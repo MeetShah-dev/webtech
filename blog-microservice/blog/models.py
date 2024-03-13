@@ -55,7 +55,6 @@ class User(AbstractBaseUser):
     email_notification  = models.BooleanField(null=False, blank=False)
     profile_photo       = models.CharField(max_length=255, null=True, blank=True)
     nationality         = models.CharField(max_length=255, null=True, blank=True)
-    type                = models.CharField(max_length=255)
     gender              = models.CharField(max_length=255)
 
     role                = models.ForeignKey(Role, on_delete=models.CASCADE)
