@@ -55,6 +55,7 @@ class User(AbstractBaseUser):
     email_notification  = models.BooleanField(null=False, blank=False)
     profile_photo       = models.ImageField(upload_to="images/")
     nationality         = models.CharField(max_length=255, null=True, blank=True)
+    type                = models.CharField(max_length=255)
     gender              = models.CharField(max_length=255)
 
     role                = models.ForeignKey(Role, on_delete=models.CASCADE)
@@ -89,6 +90,7 @@ class User(AbstractBaseUser):
 
 class Magazine(models.Model): 
     title         = models.CharField(max_length=255)
+    flag          = models.CharField(max_length=255)
     date_created  = models.DateTimeField()
     date_released = models.DateTimeField()
 
