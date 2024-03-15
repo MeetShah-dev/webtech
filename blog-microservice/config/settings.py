@@ -10,10 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+import environ
+
 from pathlib import Path
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
@@ -21,12 +30,14 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6h$*g8sa+xl9pi6@5jj+0pby4l@ghv00d+)1x)-z$@%f-h1pwz'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    env('HOST')
+]
 
 
 # Application definition
@@ -85,11 +96,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "SurreyMagazine",
-        "USER": "DJANGO",
-        "PASSWORD": "django24",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
@@ -127,15 +138,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+# refer to: https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
+USE_S3 = env('USE_S3')
 
-STATIC_URL = 'static/'
-
-# Media files
-
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = MEDIA_DIR
-
+if USE_S3:
+    AWS_ACCESS_KEY_ID           = env('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY       = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME     = env('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN        = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS    = {'CacheControl': 'max-age=86400',}
+    AWS_LOCATION                = 'static'
+    STATIC_URL                  = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATICFILES_STORAGE         = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE        = 'config.storage_backends.MediaStorage'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = MEDIA_DIR
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -152,6 +170,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 
-# Set max upload memory size to 10MB 
+# Set DATA UPLOAD MAX MEMORY SIZE to 10MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 

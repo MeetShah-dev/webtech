@@ -33,27 +33,48 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
-    reader_ids = serializers.ListField(child=serializers.CharField())
-    keywords = serializers.ListField(child=serializers.CharField())
+    reader_ids = serializers.ListField(child=serializers.CharField(), required=False)
+    keywords = serializers.ListField(child=serializers.CharField(), required=False)
     files = FileSerializer(many=True, read_only=True)
     
-    def to_internal_value(self, data):
-        keywords        = data.get('keywords')
-        reader_ids      = data.get('reader_ids')
-        validated_data  = super().to_internal_value(data)
+    def to_internal_value(self, data: dict) -> dict:
+        """
+        Override this method to support deserialization, for write operations. 
+            This is as keywords and reader_ids are lists sent by the client as strings.
 
-        if type(keywords) is not list: 
+        Parameters:
+            data (dict): data before serialization.
+
+        Returns:
+            dict: deserialized validated data to be stored in the DB.
+        """
+        keywords        = data.get('keywords', False)
+        reader_ids      = data.get('reader_ids', False)
+        validated_data  = super(BlogSerializer, self).to_internal_value(data)
+
+        if keywords and type(keywords) is not list: 
             keywords_list = json.loads(keywords)
             validated_data['keywords'] = keywords_list
 
-        if type(reader_ids) is not list: 
+        if reader_ids and type(reader_ids) is not list: 
             reader_ids_list = json.loads(reader_ids)
             validated_data['reader_ids'] = reader_ids_list
 
         return validated_data
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Blog:
+        """
+        Override this method to support saving instances. This is as 
+            both date_created and is_approved fields must be handle by the server.
+
+        Parameters: 
+            validated_data (dict): The validated data to create a new instance.
+
+        Returns:
+            Blog: A blog instance created with the validated data.
+        """
         validated_data['date_created'] = timezone.now()
+        validated_data['is_approved'] = False 
         return Blog.objects.create(**validated_data)
 
     class Meta:
@@ -65,7 +86,7 @@ class BlogSerializer(serializers.ModelSerializer):
             'category', 
             'title', 
             'content', 
-            'is_approved', 
+            'is_approved',
             'is_draft', 
             'reader_ids', 
             'keywords', 

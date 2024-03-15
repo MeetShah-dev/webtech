@@ -1,8 +1,6 @@
 import re
 import json
-import base64
 
-from django.core.files.base import ContentFile
 from django.http.request import QueryDict
 from django.utils.datastructures import MultiValueDict
 
@@ -99,20 +97,6 @@ def delete_file_placeholder(blog: str, uid: str) -> str:
     Returns:
         str: The blog after deleting the placeholder.
     """
-    pattern = r'\b{}\b'.format(uid)  
+    pattern = str(uid)
     updated_blog = re.sub(pattern, f'', blog)
     return updated_blog
-
-
-def encode_base64_image(image: dict, blog_id: int) -> None:
-    """
-    Converts base64 string object to binary and 
-        decode it to get files sent in JSON payloads.
-
-    Parameters:
-        image (dict): The image dictionary of the data in the payload.
-        blog_id (int): The ID of the blog containing the image.
-    """
-    file_content = base64.b64decode(image['url'].encode('utf-8'))
-    image['url'] = ContentFile(file_content, name=image['name'])
-    image['blog'] = blog_id

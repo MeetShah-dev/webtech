@@ -53,7 +53,7 @@ class User(AbstractBaseUser):
     date_updated        = models.DateField(null=True, blank=True)
     last_login_date     = models.DateField(null=False, blank=False)
     email_notification  = models.BooleanField(null=False, blank=False)
-    profile_photo       = models.CharField(max_length=255, null=True, blank=True)
+    profile_photo       = models.ImageField(upload_to="images/")
     nationality         = models.CharField(max_length=255, null=True, blank=True)
     type                = models.CharField(max_length=255)
     gender              = models.CharField(max_length=255)
@@ -117,15 +117,6 @@ class Blog(models.Model):
     user         = models.ForeignKey(User, on_delete=models.CASCADE)
     magazine     = models.ForeignKey(Magazine, on_delete=models.CASCADE)
     category     = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-
-    def save(self, *args: list, **kwargs: dict) -> None:
-        """
-        extending the save method to give a default value for Blogs without keywords.
-        """
-        super(Blog, self).save(*args, **kwargs)
-        if not self.keywords:
-            self.keywords.append('None')
 
     class Meta:
         db_table = 'blog'
