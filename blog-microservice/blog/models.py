@@ -90,6 +90,7 @@ class User(AbstractBaseUser):
 
 class Magazine(models.Model): 
     title         = models.CharField(max_length=255)
+    flag          = models.CharField(max_length=255)
     date_created  = models.DateTimeField()
     date_released = models.DateTimeField()
 

@@ -15,6 +15,12 @@ fake = Faker()
 class FileGenerator:
     @staticmethod
     def upload_image() -> SimpleUploadedFile:
+        """
+        Utility method to generate an image.
+
+        Returns:
+            SimpleUploadedFile: The image file.
+        """
         file_path = os.path.join(os.getcwd(), "tests\\blog\\files\\img1.jpeg")
         with open(file_path, 'rb') as f:
             file_content = f.read()
@@ -23,6 +29,12 @@ class FileGenerator:
 
     @staticmethod
     def upload_video() -> SimpleUploadedFile:
+        """
+        Utility method to generate a video.
+
+        Returns:
+            SimpleUploadedFile: The video file.
+        """
         file_path = os.path.join(os.getcwd(), "tests\\blog\\files\\vid1.mp4")
         with open(file_path, 'rb') as f:
             file_content = f.read()
@@ -34,7 +46,13 @@ class DataGenerator:
     @staticmethod
     def data_with_files(blog: 'BlogFactory') -> dict:
         """
-        
+        Utility method to generate data including files in a multipart format.
+
+        Parameters:
+            blog (BlogFactory): Used to create blogs.
+
+        Returns:
+            dict: The multipart data.
         """
         placeholder1 = str(uuid.uuid4())
         placeholder2 = str(uuid.uuid4())
@@ -61,17 +79,20 @@ class DataGenerator:
     @staticmethod
     def data_text(blog: 'BlogFactory') -> dict:
         """
+        Utility method to generate data in a multipart format.
         
-        """
-        placeholder1 = uuid.uuid4()
-        placeholder2 = uuid.uuid4()
+        Parameters:
+            blog (BlogFactory): Used to create blogs.
 
+        Returns:
+            dict: The multipart data.
+        """
         data = {
             "user": blog.user.id,
             "magazine": blog.magazine.id,
             "category": blog.category.id,
             "title": blog.title,
-            "content": f"bla bla bla{str(placeholder1)} bla bla bla {(placeholder2)} bla bla bla.",
+            "content": blog.content,
             "is_draft": False,
             "reader_ids": json.dumps(["reader1", "reader2"]), 
             "keywords": json.dumps(["keyword1", "keyword2"]), 
@@ -111,6 +132,7 @@ class MagazineFactory(factory.django.DjangoModelFactory):
         model = Magazine
 
     title           = "Students' Struggles"
+    flag            = "Upcoming"
     date_created    = timezone.now()
     date_released   = timezone.now()
 
@@ -126,7 +148,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Blog
 
-    # is_approved is True on creation only for testing purposes
+    # is_approved is True on creation, only for testing purposes
     title        = fake.sentence()
     content      = fake.paragraph()
     is_approved  = True 
@@ -166,7 +188,6 @@ class FileFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def edit_related_blog(instance, create, extracted, **kwargs):
-        # If a blog was created (not just building the factory)
         if create:
             extra_content = str(instance.uid) + fake.paragraph()
             instance.blog.content += extra_content
