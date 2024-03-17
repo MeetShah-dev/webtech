@@ -1,18 +1,17 @@
 import json
-import time
 import pytest
 
 from rest_framework.test import APIClient
 from django.utils import timezone
 
-from tests.factories import FileFactory, BlogFactory, DraftFactory, UserFactory, DataGenerator, fake
+from tests.factories import MagazineFactory, FileFactory, BlogFactory, DraftFactory, UserFactory, DataGenerator, fake
 from blog.utils import ApiResponse
 from blog.models import Blog, File
 
 pytestmark = pytest.mark.django_db
 
 
-class TestReadFeedApi:
+class TestReadCurrentFeedApi:
 
     endpoint = '/blog/magazine-feed/'
 
@@ -29,21 +28,85 @@ class TestReadFeedApi:
 
         assert response.status_code == 200
 
-    def test_feed_next_get(self, api_client, blog_factory: BlogFactory) -> None:
+    def test_feed_next_get(self, api_client, blog_factory: BlogFactory, magazine_factory: MagazineFactory) -> None:
         """
         Tests the retrieval of blogs on the feed's next page through the API to ensure it is successful. 
         
         Parameters:
             api_client (APIClient): The library used to make requests.
             blog_factory (BlogFactory): Used to create blogs.
+            magazine_factory (MagazineFactory): Used to create magazines.
         """
-        blog_factory.create_batch(20)
+        magazine = magazine_factory()
+        blog_factory.create_batch(20, magazine=magazine)
         response = api_client().get(self.endpoint)
 
         assert response.status_code == 200
 
         blogs = response.json()
         response = api_client().get(blogs['next'])
+
+        assert response.status_code == 200
+
+
+class TestReadArchivedFeedApi:
+
+    endpoint = '/blog/archived-magazine/'
+
+    def test_feed_get(self, api_client, blog_factory: BlogFactory, magazine_factory: MagazineFactory) -> None:
+        """
+        Tests the retrieval of blogs of an old magazine through the API to ensure it is successful. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            magazine_factory (MagazineFactory): Used to create magazines.
+        """
+        client = api_client()
+        magazine = magazine_factory()
+        blog_factory.create_batch(2, magazine=magazine)
+        data = {'id': magazine.pk}
+
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        assert response.status_code == 200
+
+    def test_feed_next_get(self, api_client, blog_factory: BlogFactory, magazine_factory: MagazineFactory) -> None:
+        """
+        Tests the retrieval of blogs on an old magazine feed's next page through the API to ensure it is successful. 
+        
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            magazine_factory (MagazineFactory): Used to create magazines.
+        """
+        client = api_client()
+        magazine = magazine_factory()
+        blog_factory.create_batch(20, magazine=magazine)
+        data = {'id': magazine.pk}
+
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        assert response.status_code == 200
+
+        blogs = response.json()
+
+        response = api_client().generic(
+            method="GET", 
+            path=blogs['next'], 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
 
         assert response.status_code == 200
 
@@ -66,7 +129,7 @@ class TestReadDraftsApi:
 
         draft_factory.create_batch(8, user=user)
 
-        data = {'user' : user.id}
+        data = {'id' : user.id}
 
         response = client.generic(
             method="GET", 
@@ -126,7 +189,7 @@ class TestReadUserBlogsApi:
 
         blog_factory.create_batch(5, user=user)
 
-        data = {'user' : user.id}
+        data = {'id' : user.id}
 
         response = client.generic(
             method="GET", 
@@ -217,17 +280,18 @@ class TestUpdateBlogApi:
             'category': blog.category.pk,
             'title': blog_updated_data.title,
             'content': blog_updated_data.content,
-            'date_created': blog_updated_data.date_created,
             'is_draft': False,
         }
 
         response = client.put(self.endpoint, data=data, format='multipart')
 
+        blog = Blog.objects.get(pk=blog.pk)
+
         assert response.status_code           == 201
         assert response.json()                == ApiResponse.BLOG_PUT_TEXT_SUCCESS
-        assert blog_updated_data.title        != blog_initial_data.title
-        assert blog_updated_data.content      != blog_initial_data.content
-        assert blog_updated_data.date_created != blog_initial_data.date_created
+        assert blog_updated_data.title        == blog.title
+        assert blog_updated_data.content      == blog.content
+        assert 'date_updated was handled by the server (Not None)', blog.date_updated
 
     def test_blog_files_put(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
         """
@@ -254,18 +318,24 @@ class TestUpdateBlogApi:
 
         data = DataGenerator.data_with_files(blog_updated_data)
 
-        data['id'] = blog.pk
-        data['user'] = blog.user.pk
+        # non-amendable fields
+        data['id']       = blog.pk
+        data['user']     = blog.user.pk
         data['magazine'] = blog.magazine.pk
         data['category'] = blog.category.pk
 
+        # keep data content to make sure it has been updated by the server
+        updated_content  = data['content']
+
         response = client.put(self.endpoint, data=data, format='multipart')
 
-        assert response.status_code           == 201
-        assert response.json()                == ApiResponse.BLOG_PUT_FILES_SUCCESS
-        assert blog_updated_data.title        != blog_initial_data.title
-        assert blog_updated_data.content      != blog_initial_data.content
-        assert blog_updated_data.date_created != blog_initial_data.date_created
+        blog = Blog.objects.get(pk=blog.pk)
+
+        assert response.status_code     == 201
+        assert response.json()          == ApiResponse.BLOG_PUT_FILES_SUCCESS
+        assert blog_updated_data.title  == blog.title
+        assert updated_content          == blog.content
+        assert 'date_updated was handled by the server (Not None)', blog.date_updated
 
     def __initial_blog(self, blog_initial_data: BlogFactory) -> Blog:
         """

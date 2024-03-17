@@ -7,9 +7,10 @@ from rest_framework import status
 
 from .models import Blog, File
 from .serializers import BlogSerializer
-from .utils import delete_file_placeholder, BlogProcessor, ApiResponse
+from .utils import delete_file_placeholder, BlogProcessor, ApiResponse, latest_magazine_querydict
 
 from django.db import transaction, IntegrityError
+from django.db.models import Subquery
 
 
 @api_view(['GET'])
@@ -32,7 +33,38 @@ def magazine_feed(request: Request) -> Response:
             'reader_ids'
         ).filter(
             is_draft=False, 
-            is_approved=True
+            is_approved=True,
+            magazine_id=Subquery(latest_magazine_querydict()) 
+        ).prefetch_related('files').all() 
+        result_page = paginator.paginate_queryset(blogs, request)
+        serializer = BlogSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(['GET'])
+@renderer_classes([JSONRenderer])
+def archived_magazine(request: Request) -> Response: 
+    """
+    API view to read blogs of an archived magazine. Implements a 10 blog pagination and 
+        fetches associated files for each blog. Only approved non-draft blogs are displayed.
+
+    Parameters:
+        request (Request): User request handled by the framework.
+    Returns:
+        Response: JSON object containing count, blogs, and next url.
+    """
+    if request.method == 'GET':
+        magazine_id = request.data['id'] 
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        blogs = Blog.objects.defer(
+            'keywords',
+            'reader_ids'
+        ).filter(
+            is_draft=False, 
+            is_approved=True,
+            magazine_id=magazine_id
         ).prefetch_related('files').all() 
         result_page = paginator.paginate_queryset(blogs, request)
         serializer = BlogSerializer(result_page, many=True)
@@ -53,7 +85,7 @@ def user_blogs(request: Request) -> Response:
         Response: JSON object containing count, blogs, and next url.
     """
     if request.method == 'GET':
-        user_id = request.data['user']
+        user_id = request.data['id']
         paginator = PageNumberPagination()
         paginator.page_size = 10
         blogs = Blog.objects.defer(
@@ -83,7 +115,7 @@ def user_drafts(request: Request) -> Response:
         Response: JSON object containing count, blogs, and next url.
     """
     if request.method == 'GET':
-        user_id = request.data['user']
+        user_id = request.data['id']
         paginator = PageNumberPagination()
         paginator.page_size = 10
         drafts = Blog.objects.defer(
@@ -112,9 +144,9 @@ def read_blog(request: Request) -> Response:
         Response: JSON object containing all the blog's fields.
     """
     if request.method == 'GET':
-        pk = request.data['id']
+        blog_id = request.data['id']
         try:
-            blog = Blog.objects.get(pk=pk)
+            blog = Blog.objects.get(pk=blog_id)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
         serializer = BlogSerializer(blog)
@@ -198,9 +230,9 @@ def delete_blog(request: Request) -> Response:
         Response: A response object indicating the status of the operation.
     """
     if request.method == 'DELETE':
-        pk = request.data['id']
+        blog_id = request.data['id']
         try: 
-            blog = Blog.objects.get(pk=pk)
+            blog = Blog.objects.get(pk=blog_id)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
         blog.delete()
@@ -221,9 +253,9 @@ def delete_file(request: Request) -> Response:
         Response: A response object indicating the status of the operation.
     """
     if request.method == 'DELETE':
-        pk = request.data['id']
+        file_id = request.data['id']
         try: 
-            file = File.objects.get(pk=pk)
+            file = File.objects.get(pk=file_id)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
         try:

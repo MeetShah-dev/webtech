@@ -25,6 +25,3 @@ register(FileFactory)
 @pytest.fixture
 def api_client():
     return APIClient
-
-
-# to run test run the command: "pytest -s"
