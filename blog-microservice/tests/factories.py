@@ -65,7 +65,6 @@ class DataGenerator:
             "title": blog.title,
             "content": content,
             "is_draft": False,
-            "reader_ids": json.dumps(blog.reader_ids), 
             "keywords": json.dumps(blog.keywords), 
             'file_placeholders': json.dumps([
                 {'file1': placeholder1},
@@ -94,7 +93,6 @@ class DataGenerator:
             "title": blog.title,
             "content": blog.content,
             "is_draft": False,
-            "reader_ids": json.dumps(["reader1", "reader2"]), 
             "keywords": json.dumps(["keyword1", "keyword2"]), 
         }
         return data

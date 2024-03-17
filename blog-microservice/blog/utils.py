@@ -5,7 +5,7 @@ from django.http.request import QueryDict
 from django.utils.datastructures import MultiValueDict
 
 from .serializers import BlogSerializer
-from .models import File, Blog
+from .models import File, Blog, Magazine
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -100,3 +100,14 @@ def delete_file_placeholder(blog: str, uid: str) -> str:
     pattern = str(uid)
     updated_blog = re.sub(pattern, f'', blog)
     return updated_blog
+
+
+def latest_magazine_querydict() -> QueryDict:
+    """
+    Creates a query dictionary of the latest magazine id which can be used to make a subquery.
+
+    Returns:
+        QueryDict: A query dictionary to create a subquery.
+    """
+    magazine_subquery = Magazine.objects.order_by('-date_released').values('id')[:1]
+    return magazine_subquery
