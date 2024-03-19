@@ -7215,3 +7215,6 @@ WHERE public.magazine.magazine_flag = %(magazine_flag_1)s
 2024-03-19 22:06:00,052 - success_logs - INFO - Content updated in database.
 2024-03-19 22:06:00,052 - success_logs - INFO - ===0====
 2024-03-19 22:06:00,053 - success_logs - INFO - Successful function run for get_magazine_content function.
+2024-03-19 23:19:21,204 - success_logs - INFO - Release of time error for the release of magazine.
+2024-03-19 23:25:31,644 - success_logs - INFO - Release of time error for the release of magazine.
+2024-03-19 23:26:10,285 - success_logs - INFO - Release of time error for the release of magazine.

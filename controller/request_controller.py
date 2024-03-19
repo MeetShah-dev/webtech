@@ -43,8 +43,8 @@ def get_scheduled_magazine():
     """
         Scheduling the job for the release of magazine.
     """
+    response_dict = {}
     try:
-        response_dict = {}
         post_data = request.get_json(force=True)
         year = post_data['year']
         month = post_data['month']
@@ -79,8 +79,9 @@ def get_scheduled_magazine():
             success_logger.info("Successfully scheduled the release of magazine.")
 
     except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
         error_logger.exception(error)
-        raise
     return jsonify(response_dict)
 
 
@@ -89,8 +90,8 @@ def reschedule_magazine():
     """
         Scheduling the job for the release of magazine.
     """
+    response_dict = {}
     try:
-        response_dict = {}
         reschedule = True
         post_data = request.get_json(force=True)
         year = post_data['year']
@@ -126,6 +127,7 @@ def reschedule_magazine():
             success_logger.info("Successfully scheduled the release of magazine.")
 
     except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
         error_logger.exception(error)
-        raise
     return jsonify(response_dict)

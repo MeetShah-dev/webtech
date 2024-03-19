@@ -4478,3 +4478,15 @@ Traceback (most recent call last):
   File "C:\Users\HP\Desktop\Projects\webtech\Coursework\wsgi\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 3419, in add
     raise exc.UnmappedInstanceError(instance) from err
 sqlalchemy.orm.exc.UnmappedInstanceError: Class 'builtins.tuple' is not mapped
+2024-03-19 23:21:37,705 - error_logs - ERROR - hour must be in 0..23
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 107, in reschedule_magazine
+    release_date = datetime(year, month, date, hour, minute, second)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: hour must be in 0..23
+2024-03-19 23:22:16,132 - error_logs - ERROR - hour must be in 0..23
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 107, in reschedule_magazine
+    release_date = datetime(year, month, date, hour, minute, second)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: hour must be in 0..23
