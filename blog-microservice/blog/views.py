@@ -102,9 +102,10 @@ def user_blogs(request: Request) -> Response:
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+# TODO only authors should be able to see their drafts TODO
 @api_view(['GET'])
 @renderer_classes([JSONRenderer]) 
-def user_drafts(request: Request) -> Response:
+def user_drafts(request: Request) -> Response: 
     """
     API view to read the current user's drafts. Implements a 10 
         draft pagination and fetches associated files for each draft. 
@@ -131,9 +132,10 @@ def user_drafts(request: Request) -> Response:
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
             
 
+#TODO authors should have access to their blogs even if they're drafts or not approved TODO
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
-def read_blog(request: Request) -> Response:
+def read_blog(request: Request) -> Response: 
     """
     API view to read a single blog.
 
@@ -146,7 +148,11 @@ def read_blog(request: Request) -> Response:
     if request.method == 'GET':
         blog_id = request.data['id']
         try:
-            blog = Blog.objects.get(pk=blog_id)
+            blog = Blog.objects.get(
+                pk=blog_id,
+                is_approved=True,
+                is_draft=False
+            ) 
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
         serializer = BlogSerializer(blog)

@@ -57,6 +57,7 @@ class User(AbstractBaseUser):
     nationality         = models.CharField(max_length=255, null=True, blank=True)
     type                = models.CharField(max_length=255)
     gender              = models.CharField(max_length=255)
+    banned              = models.BooleanField(default=False)
 
     role                = models.ForeignKey(Role, on_delete=models.CASCADE)
 
@@ -99,7 +100,7 @@ class Magazine(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     class Meta:
         db_table = 'category'
@@ -117,7 +118,7 @@ class Blog(models.Model):
 
     user         = models.ForeignKey(User, on_delete=models.CASCADE)
     magazine     = models.ForeignKey(Magazine, on_delete=models.CASCADE)
-    category     = models.ForeignKey(Category, on_delete=models.CASCADE)
+    categories   = models.ManyToManyField(Category, related_name='blogs')
 
     class Meta:
         db_table = 'blog'
@@ -136,7 +137,7 @@ class File(models.Model):
 
 class Like(models.Model):
     user      = models.ForeignKey(User, on_delete=models.CASCADE)
-    post      = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    blog      = models.ForeignKey(Blog, on_delete=models.CASCADE)
 
     timestamp = models.DateTimeField()
 
@@ -146,7 +147,8 @@ class Like(models.Model):
 
 class Comment(models.Model):
     user      = models.ForeignKey(User, on_delete=models.CASCADE)
-    post      = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    blog      = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    text      = models.TextField(max_length=500)
 
     timestamp = models.DateTimeField()
 
@@ -154,15 +156,12 @@ class Comment(models.Model):
         db_table = 'comment'
 
 
-class ModeratorFeedback(models.Model):
-    text = models.TextField(max_length=1000)
-    type = models.CharField(max_length=255)
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Blog, on_delete=models.CASCADE)
+class Feedback(models.Model):
+    blog    = models.ForeignKey(Blog, related_name='blogs', on_delete=models.CASCADE)    #bunu degistirdim 
+    content = models.TextField(max_length=500)
 
     class Meta:
-        db_table = 'moderator_feedback'
+        db_table = 'feedback'
 
 
 class EmailNotification(models.Model):
