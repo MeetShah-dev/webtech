@@ -44,24 +44,26 @@ class FileGenerator:
 
 class DataGenerator:
     @staticmethod
-    def data_with_files(blog: 'BlogFactory') -> dict:
+    def data_with_files(blog: 'BlogFactory', *categories: 'CategoryFactory') -> dict:
         """
         Utility method to generate data including files in a multipart format.
 
         Parameters:
             blog (BlogFactory): Used to create blogs.
+            category (CategoryFactory): Used to create categories.
 
         Returns:
             dict: The multipart data.
         """
         placeholder1 = str(uuid.uuid4())
         placeholder2 = str(uuid.uuid4())
+
         content = fake.paragraph() + placeholder1 + fake.paragraph() + placeholder2 + fake.paragraph()
 
         data = {
             "user": blog.user.id,
             "magazine": blog.magazine.id,
-            "category": blog.category.id,
+            "category_ids": json.dumps([str(category.pk) for category in categories]),
             "title": blog.title,
             "content": content,
             "is_draft": False,
@@ -76,12 +78,13 @@ class DataGenerator:
         return data
 
     @staticmethod
-    def data_text(blog: 'BlogFactory') -> dict:
+    def data_text(blog: 'BlogFactory', *categories: 'CategoryFactory') -> dict:
         """
         Utility method to generate data in a multipart format.
         
         Parameters:
             blog (BlogFactory): Used to create blogs.
+            category (CategoryFactory): Used to create categories.
 
         Returns:
             dict: The multipart data.
@@ -89,7 +92,7 @@ class DataGenerator:
         data = {
             "user": blog.user.id,
             "magazine": blog.magazine.id,
-            "category": blog.category.id,
+            "category_ids": json.dumps([str(category.pk) for category in categories]),
             "title": blog.title,
             "content": blog.content,
             "is_draft": False,
@@ -139,7 +142,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
 
-    name = "Studies"
+    name = fake.name()
 
 
 class BlogFactory(factory.django.DjangoModelFactory):
@@ -157,7 +160,6 @@ class BlogFactory(factory.django.DjangoModelFactory):
 
     user         = factory.SubFactory(UserFactory)
     magazine     = factory.SubFactory(MagazineFactory)
-    category     = factory.SubFactory(CategoryFactory)
 
 
 class DraftFactory(factory.django.DjangoModelFactory):
@@ -172,7 +174,6 @@ class DraftFactory(factory.django.DjangoModelFactory):
 
     user         = factory.SubFactory(UserFactory)
     magazine     = factory.SubFactory(MagazineFactory)
-    category     = factory.SubFactory(CategoryFactory)
 
 
 class FileFactory(factory.django.DjangoModelFactory):

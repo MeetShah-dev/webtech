@@ -1,12 +1,23 @@
 import json
 import pytest
+import factory
 
 from rest_framework.test import APIClient
 from django.utils import timezone
 
-from tests.factories import MagazineFactory, FileFactory, BlogFactory, DraftFactory, UserFactory, DataGenerator, fake
 from blog.utils import ApiResponse
 from blog.models import Blog, File
+
+from tests.factories import (
+    MagazineFactory, 
+    FileFactory, 
+    BlogFactory, 
+    DraftFactory, 
+    UserFactory, 
+    CategoryFactory, 
+    DataGenerator, 
+    fake
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -208,37 +219,44 @@ class TestCreateBlogApi:
 
     endpoint = '/blog/create-blog/'
 
-    def test_blog_text_post(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
+    def test_blog_text_post(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
         Tests the creation of blogs through the API with text only to ensure it is successful. 
 
         Parameters:
             api_client (APIClient): The library used to make requests.
             blog_factory (BlogFactory): Used to create blogs.
+            category_factory (CategoryFacory): Used to create categories.
         """
         blog    = blog_factory()
         client  = api_client()
 
-        data = DataGenerator.data_text(blog)
+        names = ['Category 1', 'Category 2', 'Category 3']
+        categories = category_factory.create_batch(3, name=factory.Iterator(names))
+
+        data = DataGenerator.data_text(blog, *categories)
 
         response = client.post(self.endpoint, data=data, format='multipart')
 
         assert response.status_code == 201
         assert response.json() == ApiResponse.BLOG_POST_TEXT_SUCCESS
 
-    def test_blog_files_post(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
+    def test_blog_files_post(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
         Tests the creation of blogs through the API with text and files to ensure it is successful. 
 
         Parameters:
             api_client (APIClient): The library used to make requests.
             blog_factory (BlogFactory): Used to create blogs.
-
+            category_factory (CategoryFacory): Used to create categories.
         """
         blog    = blog_factory()
         client  = api_client()
 
-        data = DataGenerator.data_with_files(blog)
+        names = ['Category 1', 'Category 2', 'Category 3']
+        categories = category_factory.create_batch(3, name=factory.Iterator(names))
+
+        data = DataGenerator.data_with_files(blog, *categories)
 
         response = client.post(self.endpoint, data=data, format='multipart')
 
@@ -250,15 +268,18 @@ class TestUpdateBlogApi:
     
     endpoint = '/blog/update-blog/'
 
-    def test_blog_text_put(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
+    def test_blog_text_put(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
         Tests the update of blogs with text through the API to ensure it is successful. 
 
         Parameters:
             api_client (APIClient): The library used to make requests.
             blog_factory (BlogFactory): Used to create blogs.
+            category_factory (CategoryFacory): Used to create categories.
         """
         client = api_client()
+        names = ['Category 1', 'Category 2', 'Category 3']
+        categories = category_factory.create_batch(3, name=factory.Iterator(names))
 
         blog_initial_data = blog_factory(
             title=fake.sentence(), 
@@ -277,7 +298,7 @@ class TestUpdateBlogApi:
             'id': blog.pk,
             'user': blog.user.pk,
             'magazine': blog.magazine.pk,
-            'category': blog.category.pk,
+            'category_ids': json.dumps([category.pk for category in categories]),
             'title': blog_updated_data.title,
             'content': blog_updated_data.content,
             'is_draft': False,
@@ -293,15 +314,18 @@ class TestUpdateBlogApi:
         assert blog_updated_data.content      == blog.content
         assert 'date_updated was handled by the server (Not None)', blog.date_updated
 
-    def test_blog_files_put(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
+    def test_blog_files_put(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
         Tests the update of blogs with files through the API to ensure it is successful. 
 
         Parameters:
             api_client (APIClient): The library used to make requests.
             blog_factory (BlogFactory): Used to create blogs.
+            category_factory (CategoryFacory): Used to create categories.
         """
         client = api_client()
+        names = [fake.name(), fake.name(), fake.name()]
+        categories = category_factory.create_batch(3, name=factory.Iterator(names))
 
         blog_initial_data = blog_factory(
             title=fake.sentence(), 
@@ -316,13 +340,12 @@ class TestUpdateBlogApi:
 
         blog = self.__initial_blog(blog_initial_data)
 
-        data = DataGenerator.data_with_files(blog_updated_data)
+        data = DataGenerator.data_with_files(blog_updated_data, *categories)
 
         # non-amendable fields
         data['id']       = blog.pk
         data['user']     = blog.user.pk
         data['magazine'] = blog.magazine.pk
-        data['category'] = blog.category.pk
 
         # keep data content to make sure it has been updated by the server
         updated_content  = data['content']
@@ -356,7 +379,6 @@ class TestUpdateBlogApi:
             keywords     = blog_initial_data.keywords,
             user         = blog_initial_data.user,
             magazine     = blog_initial_data.magazine,
-            category     = blog_initial_data.category
         )
         return blog
     
