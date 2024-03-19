@@ -28,13 +28,13 @@ class RequestOperations:
         egn = Engine()
         try:
             magazine_session = egn.get_engine_session()
-            magazine_data = magazine_session.query(Magazine.id).filter(Magazine.magazine_flag == 'Upcoming').all()
+            magazine_data = magazine_session.query(Magazine.id).filter(Magazine.magazine_flag == 'upcoming').all()
             magazine_content_id = [row[0] for row in magazine_data]
             if len(magazine_content_id) > 0:
                 magazine_content_id = str(magazine_content_id[0])
 
                 magazine_session.query(Magazine).filter(Magazine.id == magazine_content_id).with_for_update().update(
-                    {Magazine.magazine_flag: 'Released'}, synchronize_session=False)
+                    {Magazine.magazine_flag: 'released'}, synchronize_session=False)
 
                 if reschedule and magazine_id is not None:
                     mag_id_from_job = magazine_id
@@ -49,7 +49,7 @@ class RequestOperations:
                     title=magazine_title,
                     date_created=current_date,
                     date_released=release_date,
-                    magazine_flag='Upcoming')
+                    magazine_flag='upcoming')
                 magazine_session.add(magazine_obj)
                 magazine_session.commit()
                 msg.append("Successfully updated the magazine")
@@ -74,7 +74,7 @@ class RequestOperations:
             current_date = datetime.now()
             if not magazine_id:
                 job_session = egn.get_engine_session()
-                magazine_data = job_session.query(Magazine.id).filter(Magazine.magazine_flag == 'Upcoming').all()
+                magazine_data = job_session.query(Magazine.id).filter(Magazine.magazine_flag == 'upcoming').all()
                 magazine_content_id = [row[0] for row in magazine_data]
 
                 job_mag_id = job_session.query(Job.magazine_id).all()
@@ -96,7 +96,7 @@ class RequestOperations:
                 job_id=job_id,
                 magazine_title=title,
                 updated_time=current_date,
-                status='Scheduled',
+                status='scheduled',
                 release_date=release_date)
             job_session.add(job_obj)
             job_session.commit()
@@ -119,7 +119,7 @@ class RequestOperations:
         try:
             rem_job_session = egn.get_engine_session()
             rem_job_id_data = rem_job_session.query(Job.job_id, Job.magazine_title).filter(
-                Job.magazine_id == magazine_id, Job.status == 'Scheduled').all()
+                Job.magazine_id == magazine_id, Job.status == 'scheduled').all()
             job_id = rem_job_id_data[0][0]
             mag_title = rem_job_id_data[0][1]
             success_logger.info("Job id fetched successfully.")
@@ -141,9 +141,9 @@ class RequestOperations:
             # current_date = datetime.now()
             status_session = egn.get_engine_session()
             status_session.query(Job). \
-                filter(Job.magazine_id == magazine_id, Job.status == 'Scheduled'). \
+                filter(Job.magazine_id == magazine_id, Job.status == 'scheduled'). \
                 with_for_update().update(
-                {Job.status: 'Rescheduled'},
+                {Job.status: 'rescheduled'},
                 synchronize_session=False)
             status_session.commit()
             success_logger.info("Job id fetched successfully.")
