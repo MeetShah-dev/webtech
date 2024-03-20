@@ -16,6 +16,7 @@ from tests.factories import (
     UserFactory, 
     CategoryFactory, 
     DataGenerator, 
+    release_magazines,
     fake
 )
 
@@ -35,6 +36,7 @@ class TestReadCurrentFeedApi:
             file_factory (FileFactory): Used to create files associated to blogs in one go.
         """
         file_factory.create_batch(2)
+        release_magazines()
         response = api_client().get(self.endpoint)
 
         assert response.status_code == 200
@@ -50,6 +52,7 @@ class TestReadCurrentFeedApi:
         """
         magazine = magazine_factory()
         blog_factory.create_batch(20, magazine=magazine)
+        release_magazines()
         response = api_client().get(self.endpoint)
 
         assert response.status_code == 200
@@ -76,6 +79,8 @@ class TestReadArchivedFeedApi:
         client = api_client()
         magazine = magazine_factory()
         blog_factory.create_batch(2, magazine=magazine)
+        release_magazines()
+
         data = {'id': magazine.pk}
 
         response = client.generic(
@@ -99,6 +104,8 @@ class TestReadArchivedFeedApi:
         client = api_client()
         magazine = magazine_factory()
         blog_factory.create_batch(20, magazine=magazine)
+        release_magazines()
+
         data = {'id': magazine.pk}
 
         response = client.generic(
@@ -197,9 +204,8 @@ class TestReadUserBlogsApi:
         """
         user = user_factory()
         client = api_client()
-
         blog_factory.create_batch(5, user=user)
-
+        
         data = {'id' : user.id}
 
         response = client.generic(
@@ -297,7 +303,6 @@ class TestUpdateBlogApi:
         data = {
             'id': blog.pk,
             'user': blog.user.pk,
-            'magazine': blog.magazine.pk,
             'category_ids': json.dumps([category.pk for category in categories]),
             'title': blog_updated_data.title,
             'content': blog_updated_data.content,
@@ -345,7 +350,6 @@ class TestUpdateBlogApi:
         # non-amendable fields
         data['id']       = blog.pk
         data['user']     = blog.user.pk
-        data['magazine'] = blog.magazine.pk
 
         # keep data content to make sure it has been updated by the server
         updated_content  = data['content']

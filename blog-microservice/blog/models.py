@@ -91,7 +91,7 @@ class User(AbstractBaseUser):
 
 class Magazine(models.Model): 
     title         = models.CharField(max_length=255)
-    flag          = models.CharField(max_length=255)
+    flag          = models.CharField(max_length=255) 
     date_created  = models.DateTimeField()
     date_released = models.DateTimeField()
 
@@ -157,7 +157,7 @@ class Comment(models.Model):
 
 
 class Feedback(models.Model):
-    blog    = models.ForeignKey(Blog, related_name='blogs', on_delete=models.CASCADE)    #bunu degistirdim 
+    blog    = models.ForeignKey(Blog, related_name='blogs', on_delete=models.CASCADE)
     content = models.TextField(max_length=500)
 
     class Meta:

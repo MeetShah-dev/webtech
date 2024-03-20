@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .models import Blog, File
 from .serializers import BlogSerializer
-from .utils import delete_file_placeholder, BlogProcessor, ApiResponse, latest_magazine_querydict
+from .utils import delete_file_placeholder, BlogProcessor, ApiResponse, latest_released_magazine_querydict
 
 from django.db import transaction, IntegrityError
 from django.db.models import Subquery
@@ -15,7 +15,7 @@ from django.db.models import Subquery
 
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
-def magazine_feed(request: Request) -> Response:
+def magazine_feed(request: Request) -> Response: 
     """
     API view to read blogs. Implements a 10 blog pagination and fetches 
         associated files for each blog. Only approved non-draft blogs are displayed.
@@ -33,8 +33,8 @@ def magazine_feed(request: Request) -> Response:
             'reader_ids'
         ).filter(
             is_draft=False, 
-            is_approved=True,
-            magazine_id=Subquery(latest_magazine_querydict()) 
+            is_approved=True, 
+            magazine_id=Subquery(latest_released_magazine_querydict()) 
         ).prefetch_related('files').all() 
         result_page = paginator.paginate_queryset(blogs, request)
         serializer = BlogSerializer(result_page, many=True)
@@ -162,7 +162,7 @@ def read_blog(request: Request) -> Response:
 
 @api_view(['POST']) 
 @renderer_classes([JSONRenderer]) 
-def create_blog(request: Request) -> Response:
+def create_blog(request: Request) -> Response: 
     """
     API view to create blogs. The API handles text, images, videos, and stores the files' respective 
         uids in the DB to keep the layout of the blog consistent. Works for both drafting and posting.
@@ -192,7 +192,7 @@ def create_blog(request: Request) -> Response:
 
 @api_view(['PUT'])
 @renderer_classes([JSONRenderer])
-def update_blog(request: Request) -> Response:
+def update_blog(request: Request) -> Response: 
     """
     API view to update blogs. This view is very similar to the blog creation as the only aspect where both 
         APIs differ is that we need to fetch an existing blog in this view. Works for updating drafts and blogs.
