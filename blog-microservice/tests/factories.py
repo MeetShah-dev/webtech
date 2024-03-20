@@ -62,7 +62,6 @@ class DataGenerator:
 
         data = {
             "user": blog.user.id,
-            "magazine": blog.magazine.id,
             "category_ids": json.dumps([str(category.pk) for category in categories]),
             "title": blog.title,
             "content": content,
@@ -91,7 +90,6 @@ class DataGenerator:
         """
         data = {
             "user": blog.user.id,
-            "magazine": blog.magazine.id,
             "category_ids": json.dumps([str(category.pk) for category in categories]),
             "title": blog.title,
             "content": blog.content,
@@ -99,7 +97,15 @@ class DataGenerator:
             "keywords": json.dumps(["keyword1", "keyword2"]), 
         }
         return data
-    
+
+
+def release_magazines() -> None:
+    """
+    Releases all the magazines created to make them available.
+    """
+    magazines = Magazine.objects.all()
+    magazines.update(flag='released')
+
 
 class RoleFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -133,7 +139,7 @@ class MagazineFactory(factory.django.DjangoModelFactory):
         model = Magazine
 
     title           = "Students' Struggles"
-    flag            = "Upcoming"
+    flag            = "upcoming"
     date_created    = timezone.now()
     date_released   = timezone.now()
 

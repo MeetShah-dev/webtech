@@ -20,7 +20,7 @@ class BlogProcessor:
     @staticmethod
     def process_blog_data(request_method: str, blog_serializer: BlogSerializer, data: QueryDict, files: MultiValueDict) -> Response:
         """
-        Process blog data including validation and saving.
+        Processes blog data including validation and saving.
 
         Parameters:
             request_method (str): The HTTP request method ('POST' or 'PUT').
@@ -50,7 +50,7 @@ class BlogProcessor:
     @staticmethod
     def __process_blog_files(blog: Blog, files: dict, placeholders_json: str) -> None:
         """
-        Process files associated with the blog, and store 
+        Processes files associated with the blog, and store 
             them at once in the DB through a bulk insert.
 
         Parameters:
@@ -102,12 +102,15 @@ def delete_file_placeholder(blog: str, uid: str) -> str:
     return updated_blog
 
 
-def latest_magazine_querydict() -> QueryDict:
+def latest_released_magazine_querydict() -> QueryDict:
     """
-    Creates a query dictionary of the latest magazine id which can be used to make a subquery.
+    Creates a query dictionary of the latest released 
+        magazine id which can be used to make a subquery.
 
     Returns:
         QueryDict: A query dictionary to create a subquery.
     """
-    magazine_subquery = Magazine.objects.order_by('-date_released').values('id')[:1]
+    magazine_subquery = Magazine.objects.filter(
+        flag='released'
+    ).order_by('-date_released').values('id')[:1]
     return magazine_subquery

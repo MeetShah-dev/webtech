@@ -3,7 +3,7 @@ import json
 from rest_framework import serializers
 from django.utils import timezone
 
-from .models import Blog, File, Category
+from .models import Blog, File, Category, Magazine
 
 
 class CategorySerializer(serializers.ModelSerializer):    
@@ -21,6 +21,7 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    magazine     = serializers.PrimaryKeyRelatedField(read_only=True)
     category_ids = serializers.ListField(child=serializers.CharField(), required=True, write_only=True)
     reader_ids   = serializers.ListField(child=serializers.CharField(), required=False)
     keywords     = serializers.ListField(child=serializers.CharField(), required=False)
@@ -30,8 +31,9 @@ class BlogSerializer(serializers.ModelSerializer):
     
     def to_internal_value(self, data: dict) -> dict:
         """
-        Overrides to_internal_value to support deserialization, for write operations. This is as both 
-            keywords and reader_ids are lists sent by the client as strings that should be treated as python objects.
+        Overrides to_internal_value to support deserialization, for write operations. 
+            This is as both keywords and reader_ids are lists sent by the client as 
+            strings that should be treated as python objects.
 
         Parameters:
             data (dict): input data from the client request.
@@ -86,8 +88,12 @@ class BlogSerializer(serializers.ModelSerializer):
         Returns:
             Blog: A blog instance created with the validated data.
         """
-        validated_data['date_created'] = timezone.now()
-        validated_data['is_approved'] = False 
+        # new posts are associated with the latest upcoming magazine
+        magazine = self.__get_latest_upcommig_magazine()
+
+        validated_data['magazine']      = magazine
+        validated_data['date_created']  = timezone.now()
+        validated_data['is_approved']   = False
         categories = validated_data.pop('category_ids', [])
 
         blog = Blog.objects.create(**validated_data)
@@ -130,7 +136,7 @@ class BlogSerializer(serializers.ModelSerializer):
             removed_category_ids = list(set(current_category_ids) - set(new_category_ids))
             new_category_ids     = list(set(new_category_ids) - set(current_category_ids))
             
-            # remove categories  that aren't present in the updated data
+            # remove categories that aren't present in the updated data
             instance.categories.remove(*removed_category_ids)
 
             # update of new categories through bulk create
@@ -142,6 +148,22 @@ class BlogSerializer(serializers.ModelSerializer):
                 
         instance.save()
         return instance
+    
+    @staticmethod
+    def __get_latest_upcommig_magazine() -> Magazine:
+        """
+        Gets the latest upcoming magazine instance to set the blogs' FK upon their creation.
+
+        Returns:
+            Magazine: A magazine instance.
+        """
+        try:
+            magazine = Magazine.objects.filter(
+                flag='upcoming'
+            ).order_by('-date_released')[:1][0]
+            return magazine
+        except Magazine.DoesNotExist:
+            raise LookupError('Error: There are no upcoming magazines in the database.')
 
     class Meta:
         model = Blog
