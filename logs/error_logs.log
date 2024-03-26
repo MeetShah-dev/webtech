@@ -4490,3 +4490,1255 @@ Traceback (most recent call last):
     release_date = datetime(year, month, date, hour, minute, second)
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ValueError: hour must be in 0..23
+2024-03-23 17:17:01,107 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 174, in fetch_all_magazine
+    egn.close_session(get_magazine_session)
+    ^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-03-23 17:24:53,572 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 169, in fetch_all_magazine
+    magazine_ids_left_to_release = ",".join(str(ids) for id in magazine_ids_left_to_release)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 169, in <genexpr>
+    magazine_ids_left_to_release = ",".join(str(ids) for id in magazine_ids_left_to_release)
+                                                ^^^
+NameError: name 'ids' is not defined. Did you mean: 'id'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 173, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:26:45,874 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type bigint: "12,13"
+LINE 3: WHERE public.scheduled_jobs.magazine_id = '12,13'
+                                                  ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 171, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == magazine_ids_left_to_release).all()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2673, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2827, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2191, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "12,13"
+LINE 3: WHERE public.scheduled_jobs.magazine_id = '12,13'
+                                                  ^
+
+[SQL: SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s]
+[parameters: {'magazine_id_1': '12,13'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:26:57,247 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type bigint: "12,13"
+LINE 3: WHERE public.scheduled_jobs.magazine_id = '12,13'
+                                                  ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 171, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == magazine_ids_left_to_release).all()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2673, in all
+    return self._iter().all()  # type: ignore
+           ^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2827, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2191, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "12,13"
+LINE 3: WHERE public.scheduled_jobs.magazine_id = '12,13'
+                                                  ^
+
+[SQL: SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s]
+[parameters: {'magazine_id_1': '12,13'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:28:02,390 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 171, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release)).all()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:29:09,341 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 171, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 176, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:29:26,929 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 171, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release))
+                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:31:35,533 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 170, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release)).all()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:32:03,323 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 170, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release)).all()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 173, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:32:49,608 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 170, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release)).all()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\properties.py", line 478, in operate
+    return op(self.__clause_element__(), *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 1511, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 2102, in in_op
+    return a.in_(b)
+           ^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\operators.py", line 925, in in_
+    return self.operate(in_op, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\type_api.py", line 194, in operate
+    return op_fn(self.expr, op, *other, **addtl_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\default_comparator.py", line 219, in _in_impl
+    seq_or_selectable = coercions.expect(
+                        ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 868, in _literal_coercion
+    self._raise_for_expected(element, **kw)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 518, in _raise_for_expected
+    raise exc.ArgumentError(msg, code=code) from err
+sqlalchemy.exc.ArgumentError: IN expression list, SELECT construct, or bound parameter object expected, got '12,13'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 173, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:46:15,603 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 172, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id.in_(magazine_ids_left_to_release)).all()
+                          ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:52:27,014 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 168, in fetch_all_magazine
+    magazine_ids_left_to_release = ",".join(ids for ids in magazine_ids_left_to_release)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, int found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:52:59,071 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 168, in fetch_all_magazine
+    magazine_ids_left_to_release = ",".join(ids for ids in magazine_ids_left_to_release)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, int found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 17:54:11,936 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 168, in fetch_all_magazine
+    magazine_ids_left_to_release = ",".join(ids for ids in magazine_ids_left_to_release)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, int found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 175, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-23 18:10:26,112 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 178, in fetch_all_magazine
+    import pb; pdb.set_trace()
+    ^^^^^^^^^
+ModuleNotFoundError: No module named 'pb'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 181, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-24 15:40:02,157 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 183, in fetch_all_magazine
+    egn.close_session(get_magazine_session)
+    ^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-03-24 16:02:39,281 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 174, in fetch_all_magazine
+    rows = [dict(row) for row in data_for_reschedule]
+            ^^^^^^^^^
+TypeError: cannot convert dictionary update sequence element #0 to a sequence
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 190, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-24 16:02:50,523 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 174, in fetch_all_magazine
+    rows = [dict(row) for row in data_for_reschedule]
+            ^^^^^^^^^
+TypeError: cannot convert dictionary update sequence element #0 to a sequence
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 190, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-24 16:04:13,369 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 195, in fetch_all_magazine
+    return content_data
+           ^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-03-24 16:08:41,914 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 173, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids).fetchall()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Query' object has no attribute 'fetchall'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 179, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-24 16:08:55,398 - error_logs - ERROR - catching classes that do not inherit from BaseException is not allowed
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 173, in fetch_all_magazine
+    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids).fetchAll()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Query' object has no attribute 'fetchAll'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_all_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 179, in fetch_all_magazine
+    except (Exception, psycopg2.errors) as error:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+2024-03-24 16:10:06,157 - error_logs - ERROR - Object of type Row is not JSON serializable
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 51, in get_all_magazine
+    return jsonify(response_dict)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\flask\json\__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\flask\json\provider.py", line 214, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\flask\json\provider.py", line 179, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 326, in _iterencode_list
+    yield from chunks
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 326, in _iterencode_list
+    yield from chunks
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\json\encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\flask\json\provider.py", line 121, in _default
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+TypeError: Object of type Row is not JSON serializable
+2024-03-24 16:38:02,252 - error_logs - ERROR - 'RequestOperations' object has no attribute 'fetch_ll_magazine'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 45, in get_all_magazine
+    magazine_data = data.fetch_ll_magazine()
+                    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'RequestOperations' object has no attribute 'fetch_ll_magazine'. Did you mean: 'fetch_all_magazine'?
+2024-03-24 16:53:06,153 - error_logs - ERROR - name 'magazine_dat' is not defined
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 48, in get_all_magazine
+    response_dict['data'] = magazine_dat
+                            ^^^^^^^^^^^^
+NameError: name 'magazine_dat' is not defined. Did you mean: 'magazine_data'?
+2024-03-24 16:55:54,413 - error_logs - ERROR - 'No job by the id of 381bfde02652433d93501415b4cba8eb was found'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 138, in reschedule_magazine
+    schedule.remove_job(job_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\apscheduler\schedulers\base.py", line 635, in remove_job
+    raise JobLookupError(job_id)
+apscheduler.jobstores.base.JobLookupError: 'No job by the id of 381bfde02652433d93501415b4cba8eb was found'
+2024-03-24 16:56:32,388 - error_logs - ERROR - 'No job by the id of 63d53492c3e4458fbb74207b530d0412 was found'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 138, in reschedule_magazine
+    schedule.remove_job(job_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\apscheduler\schedulers\base.py", line 635, in remove_job
+    raise JobLookupError(job_id)
+apscheduler.jobstores.base.JobLookupError: 'No job by the id of 63d53492c3e4458fbb74207b530d0412 was found'
+2024-03-24 17:09:16,391 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:09:16,504 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 96, in get_scheduled_magazine
+    data.store_jobs(job_id, title, release_date, magazine_id=False)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:10:00,940 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:10:00,949 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 96, in get_scheduled_magazine
+    data.store_jobs(job_id, title, release_date, magazine_id=False)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:13:04,910 - error_logs - ERROR - Foreign key associated with column 'scheduled_jobs.magazine_id' could not find table 'public.Magazine' with which to generate a foreign key to target column 'id'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1257, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1232, in _prepare_impl
+    self.session.flush()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4392, in _flush
+    flush_context.execute()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 76, in save_obj
+    for table, mapper in base_mapper._sorted_tables.items():
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1252, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4049, in _sorted_tables
+    sorted_ = sql_util.sort_tables(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1252, in sort_tables
+    for (t, fkcs) in sort_tables_and_constraints(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1322, in sort_tables_and_constraints
+    filtered = filter_fn(fkc)
+               ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1242, in _skip_fn
+    if fixed_skip_fn(fk):
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4032, in skip
+    dep = table_to_mapper.get(fk.column.table)
+                              ^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1140, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3159, in column
+    return self._resolve_column()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3182, in _resolve_column
+    raise exc.NoReferencedTableError(
+sqlalchemy.exc.NoReferencedTableError: Foreign key associated with column 'scheduled_jobs.magazine_id' could not find table 'public.Magazine' with which to generate a foreign key to target column 'id'
+2024-03-24 17:13:05,143 - error_logs - ERROR - Foreign key associated with column 'scheduled_jobs.magazine_id' could not find table 'public.Magazine' with which to generate a foreign key to target column 'id'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 96, in get_scheduled_magazine
+    data.store_jobs(job_id, title, release_date, magazine_id=False)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1257, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1232, in _prepare_impl
+    self.session.flush()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4296, in flush
+    self._flush(objects)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4392, in _flush
+    flush_context.execute()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 76, in save_obj
+    for table, mapper in base_mapper._sorted_tables.items():
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1252, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4049, in _sorted_tables
+    sorted_ = sql_util.sort_tables(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1252, in sort_tables
+    for (t, fkcs) in sort_tables_and_constraints(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1322, in sort_tables_and_constraints
+    filtered = filter_fn(fkc)
+               ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 1242, in _skip_fn
+    if fixed_skip_fn(fk):
+       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4032, in skip
+    dep = table_to_mapper.get(fk.column.table)
+                              ^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1140, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3159, in column
+    return self._resolve_column()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 3182, in _resolve_column
+    raise exc.NoReferencedTableError(
+sqlalchemy.exc.NoReferencedTableError: Foreign key associated with column 'scheduled_jobs.magazine_id' could not find table 'public.Magazine' with which to generate a foreign key to target column 'id'
+2024-03-24 17:13:39,202 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:13:39,218 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 96, in get_scheduled_magazine
+    data.store_jobs(job_id, title, release_date, magazine_id=False)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(1) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:18:01,096 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-03-24 17:18:01,112 - error_logs - ERROR - (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+psycopg2.errors.ForeignKeyViolation: insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 96, in get_scheduled_magazine
+    data.store_jobs(job_id, title, release_date, magazine_id=False)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 102, in store_jobs
+    job_session.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1264, in commit
+    trans.commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2632, in commit
+    self._do_commit()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2737, in _do_commit
+    self._connection_commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2708, in _connection_commit_impl
+    self.connection._commit_impl()
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1149, in _commit_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1147, in _commit_impl
+    self.engine.dialect.do_commit(self.connection)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 695, in do_commit
+    dbapi_connection.commit()
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or update on table "scheduled_jobs" violates foreign key constraint "scheduled_jobs_magazine_id_cdfb6d08_fk_magazine_id"
+DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
+
+(Background on this error at: https://sqlalche.me/e/20/gkpj)

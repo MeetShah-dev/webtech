@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from logs.logging_handler import success_logger, error_logger
 
-DB_NAME = "magazine_db"
+DB_NAME = "surrey_magazine"
 DB_USERNAME = "postgres"
-DB_PASSWORD = "root"
-DB_HOST = "localhost"
+DB_PASSWORD = "sRd4NIyQVmMQQZ71jMvb"
+DB_HOST = "database-3.czyucuu48jmn.us-east-1.rds.amazonaws.com"
 DB_PORT = "5432"
 SQLALCHEMY_ECHO = True
 DB_CONNECTION_POOL_SIZE = 10

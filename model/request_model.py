@@ -28,13 +28,13 @@ class RequestOperations:
         egn = Engine()
         try:
             magazine_session = egn.get_engine_session()
-            magazine_data = magazine_session.query(Magazine.id).filter(Magazine.magazine_flag == 'upcoming').all()
+            magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
             magazine_content_id = [row[0] for row in magazine_data]
             if len(magazine_content_id) > 0:
                 magazine_content_id = str(magazine_content_id[0])
 
                 magazine_session.query(Magazine).filter(Magazine.id == magazine_content_id).with_for_update().update(
-                    {Magazine.magazine_flag: 'released'}, synchronize_session=False)
+                    {Magazine.flag: 'released'}, synchronize_session=False)
 
                 if reschedule and magazine_id is not None:
                     mag_id_from_job = magazine_id
@@ -49,7 +49,7 @@ class RequestOperations:
                     title=magazine_title,
                     date_created=current_date,
                     date_released=release_date,
-                    magazine_flag='upcoming')
+                    flag='upcoming')
                 magazine_session.add(magazine_obj)
                 magazine_session.commit()
                 msg.append("Successfully updated the magazine")
@@ -74,7 +74,7 @@ class RequestOperations:
             current_date = datetime.now()
             if not magazine_id:
                 job_session = egn.get_engine_session()
-                magazine_data = job_session.query(Magazine.id).filter(Magazine.magazine_flag == 'upcoming').all()
+                magazine_data = job_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
                 magazine_content_id = [row[0] for row in magazine_data]
 
                 job_mag_id = job_session.query(Job.magazine_id).all()
@@ -152,3 +152,33 @@ class RequestOperations:
             raise
         finally:
             egn.close_session(status_session)
+
+    @staticmethod
+    def fetch_all_magazine():
+        get_magazine_session = None
+        egn = Engine()
+        content_data = []
+        try:
+            get_magazine_session = egn.get_engine_session()
+            get_magazine_data_from_scheduled_jobs = get_magazine_session.query(Job.magazine_id). filter(Job.status == 'scheduled').all()
+            jobs_magazine_id = [row[0] for row in get_magazine_data_from_scheduled_jobs]
+            get_magazine_data_from_magazine = get_magazine_session.query(Magazine.id).all()
+            magazine_id = [row[0] for row in get_magazine_data_from_magazine]
+
+            magazine_ids_left_to_release = list(set(jobs_magazine_id) - set(magazine_id))
+            if len(magazine_ids_left_to_release) > 0:
+                for ids in magazine_ids_left_to_release:
+                    ids = str(ids)
+
+                    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids, Job.status == 'scheduled').all()
+                    rows = [row for row in data_for_reschedule]
+                    content = {"magazine_id": rows[0][0], "created_date_time": rows[0][1], "release_date_time": rows[0][2]}
+                    content_data.append(content)
+            else:
+                content_data = "No magazine found for reschedule."
+        except (Exception, psycopg2.errors) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(get_magazine_session)
+        return content_data
