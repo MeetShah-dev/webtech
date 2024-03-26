@@ -34,6 +34,27 @@ def get_magazine_content(title, release_date, current_date, reschedule, magazine
         raise
 
 
+@app.route("/get_all_magazine", methods=['GET'])
+def get_all_magazine():
+    """
+        Scheduling the job for the release of magazine.
+    """
+    response_dict = {}
+    try:
+        data = RequestOperations()
+        magazine_data = data.fetch_all_magazine()
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data fetched successfully.'
+        response_dict['data'] = magazine_data
+        success_logger.info("Magazine Id available for reschedule of magazine.")
+    except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
+        response_dict['data'] = "No data found."
+        error_logger.exception(error)
+    return jsonify(response_dict)
+
+
 schedule = BackgroundScheduler()
 schedule.start()
 
