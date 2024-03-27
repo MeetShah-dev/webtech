@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 
 from .models import Blog, File
-from .serializers import BlogSerializer
+from .serializers import BlogSerializer, RejectedBlogSerializer
 from .utils import delete_file_placeholder, BlogProcessor, ApiResponse, latest_released_magazine_querydict
 
 from django.db import transaction, IntegrityError
@@ -17,8 +17,8 @@ from django.db.models import Subquery
 @renderer_classes([JSONRenderer])
 def magazine_feed(request: Request) -> Response: 
     """
-    API view to read blogs. Implements a 10 blog pagination and fetches 
-        associated files for each blog. Only approved non-draft blogs are displayed.
+    API view to read blogs of the latest released magazine. Implements a 10 blog pagination 
+        and fetches associated files for each blog. Only approved non-draft blogs are displayed.
 
     Parameters:
         request (Request): User request handled by the framework.
@@ -29,8 +29,9 @@ def magazine_feed(request: Request) -> Response:
         paginator = PageNumberPagination()
         paginator.page_size = 10
         blogs = Blog.objects.defer(
-            'keywords',
-            'reader_ids'
+            'is_ready',
+            'is_rejected',
+            'rejection_number'
         ).filter(
             is_draft=False, 
             is_approved=True, 
@@ -55,12 +56,16 @@ def archived_magazine(request: Request) -> Response:
         Response: JSON object containing count, blogs, and next url.
     """
     if request.method == 'GET':
-        magazine_id = request.data['id'] 
+        try:
+            magazine_id = request.data['magazine'] 
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
         paginator = PageNumberPagination()
         paginator.page_size = 10
         blogs = Blog.objects.defer(
-            'keywords',
-            'reader_ids'
+            'is_ready',
+            'is_rejected',
+            'rejection_number'
         ).filter(
             is_draft=False, 
             is_approved=True,
@@ -74,7 +79,7 @@ def archived_magazine(request: Request) -> Response:
 
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
-def user_blogs(request: Request) -> Response:
+def user_blogs(request: Request) -> Response: 
     """
     API view to read a user's blogs. Implements a 10 blog pagination and fetches 
         associated files for each blog. Only approved non-draft blogs are displayed.
@@ -85,14 +90,18 @@ def user_blogs(request: Request) -> Response:
         Response: JSON object containing count, blogs, and next url.
     """
     if request.method == 'GET':
-        user_id = request.data['id']
+        try:
+            author_id = request.data['author']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
         paginator = PageNumberPagination()
         paginator.page_size = 10
         blogs = Blog.objects.defer(
-            'keywords',
-            'reader_ids'
+            'is_ready',
+            'is_rejected',
+            'rejection_number'
         ).filter(
-            user_id=user_id,
+            user_id=author_id,
             is_draft=False, 
             is_approved=True
         ).prefetch_related('files').all() 
@@ -102,7 +111,41 @@ def user_blogs(request: Request) -> Response:
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-# TODO only authors should be able to see their drafts TODO
+@api_view(['GET'])
+@renderer_classes([JSONRenderer])
+def user_rejected_blogs(request: Request) -> Response: 
+    """
+    API view to read the current user's rejected blogs. Implements a 10 
+        blog pagination and fetches associated files and feedback for each blog. 
+
+    Parameters:
+        request (Request): User request handled by the framework.
+    Returns:
+        Response: JSON object containing count, blogs, and next url.
+    """
+    if request.method == 'GET':
+        try:
+            user_id = request.data['user']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        blogs = Blog.objects.defer(
+            'is_ready',
+            'rejection_number'
+        ).filter(
+            user_id=user_id,
+            is_rejected=True
+        ).prefetch_related(
+            'files',
+            'feedbacks' 
+        ).all() 
+        result_page = paginator.paginate_queryset(blogs, request)
+        serializer = RejectedBlogSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
 @api_view(['GET'])
 @renderer_classes([JSONRenderer]) 
 def user_drafts(request: Request) -> Response: 
@@ -116,12 +159,16 @@ def user_drafts(request: Request) -> Response:
         Response: JSON object containing count, blogs, and next url.
     """
     if request.method == 'GET':
-        user_id = request.data['id']
+        try:
+            user_id = request.data['user']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
         paginator = PageNumberPagination()
         paginator.page_size = 10
         drafts = Blog.objects.defer(
-            'keywords',
-            'reader_ids'
+            'is_ready',
+            'is_rejected',
+            'rejection_number'
         ).filter(
             user_id=user_id,
             is_draft=True, 
@@ -132,31 +179,86 @@ def user_drafts(request: Request) -> Response:
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
             
 
-#TODO authors should have access to their blogs even if they're drafts or not approved TODO
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
 def read_blog(request: Request) -> Response: 
     """
-    API view to read a single blog.
+    API view to read a single blog/draft. If the client tries to read 
+        another user's unapproved blog or draft the action will be forbidden 
+        by the server. Only the author has access to these data. On the other 
+        hand, if the blog is approved, its data can be accessed by the client.
 
     Parameters:
-        pk (int): Blog's author primary key/id.
         request (Request): User request handled by the framework.
     Returns:
         Response: JSON object containing all the blog's fields.
     """
     if request.method == 'GET':
-        blog_id = request.data['id']
         try:
-            blog = Blog.objects.get(
+            user_id = request.data['user']
+            blog_id = request.data['blog']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
+        try:
+            blog = Blog.objects.defer(
+                'is_ready',
+                'is_rejected',
+                'rejection_number'
+            ).prefetch_related(
+                'files',
+            ).get(
                 pk=blog_id,
-                is_approved=True,
-                is_draft=False
-            ) 
+            )
+            if int(blog.user_id) == int(user_id):
+                if blog.is_rejected:
+                    serializer = RejectedBlogSerializer(blog)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    serializer = BlogSerializer(blog)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                if blog.is_approved == True:
+                    serializer = BlogSerializer(blog)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_403_FORBIDDEN)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-        serializer = BlogSerializer(blog)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(['POST'])
+@renderer_classes([JSONRenderer])
+def new_reader(request: Request) -> Response: 
+    """
+    API view to add a reader id in a blog. This api takes care of 
+        incrementing the count of readers in the blog targeted as well.
+
+    Parameters:
+        request (Request): User request handled by the framework.
+    Returns:
+        Response: A response object indicating the status of the operation.
+    """
+    if request.method == 'POST':
+        try:
+            blog_id = request.data['blog']
+            user_id = request.data['user']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
+        try: 
+            blog = Blog.objects.get(pk=blog_id)
+        except Blog.DoesNotExist:
+            return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
+        try:
+            if blog.reader_ids:
+                blog.reader_ids.append(user_id)
+                blog.readers += 1
+                blog.save()
+            else:
+                blog.reader_ids = [str(user_id)]
+                blog.save()
+            return Response(ApiResponse.READER_POST_SUCCESS, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(ApiResponse.READER_POST_ERROR, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
@@ -172,7 +274,7 @@ def create_blog(request: Request) -> Response:
     Returns:
         Response: A response object indicating the status of the operation.
     """
-    if request.method == 'POST':
+    if request.method == 'POST': 
         data       = request.data
         files      = request.FILES
         serializer = BlogSerializer(data=data)
@@ -203,24 +305,30 @@ def update_blog(request: Request) -> Response:
         Response: A response object indicating the status of the operation.
     """
     if request.method == 'PUT':
-        data = request.data
         try:
-            blog = Blog.objects.get(pk=data['id'])
+            data = request.data
+            user_id = data['user']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
+        try:
+            blog = Blog.objects.get(pk=data['blog'])
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-        files = request.FILES
-        serializer = BlogSerializer(blog, data=data)
-        try:
-            with transaction.atomic():
-                response = BlogProcessor.process_blog_data(
-                    "PUT", 
-                    serializer, 
-                    data, 
-                    files
-                )
-                return response
-        except IntegrityError:
-            return Response(ApiResponse.SERIALIZER_ERROR, status=status.HTTP_400_BAD_REQUEST)
+        if int(blog.user_id) == int(user_id):
+            files = request.FILES
+            serializer = BlogSerializer(blog, data=data)
+            try:
+                with transaction.atomic():
+                    response = BlogProcessor.process_blog_data(
+                        "PUT", 
+                        serializer, 
+                        data, 
+                        files
+                    )
+                    return response
+            except IntegrityError:
+                return Response(ApiResponse.SERIALIZER_ERROR, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_403_FORBIDDEN)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
@@ -228,7 +336,8 @@ def update_blog(request: Request) -> Response:
 @renderer_classes([JSONRenderer])
 def delete_blog(request: Request) -> Response:
     """
-    API view to delete a blog. 
+    API view to delete a blog. Only the authors are able to delete their 
+        blogs. An attempt to delete another user's blog is forbidden by the server
 
     Parameters:
         request (Request): User request handled by the framework.
@@ -236,13 +345,20 @@ def delete_blog(request: Request) -> Response:
         Response: A response object indicating the status of the operation.
     """
     if request.method == 'DELETE':
-        blog_id = request.data['id']
+        try:
+            data = request.data
+            blog_id = data['blog']
+            user_id = data['user']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
         try: 
             blog = Blog.objects.get(pk=blog_id)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-        blog.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if int(user_id) == int(blog.user_id):
+            blog.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
@@ -250,8 +366,10 @@ def delete_blog(request: Request) -> Response:
 @renderer_classes([JSONRenderer])
 def delete_file(request: Request) -> Response:
     """
-    API view to delete a file in a blog. This api can be called to delete a specific file in 
-        a blog and it also deletes the file uid used as a placeholder for the image in the text.
+    API view to delete a file in a blog. This api can be called to delete a specific 
+        file in a blog and it also deletes the file uid used as a placeholder for the 
+        image in the text. Only the file uploaders are able to delete their files. 
+        An attempt to delete another user's file is forbidden by the server.
 
     Parameters:
         request (Request): User request handled by the framework.
@@ -259,21 +377,28 @@ def delete_file(request: Request) -> Response:
         Response: A response object indicating the status of the operation.
     """
     if request.method == 'DELETE':
-        file_id = request.data['id']
+        try:
+            data = request.data
+            user_id = data['user']
+            file_id = data['file']
+        except KeyError as e:
+            return Response(ApiResponse.key_error(e), status=status.HTTP_400_BAD_REQUEST)
         try: 
-            file = File.objects.get(pk=file_id)
+            file = File.objects.select_related('blog').get(pk=file_id)
         except Blog.DoesNotExist:
             return Response(ApiResponse.NOT_FOUND, status=status.HTTP_404_NOT_FOUND)
-        try:
-            with transaction.atomic():
-                blog = file.blog
-                blog.content = delete_file_placeholder(
-                    blog.content, 
-                    file.uid
-                )
-                blog.save()
-                file.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-        except IntegrityError:
-            return Response(ApiResponse.FILE_DELETE_ERROR, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if int(user_id) == int(file.blog.user_id):
+            try:
+                with transaction.atomic():
+                    blog = file.blog
+                    blog.content = delete_file_placeholder(
+                        blog.content, 
+                        file.uid
+                    )
+                    blog.save()
+                    file.delete()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+            except IntegrityError:
+                return Response(ApiResponse.FILE_DELETE_ERROR, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status=status.HTTP_403_FORBIDDEN)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -77,13 +77,19 @@ class ApiResponse:
     """
     BLOG_POST_FILES_SUCCESS = {"Response": "Blog with files posted successfully."}
     BLOG_POST_TEXT_SUCCESS  = {"Response": "Blog with text only posted successfully."}
+    READER_POST_SUCCESS     = {"Response": "Reader id added successfully."}
     BLOG_PUT_FILES_SUCCESS  = {"Response": "Blog with files updated successfully."}
     BLOG_PUT_TEXT_SUCCESS   = {"Response": "Blog with text only updated successfully."}
-    BLOG_DELETE_SUCCESS     = {"Response": "Blog deleted successfully"}
-    NOT_FOUND               = {"Response": "Item requested not found"}
-    FILE_DELETE_SUCCESS     = {"Response": "File deleted successfully"}
+    BLOG_DELETE_SUCCESS     = {"Response": "Blog deleted successfully."}
+    NOT_FOUND               = {"Response": "Item requested not found."}
+    FILE_DELETE_SUCCESS     = {"Response": "File deleted successfully."}
     SERIALIZER_ERROR        = {"Error": "The error is most likely due to the data format."}
-    FILE_DELETE_ERROR       = {"Error": "An error occured while trying to delete the file"}
+    FILE_DELETE_ERROR       = {"Error": "An error occured while trying to delete the file."}
+    READER_POST_ERROR       = {"Erroe": "An error occured while trying to add the reader id."}
+
+    @staticmethod
+    def key_error(e: KeyError) -> dict:
+        return {"Error": f"Missing key: {e}"}
 
 
 def delete_file_placeholder(blog: str, uid: str) -> str:

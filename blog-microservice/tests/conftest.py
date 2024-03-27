@@ -10,7 +10,8 @@ from .factories import (
     UserFactory, 
     RoleFactory, 
     CategoryFactory, 
-    MagazineFactory
+    MagazineFactory,
+    FeedbackFactory
 )
 
 register(RoleFactory)
@@ -20,6 +21,7 @@ register(CategoryFactory)
 register(BlogFactory)
 register(DraftFactory)
 register(FileFactory)
+register(FeedbackFactory)
 
 
 @pytest.fixture

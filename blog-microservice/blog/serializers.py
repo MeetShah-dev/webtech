@@ -3,12 +3,18 @@ import json
 from rest_framework import serializers
 from django.utils import timezone
 
-from .models import Blog, File, Category, Magazine
+from .models import Blog, File, Category, Magazine, Feedback
 
 
 class CategorySerializer(serializers.ModelSerializer):    
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class FeedbackSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Feedback
         fields = '__all__'
 
 
@@ -21,9 +27,11 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    likes        = serializers.IntegerField(read_only=True)
+    comments     = serializers.IntegerField(read_only=True)
     magazine     = serializers.PrimaryKeyRelatedField(read_only=True)
+    reader_ids   = serializers.ListField(child=serializers.CharField(), read_only=True)
     category_ids = serializers.ListField(child=serializers.CharField(), required=True, write_only=True)
-    reader_ids   = serializers.ListField(child=serializers.CharField(), required=False)
     keywords     = serializers.ListField(child=serializers.CharField(), required=False)
     date_created = serializers.DateTimeField(required=False)
     files        = FileSerializer(many=True, read_only=True)
@@ -42,7 +50,6 @@ class BlogSerializer(serializers.ModelSerializer):
             dict: deserialized validated data to be stored in the DB.
         """
         keywords        = data.get('keywords', False)
-        reader_ids      = data.get('reader_ids', False)
         category_ids    = data.get('category_ids', False)
         validated_data  = super(BlogSerializer, self).to_internal_value(data)
 
@@ -64,23 +71,14 @@ class BlogSerializer(serializers.ModelSerializer):
                     'keywords': 'Must be a valid JSON list string.'
                 })
 
-        if reader_ids and type(reader_ids) is not list: 
-            try:
-                reader_ids_list = json.loads(reader_ids)
-                validated_data['reader_ids'] = reader_ids_list
-            except json.JSONDecodeError:
-                raise serializers.ValidationError({
-                    'reader_ids': 'Must be a valid JSON list string.'
-                })
-
         return validated_data
 
     def create(self, validated_data: dict) -> Blog:
         """
-        Overrides create to support saving instances. This is as 
-            both date_created and is_approved fields must be handled by the server.
-            This method also creates many to many relationships between the blog
-            created and the categories provided based on their ids.
+        Overrides create to support saving instances. This is as some fields'
+            values must be assigned by the server. This method also creates 
+            many to many relationships between the blog created and 
+            the categories provided based in the request on their ids.
 
         Parameters: 
             validated_data (dict): The validated data to create a new instance.
@@ -93,6 +91,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
         validated_data['magazine']      = magazine
         validated_data['date_created']  = timezone.now()
+        validated_data['is_ready']      = True
         validated_data['is_approved']   = False
         categories = validated_data.pop('category_ids', [])
 
@@ -110,7 +109,7 @@ class BlogSerializer(serializers.ModelSerializer):
     def update(self, instance: Blog, validated_data: dict) -> Blog:
         """
         Overrides update to support updating instances. This is as 
-            both date_updated and is_approved fields must be handled by the server.
+            some fields' values must be assigned by the server.
             This method also updates many to many relationships between the blog
             updated and the categories provided based on their ids.
 
@@ -123,6 +122,7 @@ class BlogSerializer(serializers.ModelSerializer):
         """
         # fields values handled by the server
         instance.is_approved  = False
+        instance.is_ready     = True
         instance.date_updated = timezone.now()
         # fields values sent by the client 
         instance.title        = validated_data.get('title', instance.title)
@@ -157,13 +157,13 @@ class BlogSerializer(serializers.ModelSerializer):
         Returns:
             Magazine: A magazine instance.
         """
-        try:
-            magazine = Magazine.objects.filter(
-                flag='upcoming'
-            ).order_by('-date_released')[:1][0]
+        magazine = Magazine.objects.filter(
+            flag='upcoming'
+        ).order_by('-date_released').first()
+        if magazine:
             return magazine
-        except Magazine.DoesNotExist:
-            raise LookupError('Error: There are no upcoming magazines in the database.')
+        else:
+            raise Magazine.DoesNotExist('There are no upcoming magazines in the database.')
 
     class Meta:
         model = Blog
@@ -181,5 +181,19 @@ class BlogSerializer(serializers.ModelSerializer):
             'category_ids',
             'reader_ids', 
             'keywords', 
-            'files'
+            'likes',
+            'comments',
+            'files',
         ]
+
+
+class RejectedBlogSerializer(BlogSerializer):
+    """
+    Using a separate serializer for rejected blogs as the feedback 
+        shouldn't be queried when dealing with a draft or approved blog.
+    """
+    feedbacks = FeedbackSerializer(many=True, read_only=True) 
+
+    class Meta:
+        model = Blog
+        fields = '__all__'

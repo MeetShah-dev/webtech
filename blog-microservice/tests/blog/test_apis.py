@@ -1,4 +1,5 @@
 import json
+import uuid
 import pytest
 import factory
 
@@ -14,6 +15,7 @@ from tests.factories import (
     BlogFactory, 
     DraftFactory, 
     UserFactory, 
+    FeedbackFactory,
     CategoryFactory, 
     DataGenerator, 
     release_magazines,
@@ -25,7 +27,7 @@ pytestmark = pytest.mark.django_db
 
 class TestReadCurrentFeedApi:
 
-    endpoint = '/blog/magazine-feed/'
+    endpoint = '/api/magazine-feed/'
 
     def test_feed_get(self, api_client, file_factory: FileFactory) -> None:
         """
@@ -35,7 +37,9 @@ class TestReadCurrentFeedApi:
             api_client (APIClient): The library used to make requests.
             file_factory (FileFactory): Used to create files associated to blogs in one go.
         """
-        file_factory.create_batch(2)
+        uuids = [str(uuid.uuid4()) for _ in range(2)] # creating unique uids to conform to the db design
+        num_files = len(uuids)
+        file_factory.create_batch(num_files, uid=factory.Iterator(uuids))
         release_magazines()
         response = api_client().get(self.endpoint)
 
@@ -65,7 +69,7 @@ class TestReadCurrentFeedApi:
 
 class TestReadArchivedFeedApi:
 
-    endpoint = '/blog/archived-magazine/'
+    endpoint = '/api/archived-magazine/'
 
     def test_feed_get(self, api_client, blog_factory: BlogFactory, magazine_factory: MagazineFactory) -> None:
         """
@@ -81,8 +85,7 @@ class TestReadArchivedFeedApi:
         blog_factory.create_batch(2, magazine=magazine)
         release_magazines()
 
-        data = {'id': magazine.pk}
-
+        data = {'magazine': magazine.pk}
         response = client.generic(
             method="GET", 
             path=self.endpoint, 
@@ -106,8 +109,7 @@ class TestReadArchivedFeedApi:
         blog_factory.create_batch(20, magazine=magazine)
         release_magazines()
 
-        data = {'id': magazine.pk}
-
+        data = {'magazine': magazine.pk}
         response = client.generic(
             method="GET", 
             path=self.endpoint, 
@@ -118,7 +120,6 @@ class TestReadArchivedFeedApi:
         assert response.status_code == 200
 
         blogs = response.json()
-
         response = api_client().generic(
             method="GET", 
             path=blogs['next'], 
@@ -131,7 +132,7 @@ class TestReadArchivedFeedApi:
 
 class TestReadDraftsApi: 
 
-    endpoint = '/blog/read-drafts/'
+    endpoint = '/api/read-drafts/'
 
     def test_drafts_get(self, api_client: APIClient, user_factory: UserFactory,  draft_factory: DraftFactory) -> None:
         """
@@ -144,11 +145,9 @@ class TestReadDraftsApi:
         """
         user = user_factory()
         client = api_client()
-
         draft_factory.create_batch(8, user=user)
 
-        data = {'id' : user.id}
-
+        data = {'user' : user.id}
         response = client.generic(
             method="GET", 
             path=self.endpoint, 
@@ -162,9 +161,41 @@ class TestReadDraftsApi:
         assert drafts['count'] == 8
 
 
+class TestReadRejectedBlogsApi:
+
+    endpoint = '/api/read-user-rejected-blogs/'
+
+    def test_rejected_blogs_get(self, api_client: APIClient, blog_factory: BlogFactory, feedback_factory: FeedbackFactory) -> None: 
+        """
+        Tests the retrieval of the current user's rejected blogs and feedbacks through the API to ensure it is successful. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            feedback_factory (FeedbackFactory): Used to create feedbacks.
+        """
+        client = api_client()
+        blog = blog_factory(is_approved=False, is_ready=False, is_rejected=True, rejection_number=1)
+        feedback = feedback_factory(blog=blog, content=fake.sentence())
+
+        data = {'user': blog.user_id}
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        rejected_blogs = response.json()
+
+        assert response.status_code == 200
+        assert rejected_blogs['results'][0]['feedbacks'][0]['content'] == feedback.content
+        assert rejected_blogs['results'][0]['id'] == blog.pk
+
+
 class TestReadBlogApi: 
 
-    endpoint = '/blog/read-blog/'
+    endpoint = '/api/read-blog/'
 
     def test_blog_get(self, api_client: APIClient, blog_factory: BlogFactory) -> None:
         """
@@ -177,8 +208,7 @@ class TestReadBlogApi:
         client = api_client()
         blog = blog_factory()
 
-        data = {'id' : blog.id}
-
+        data = {'user': blog.user_id, 'blog': blog.id}
         response = client.generic(
             method="GET", 
             path=self.endpoint, 
@@ -188,14 +218,108 @@ class TestReadBlogApi:
 
         assert response.status_code == 200
 
+    def test_draft_get(self, api_client: APIClient, draft_factory: DraftFactory) -> None:
+        """
+        Tests the retrieval of a single draft through the API to ensure it is successful. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+        """
+        client = api_client()
+        draft = draft_factory()
+
+        data = {'user': draft.user_id, 'blog': draft.id}
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        assert response.status_code == 200
+
+    def test_rejected_blog_get(self, api_client: APIClient, blog_factory: BlogFactory, feedback_factory: FeedbackFactory) -> None: 
+        """
+        Tests the retrieval of a rejected blog and its feedback through the API to ensure it is successful. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            feedback_factory (FeedbackFactory): Used to create feedbacks.
+        """
+        client = api_client()
+        blog = blog_factory(is_approved=False, is_ready=False, is_rejected=True, rejection_number=1)
+        feedback = feedback_factory(blog=blog, content=fake.sentence())
+
+        data = {'user': blog.user_id, 'blog': blog.pk}
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        rejected_blog = response.json()
+        
+        assert response.status_code == 200
+        assert rejected_blog['is_rejected'] == True
+        assert rejected_blog['feedbacks'][0]['content'] == feedback.content
+
+    def test_other_user_draft_get(self, api_client: APIClient, draft_factory: DraftFactory, user_factory: UserFactory) -> None:
+        """
+        Tests the retrieval of an other user's draft through the API to ensure it is forbidden. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            user_factory (UserFactory): Used to create users.
+        """
+        client = api_client()
+        draft = draft_factory()
+        user = user_factory()
+
+        data = {'user': user.pk, 'blog' : draft.id}
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        assert response.status_code == 403
+
+    def test_other_user_unapproved_blog_get(self, api_client: APIClient, blog_factory: BlogFactory, user_factory: UserFactory) -> None:
+        """
+        Tests the retrieval of an other user's unapproved blog through the API to ensure it is forbidden. 
+
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            user_factory (UserFactory): Used to create users.
+        """
+        client = api_client()
+        blog = blog_factory(is_approved=False)
+        user = user_factory()
+
+        data = {'user': user.pk, 'blog' : blog.id}
+        response = client.generic(
+            method="GET", 
+            path=self.endpoint, 
+            data=json.dumps(data), 
+            content_type='application/json'
+        )
+
+        assert response.status_code == 403
+
 
 class TestReadUserBlogsApi: 
 
-    endpoint = '/blog/read-user-blogs/'
+    endpoint = '/api/read-user-blogs/'
 
     def test_user_blogs_get(self, api_client: APIClient, user_factory: UserFactory,  blog_factory: BlogFactory) -> None:
         """
-        Tests the retrieval of the user's blogs through the API to ensure it is successful. 
+        Tests the retrieval of a user's blogs through the API to ensure it is successful. 
 
         Parameters:
             api_client (APIClient): The library used to make requests.
@@ -206,8 +330,7 @@ class TestReadUserBlogsApi:
         client = api_client()
         blog_factory.create_batch(5, user=user)
         
-        data = {'id' : user.id}
-
+        data = {'author' : user.id}
         response = client.generic(
             method="GET", 
             path=self.endpoint, 
@@ -215,15 +338,15 @@ class TestReadUserBlogsApi:
             content_type='application/json'
         )
 
-        drafts = response.json()
+        blogs = response.json()
 
         assert response.status_code == 200
-        assert drafts['count'] == 5
+        assert blogs['count'] == 5
 
 
 class TestCreateBlogApi: 
 
-    endpoint = '/blog/create-blog/'
+    endpoint = '/api/create-blog/'
 
     def test_blog_text_post(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
@@ -236,12 +359,10 @@ class TestCreateBlogApi:
         """
         blog    = blog_factory()
         client  = api_client()
-
         names = ['Category 1', 'Category 2', 'Category 3']
         categories = category_factory.create_batch(3, name=factory.Iterator(names))
 
         data = DataGenerator.data_text(blog, *categories)
-
         response = client.post(self.endpoint, data=data, format='multipart')
 
         assert response.status_code == 201
@@ -258,12 +379,10 @@ class TestCreateBlogApi:
         """
         blog    = blog_factory()
         client  = api_client()
-
         names = ['Category 1', 'Category 2', 'Category 3']
         categories = category_factory.create_batch(3, name=factory.Iterator(names))
 
         data = DataGenerator.data_with_files(blog, *categories)
-
         response = client.post(self.endpoint, data=data, format='multipart')
 
         assert response.status_code == 201
@@ -272,7 +391,7 @@ class TestCreateBlogApi:
 
 class TestUpdateBlogApi:
     
-    endpoint = '/blog/update-blog/'
+    endpoint = '/api/update-blog/'
 
     def test_blog_text_put(self, api_client: APIClient, blog_factory: BlogFactory, category_factory: CategoryFactory) -> None:
         """
@@ -286,7 +405,6 @@ class TestUpdateBlogApi:
         client = api_client()
         names = ['Category 1', 'Category 2', 'Category 3']
         categories = category_factory.create_batch(3, name=factory.Iterator(names))
-
         blog_initial_data = blog_factory(
             title=fake.sentence(), 
             content=fake.paragraph(), 
@@ -297,18 +415,15 @@ class TestUpdateBlogApi:
             content=fake.paragraph(),
             date_created=timezone.now()
         )
-
         blog = self.__initial_blog(blog_initial_data)
-
         data = {
-            'id': blog.pk,
+            'blog': blog.pk,
             'user': blog.user.pk,
             'category_ids': json.dumps([category.pk for category in categories]),
             'title': blog_updated_data.title,
             'content': blog_updated_data.content,
             'is_draft': False,
         }
-
         response = client.put(self.endpoint, data=data, format='multipart')
 
         blog = Blog.objects.get(pk=blog.pk)
@@ -331,7 +446,6 @@ class TestUpdateBlogApi:
         client = api_client()
         names = [fake.name(), fake.name(), fake.name()]
         categories = category_factory.create_batch(3, name=factory.Iterator(names))
-
         blog_initial_data = blog_factory(
             title=fake.sentence(), 
             content=fake.paragraph(), 
@@ -342,18 +456,13 @@ class TestUpdateBlogApi:
             content=fake.paragraph(),
             date_created=timezone.now()
         )
-
         blog = self.__initial_blog(blog_initial_data)
-
         data = DataGenerator.data_with_files(blog_updated_data, *categories)
-
         # non-amendable fields
-        data['id']       = blog.pk
-        data['user']     = blog.user.pk
-
+        data['blog'] = blog.pk
+        data['user'] = blog.user.pk
         # keep data content to make sure it has been updated by the server
         updated_content  = data['content']
-
         response = client.put(self.endpoint, data=data, format='multipart')
 
         blog = Blog.objects.get(pk=blog.pk)
@@ -370,7 +479,6 @@ class TestUpdateBlogApi:
 
         Parameters:
             blog_initial_data (BlogFactory): The source of the data.
-
         Returns:
             Blog: A Blog instance.
         """
@@ -397,7 +505,7 @@ class TestUpdateBlogApi:
 
 class TestDeleteBlogApi: 
 
-    endpoint = '/blog/delete-blog/'
+    endpoint = '/api/delete-blog/'
 
     def test_blog_delete(self, api_client: APIClient, blog_factory: FileFactory) -> None:
         """
@@ -410,18 +518,35 @@ class TestDeleteBlogApi:
         blog    = blog_factory()
         client  = api_client()
 
-        data = {'id': blog.id}
-
         assert Blog.objects.filter(pk=blog.id).exists()
 
+        data = {'user': blog.user.pk, 'blog': blog.id}
         client.delete(self.endpoint, data=data, format='json')
 
         assert not Blog.objects.filter(pk=blog.id).exists()
 
+    def test_other_user_blog_delete(self, api_client: APIClient, blog_factory: FileFactory, user_factory: UserFactory) -> None:
+        """
+        Tests the deletion of another user's blog through the API to ensure it is forbidden. 
+        
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            user_factory (UserFactory): Used to create users.
+        """
+        blog    = blog_factory()
+        user    = user_factory()
+        client  = api_client()
+
+        data = {'user': user.pk, 'blog': blog.id}
+        response = client.delete(self.endpoint, data=data, format='json')
+
+        assert response.status_code == 403
+
 
 class TestDeleteFileApi: 
 
-    endpoint = '/blog/delete-file/'
+    endpoint = '/api/delete-file/'
 
     def test_delete_file(self, api_client: APIClient, file_factory: FileFactory) -> None:
         """
@@ -432,9 +557,8 @@ class TestDeleteFileApi:
             api_client (APIClient): The library used to make requests.
             file_factory (FileFactory): Used to create files associated to blogs in one go.
         """
-        file    = file_factory()
-        client  = api_client()
-
+        file         = file_factory()
+        client       = api_client()
         file_id      = file.id
         file_uid     = str(file.uid)
         blog         = file.blog
@@ -443,8 +567,7 @@ class TestDeleteFileApi:
         
         assert file_uid in blog_content
 
-        data = {'id': file_id}
-
+        data = {'user': file.blog.user.pk, 'file': file_id}
         client.delete(self.endpoint, data=data, format='json')
 
         updated_blog = Blog.objects.get(pk=blog_id)
@@ -452,3 +575,49 @@ class TestDeleteFileApi:
 
         assert file_uid not in updated_content
         assert not File.objects.filter(pk=file_id).exists()
+
+    def test_delete_other_user_file(self, api_client: APIClient, file_factory: FileFactory, user_factory: UserFactory) -> None:
+        """
+        Tests the deletion of an other user's file through the API to ensure it is forbidden. 
+        
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            file_factory (FileFactory): Used to create files associated to blogs in one go.
+            user_factory (UserFactory): Used to create users.
+        """
+        file   = file_factory()
+        user   = user_factory()
+        client = api_client()
+        
+        data = {'user': user.pk, 'file': file.id}
+        response = client.delete(self.endpoint, data=data, format='json')
+
+        assert response.status_code == 403
+
+
+class TestAddReaderApi: 
+
+    endpoint = '/api/add-reader/'
+
+    def test_reader_post(self, api_client: APIClient, blog_factory: BlogFactory, user_factory: UserFactory) -> None:
+        """
+        Tests the addition of a new reader to the list of a blog readers through the API to ensure it is successful. 
+        
+        Parameters:
+            api_client (APIClient): The library used to make requests.
+            blog_factory (BlogFactory): Used to create blogs.
+            user_factory (UserFactory): Used to create users.
+        """
+        blog    = blog_factory()
+        user    = user_factory()
+        client  = api_client()
+        blog_id = blog.pk
+
+        data = {'user': user.pk, 'blog': blog_id}
+        response = client.post(self.endpoint, data=data, format='json')
+
+        blog = Blog.objects.get(pk=blog_id)
+
+        assert response.status_code == 201
+        assert response.json() == ApiResponse.READER_POST_SUCCESS
+        assert str(user.pk) in blog.reader_ids
