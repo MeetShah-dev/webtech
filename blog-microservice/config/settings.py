@@ -21,7 +21,7 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Take environment variables from .env file
+# Get environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
@@ -105,25 +105,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -139,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 # refer to: https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/
-USE_S3 = env('USE_S3')
+USE_S3 = env('USE_S3') == 'True'
 
 if USE_S3:
     AWS_ACCESS_KEY_ID           = env('AWS_ACCESS_KEY_ID')
@@ -152,6 +133,7 @@ if USE_S3:
     STATICFILES_STORAGE         = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE        = 'config.storage_backends.MediaStorage'
 else:
+    STATIC_URL = 'static/'
     MEDIA_URL = '/media/'
     MEDIA_ROOT = MEDIA_DIR
 
@@ -172,4 +154,3 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Set DATA UPLOAD MAX MEMORY SIZE to 10MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
-

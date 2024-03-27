@@ -7,7 +7,7 @@ from faker import Faker
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from blog.models import Blog, File, User, Magazine, Category, Role
+from blog.models import Blog, File, User, Magazine, Category, Role, Feedback
 
 fake = Faker()
 
@@ -112,7 +112,6 @@ class RoleFactory(factory.django.DjangoModelFactory):
         model = Role
 
     name = "user"
-    privilege_properties = json.dumps({"privilege": "basic"})
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -161,7 +160,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
     is_approved  = True 
     is_draft     = False
     date_created = timezone.now()
-    reader_ids   = [[fake.random_number(digits=5) for _ in range(2)]]
+    reader_ids   = [fake.random_number(digits=5) for _ in range(2)]
     keywords     = [fake.word() for _ in range(2)]
 
     user         = factory.SubFactory(UserFactory)
@@ -197,3 +196,11 @@ class FileFactory(factory.django.DjangoModelFactory):
             extra_content = str(instance.uid) + fake.paragraph()
             instance.blog.content += extra_content
             instance.blog.save()
+
+
+class FeedbackFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Feedback
+
+    content = fake.sentence()
+    blog = factory.SubFactory(BlogFactory)
