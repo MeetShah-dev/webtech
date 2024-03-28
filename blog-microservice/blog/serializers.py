@@ -31,6 +31,7 @@ class BlogSerializer(serializers.ModelSerializer):
     comments     = serializers.IntegerField(read_only=True)
     magazine     = serializers.PrimaryKeyRelatedField(read_only=True)
     reader_ids   = serializers.ListField(child=serializers.CharField(), read_only=True)
+    reader_ids   = serializers.ListField(child=serializers.CharField(), read_only=True)
     category_ids = serializers.ListField(child=serializers.CharField(), required=True, write_only=True)
     keywords     = serializers.ListField(child=serializers.CharField(), required=False)
     date_created = serializers.DateTimeField(required=False)
@@ -183,6 +184,7 @@ class BlogSerializer(serializers.ModelSerializer):
             'keywords', 
             'likes',
             'comments',
+            'readers',
             'files',
         ]
 
