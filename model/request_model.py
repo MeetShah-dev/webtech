@@ -170,9 +170,9 @@ class RequestOperations:
                 for ids in magazine_ids_left_to_release:
                     ids = str(ids)
 
-                    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids, Job.status == 'scheduled').all()
+                    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.magazine_title, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids, Job.status == 'scheduled').all()
                     rows = [row for row in data_for_reschedule]
-                    content = {"magazine_id": rows[0][0], "created_date_time": rows[0][1], "release_date_time": rows[0][2]}
+                    content = {"magazine_id": rows[0][0], "magazine_title":rows[0][1], "created_date_time": rows[0][2], "release_date_time": rows[0][3]}
                     content_data.append(content)
             else:
                 content_data = "No magazine found for reschedule."

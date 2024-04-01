@@ -11288,3 +11288,425 @@ FROM public.magazine
 2024-03-24 17:31:40,456 - success_logs - INFO - =====5=====
 2024-03-24 17:31:40,459 - success_logs - INFO - Session Object Removed
 2024-03-24 17:31:40,460 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-03-28 13:55:29,422 - success_logs - INFO - =====3=====
+2024-03-28 13:55:29,424 - success_logs - INFO - Engine Object created...
+2024-03-28 13:55:29,424 - success_logs - INFO - =====4=====
+2024-03-28 13:55:29,425 - success_logs - INFO - Session Object created...
+2024-03-28 13:55:30,412 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-28 13:55:30,415 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 13:55:30,594 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-28 13:55:30,596 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 13:55:30,763 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-28 13:55:30,763 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 13:55:30,945 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 13:55:30,945 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-03-28 13:55:30,945 - sqlalchemy.engine.Engine - INFO - [generated in 0.00071s] {'status_1': 'scheduled'}
+2024-03-28 13:55:31,128 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-03-28 13:55:31,128 - sqlalchemy.engine.Engine - INFO - [generated in 0.00075s] {}
+2024-03-28 13:55:31,224 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-28 13:55:31,324 - success_logs - INFO - =====5=====
+2024-03-28 13:55:31,324 - success_logs - INFO - Session Object Removed
+2024-03-28 13:55:31,324 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-03-28 15:29:30,659 - success_logs - INFO - =====3=====
+2024-03-28 15:29:30,659 - success_logs - INFO - Engine Object created...
+2024-03-28 15:29:30,659 - success_logs - INFO - =====4=====
+2024-03-28 15:29:30,700 - success_logs - INFO - Session Object created...
+2024-03-28 15:29:32,049 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-28 15:29:32,049 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 15:29:32,256 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-28 15:29:32,258 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 15:29:32,460 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-28 15:29:32,460 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-28 15:29:32,669 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:29:32,677 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-28 15:29:32,677 - sqlalchemy.engine.Engine - INFO - [generated in 0.00178s] {'flag_1': 'upcoming'}
+2024-03-28 15:29:32,972 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs
+2024-03-28 15:29:32,972 - sqlalchemy.engine.Engine - INFO - [generated in 0.00137s] {}
+2024-03-28 15:29:33,171 - success_logs - INFO - =====4=====
+2024-03-28 15:29:33,171 - success_logs - INFO - Session Object created...
+2024-03-28 15:29:33,179 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-28 15:29:33,179 - sqlalchemy.engine.Engine - INFO - [generated in 0.00162s] {'magazine_id': 4, 'job_id': 'bc762af386074cc387775536e5da14cd', 'status': 'scheduled', 'magazine_title': 'test4', 'updated_time': datetime.datetime(2024, 3, 28, 15, 29, 30, 659473), 'release_date': datetime.datetime(2024, 3, 28, 15, 35)}
+2024-03-28 15:29:33,383 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:29:33,480 - success_logs - INFO - Job added successfully.
+2024-03-28 15:29:33,487 - success_logs - INFO - =====5=====
+2024-03-28 15:29:33,490 - success_logs - INFO - Session Object Removed
+2024-03-28 15:29:33,490 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-28 15:30:26,912 - success_logs - INFO - =====3=====
+2024-03-28 15:30:26,912 - success_logs - INFO - Engine Object created...
+2024-03-28 15:30:26,912 - success_logs - INFO - =====4=====
+2024-03-28 15:30:26,912 - success_logs - INFO - Session Object created...
+2024-03-28 15:30:26,912 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:30:26,912 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.job_id AS public_scheduled_jobs_job_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-28 15:30:26,912 - sqlalchemy.engine.Engine - INFO - [generated in 0.00047s] {'magazine_id_1': 4, 'status_1': 'scheduled'}
+2024-03-28 15:30:27,142 - success_logs - INFO - Job id fetched successfully.
+2024-03-28 15:30:27,143 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-28 15:30:27,244 - success_logs - INFO - =====5=====
+2024-03-28 15:30:27,244 - success_logs - INFO - Session Object Removed
+2024-03-28 15:30:27,246 - success_logs - INFO - =====3=====
+2024-03-28 15:30:27,246 - success_logs - INFO - Engine Object created...
+2024-03-28 15:30:27,248 - success_logs - INFO - =====4=====
+2024-03-28 15:30:27,248 - success_logs - INFO - Session Object created...
+2024-03-28 15:30:27,248 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:30:27,253 - sqlalchemy.engine.Engine - INFO - UPDATE public.scheduled_jobs SET status=%(status)s WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-28 15:30:27,254 - sqlalchemy.engine.Engine - INFO - [generated in 0.00328s] {'status': 'rescheduled', 'magazine_id_1': 4, 'status_1': 'scheduled'}
+2024-03-28 15:30:27,550 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:30:27,655 - success_logs - INFO - Job id fetched successfully.
+2024-03-28 15:30:27,655 - success_logs - INFO - =====5=====
+2024-03-28 15:30:27,655 - success_logs - INFO - Session Object Removed
+2024-03-28 15:30:27,655 - success_logs - INFO - =====3=====
+2024-03-28 15:30:27,655 - success_logs - INFO - Engine Object created...
+2024-03-28 15:30:27,655 - success_logs - INFO - =====4=====
+2024-03-28 15:30:27,655 - success_logs - INFO - Session Object created...
+2024-03-28 15:30:27,655 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:30:27,655 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-28 15:30:27,655 - sqlalchemy.engine.Engine - INFO - [cached since 54.48s ago] {'magazine_id': 4, 'job_id': '072f06cef58f4d57a26cd4e8a8c875af', 'status': 'scheduled', 'magazine_title': 'test4', 'updated_time': datetime.datetime(2024, 3, 28, 15, 30, 27, 655533), 'release_date': datetime.datetime(2024, 3, 28, 15, 31, 30)}
+2024-03-28 15:30:27,859 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:30:27,957 - success_logs - INFO - Job added successfully.
+2024-03-28 15:30:27,957 - success_logs - INFO - =====5=====
+2024-03-28 15:30:27,957 - success_logs - INFO - Session Object Removed
+2024-03-28 15:30:27,957 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-28 15:31:30,016 - success_logs - INFO - =====3=====
+2024-03-28 15:31:30,016 - success_logs - INFO - Engine Object created...
+2024-03-28 15:31:30,016 - success_logs - INFO - =====4=====
+2024-03-28 15:31:30,016 - success_logs - INFO - Session Object created...
+2024-03-28 15:31:30,017 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:31:30,018 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-28 15:31:30,018 - sqlalchemy.engine.Engine - INFO - [cached since 117.3s ago] {'flag_1': 'upcoming'}
+2024-03-28 15:31:30,326 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-28 15:31:30,429 - success_logs - INFO - =====5=====
+2024-03-28 15:31:30,430 - success_logs - INFO - Session Object Removed
+2024-03-28 15:31:30,431 - success_logs - INFO - =====6=====
+2024-03-28 15:31:30,431 - success_logs - INFO - Content updated in database.
+2024-03-28 15:31:30,432 - success_logs - INFO - ===0====
+2024-03-28 15:31:30,432 - success_logs - INFO - Successful function run for get_magazine_content function.
+2024-03-28 15:33:42,685 - success_logs - INFO - =====3=====
+2024-03-28 15:33:42,685 - success_logs - INFO - Engine Object created...
+2024-03-28 15:33:42,685 - success_logs - INFO - =====4=====
+2024-03-28 15:33:42,685 - success_logs - INFO - Session Object created...
+2024-03-28 15:33:42,685 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:33:42,691 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-28 15:33:42,691 - sqlalchemy.engine.Engine - INFO - [cached since 250s ago] {'flag_1': 'upcoming'}
+2024-03-28 15:33:42,934 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs
+2024-03-28 15:33:42,950 - sqlalchemy.engine.Engine - INFO - [cached since 250s ago] {}
+2024-03-28 15:33:43,137 - success_logs - INFO - =====4=====
+2024-03-28 15:33:43,137 - success_logs - INFO - Session Object created...
+2024-03-28 15:33:43,137 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-28 15:33:43,137 - sqlalchemy.engine.Engine - INFO - [cached since 250s ago] {'magazine_id': 4, 'job_id': '44fdc17056b442f19fcb027ad1b767fa', 'status': 'scheduled', 'magazine_title': 'test4', 'updated_time': datetime.datetime(2024, 3, 28, 15, 33, 42, 685665), 'release_date': datetime.datetime(2024, 3, 28, 15, 35)}
+2024-03-28 15:33:43,239 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:33:43,344 - success_logs - INFO - Job added successfully.
+2024-03-28 15:33:43,344 - success_logs - INFO - =====5=====
+2024-03-28 15:33:43,344 - success_logs - INFO - Session Object Removed
+2024-03-28 15:33:43,344 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-28 15:33:49,838 - success_logs - INFO - =====3=====
+2024-03-28 15:33:49,838 - success_logs - INFO - Engine Object created...
+2024-03-28 15:33:49,838 - success_logs - INFO - =====4=====
+2024-03-28 15:33:49,838 - success_logs - INFO - Session Object created...
+2024-03-28 15:33:49,838 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:33:49,838 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.job_id AS public_scheduled_jobs_job_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-28 15:33:49,838 - sqlalchemy.engine.Engine - INFO - [cached since 202.9s ago] {'magazine_id_1': 4, 'status_1': 'scheduled'}
+2024-03-28 15:33:50,102 - success_logs - INFO - Job id fetched successfully.
+2024-03-28 15:33:50,102 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-28 15:33:50,203 - success_logs - INFO - =====5=====
+2024-03-28 15:33:50,203 - success_logs - INFO - Session Object Removed
+2024-03-28 15:33:50,209 - success_logs - INFO - =====3=====
+2024-03-28 15:33:50,209 - success_logs - INFO - Engine Object created...
+2024-03-28 15:33:50,209 - success_logs - INFO - =====4=====
+2024-03-28 15:33:50,209 - success_logs - INFO - Session Object created...
+2024-03-28 15:33:50,209 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:33:50,209 - sqlalchemy.engine.Engine - INFO - UPDATE public.scheduled_jobs SET status=%(status)s WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-28 15:33:50,209 - sqlalchemy.engine.Engine - INFO - [cached since 203s ago] {'status': 'rescheduled', 'magazine_id_1': 4, 'status_1': 'scheduled'}
+2024-03-28 15:33:50,407 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:33:50,511 - success_logs - INFO - Job id fetched successfully.
+2024-03-28 15:33:50,511 - success_logs - INFO - =====5=====
+2024-03-28 15:33:50,511 - success_logs - INFO - Session Object Removed
+2024-03-28 15:33:50,519 - success_logs - INFO - =====3=====
+2024-03-28 15:33:50,519 - success_logs - INFO - Engine Object created...
+2024-03-28 15:33:50,519 - success_logs - INFO - =====4=====
+2024-03-28 15:33:50,519 - success_logs - INFO - Session Object created...
+2024-03-28 15:33:50,519 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:33:50,519 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-28 15:33:50,522 - sqlalchemy.engine.Engine - INFO - [cached since 257.3s ago] {'magazine_id': 4, 'job_id': '9e7f0510186a40f78e425a3c30dcac14', 'status': 'scheduled', 'magazine_title': 'test4', 'updated_time': datetime.datetime(2024, 3, 28, 15, 33, 50, 519062), 'release_date': datetime.datetime(2024, 3, 28, 15, 34)}
+2024-03-28 15:33:50,820 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:33:50,924 - success_logs - INFO - Job added successfully.
+2024-03-28 15:33:50,924 - success_logs - INFO - =====5=====
+2024-03-28 15:33:50,924 - success_logs - INFO - Session Object Removed
+2024-03-28 15:33:50,924 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-28 15:34:00,001 - success_logs - INFO - =====3=====
+2024-03-28 15:34:00,005 - success_logs - INFO - Engine Object created...
+2024-03-28 15:34:00,005 - success_logs - INFO - =====4=====
+2024-03-28 15:34:00,005 - success_logs - INFO - Session Object created...
+2024-03-28 15:34:00,006 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-28 15:34:00,006 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-28 15:34:00,023 - sqlalchemy.engine.Engine - INFO - [cached since 267.3s ago] {'flag_1': 'upcoming'}
+2024-03-28 15:34:00,248 - sqlalchemy.engine.Engine - INFO - UPDATE public.magazine SET flag=%(flag)s WHERE public.magazine.id = %(id_1)s
+2024-03-28 15:34:00,249 - sqlalchemy.engine.Engine - INFO - [generated in 0.00115s] {'flag': 'released', 'id_1': '3'}
+2024-03-28 15:34:00,349 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.magazine (id, title, date_created, date_released, flag) VALUES (%(id)s, %(title)s, %(date_created)s, %(date_released)s, %(flag)s)
+2024-03-28 15:34:00,355 - sqlalchemy.engine.Engine - INFO - [generated in 0.00400s] {'id': 4, 'title': 'test4', 'date_created': datetime.datetime(2024, 3, 28, 15, 33, 49, 838250), 'date_released': datetime.datetime(2024, 3, 28, 15, 34), 'flag': 'upcoming'}
+2024-03-28 15:34:00,549 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-28 15:34:00,641 - success_logs - INFO - =====7=====
+2024-03-28 15:34:00,641 - success_logs - INFO - No upcoming draft of magazine remaining.
+2024-03-28 15:34:00,641 - success_logs - INFO - =====5=====
+2024-03-28 15:34:00,641 - success_logs - INFO - Session Object Removed
+2024-03-28 15:34:00,653 - success_logs - INFO - =====6=====
+2024-03-28 15:34:00,653 - success_logs - INFO - Content updated in database.
+2024-03-28 15:34:00,653 - success_logs - INFO - ===0====
+2024-03-28 15:34:00,653 - success_logs - INFO - Successful function run for get_magazine_content function.
+2024-03-29 19:08:08,157 - success_logs - INFO - =====3=====
+2024-03-29 19:08:08,157 - success_logs - INFO - Engine Object created...
+2024-03-29 19:08:08,158 - success_logs - INFO - =====4=====
+2024-03-29 19:08:08,158 - success_logs - INFO - Session Object created...
+2024-03-29 19:08:09,100 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-29 19:08:09,102 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:08:09,279 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-29 19:08:09,279 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:08:09,455 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-29 19:08:09,455 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:08:09,635 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:08:09,640 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-29 19:08:09,640 - sqlalchemy.engine.Engine - INFO - [generated in 0.00075s] {'flag_1': 'upcoming'}
+2024-03-29 19:08:09,819 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs
+2024-03-29 19:08:09,819 - sqlalchemy.engine.Engine - INFO - [generated in 0.00061s] {}
+2024-03-29 19:08:09,907 - success_logs - INFO - =====4=====
+2024-03-29 19:08:09,908 - success_logs - INFO - Session Object created...
+2024-03-29 19:08:09,909 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-29 19:08:09,909 - sqlalchemy.engine.Engine - INFO - [generated in 0.00046s] {'magazine_id': 5, 'job_id': '12982bc37f1648a5957b1dff0c1a1362', 'status': 'scheduled', 'magazine_title': 'test5', 'updated_time': datetime.datetime(2024, 3, 29, 19, 8, 8, 158629), 'release_date': datetime.datetime(2024, 3, 29, 22, 0)}
+2024-03-29 19:08:09,999 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-29 19:08:10,089 - success_logs - INFO - Job added successfully.
+2024-03-29 19:08:10,090 - success_logs - INFO - =====5=====
+2024-03-29 19:08:10,090 - success_logs - INFO - Session Object Removed
+2024-03-29 19:08:10,090 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-29 19:08:18,341 - success_logs - INFO - =====3=====
+2024-03-29 19:08:18,341 - success_logs - INFO - Engine Object created...
+2024-03-29 19:08:18,342 - success_logs - INFO - =====4=====
+2024-03-29 19:08:18,342 - success_logs - INFO - Session Object created...
+2024-03-29 19:08:18,343 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:08:18,344 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:08:18,345 - sqlalchemy.engine.Engine - INFO - [generated in 0.00082s] {'status_1': 'scheduled'}
+2024-03-29 19:08:18,791 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-03-29 19:08:18,791 - sqlalchemy.engine.Engine - INFO - [generated in 0.00068s] {}
+2024-03-29 19:08:18,881 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:08:18,882 - sqlalchemy.engine.Engine - INFO - [generated in 0.00074s] {'magazine_id_1': '5', 'status_1': 'scheduled'}
+2024-03-29 19:08:18,970 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-29 19:08:19,060 - success_logs - INFO - =====5=====
+2024-03-29 19:08:19,060 - success_logs - INFO - Session Object Removed
+2024-03-29 19:08:19,060 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-03-29 19:11:05,678 - success_logs - INFO - =====3=====
+2024-03-29 19:11:05,679 - success_logs - INFO - Engine Object created...
+2024-03-29 19:11:05,679 - success_logs - INFO - =====4=====
+2024-03-29 19:11:05,679 - success_logs - INFO - Session Object created...
+2024-03-29 19:11:05,680 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:11:05,681 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.job_id AS public_scheduled_jobs_job_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:11:05,681 - sqlalchemy.engine.Engine - INFO - [generated in 0.00049s] {'magazine_id_1': 5, 'status_1': 'scheduled'}
+2024-03-29 19:11:05,859 - success_logs - INFO - Job id fetched successfully.
+2024-03-29 19:11:05,859 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-29 19:11:05,946 - success_logs - INFO - =====5=====
+2024-03-29 19:11:05,946 - success_logs - INFO - Session Object Removed
+2024-03-29 19:11:05,946 - success_logs - INFO - =====3=====
+2024-03-29 19:11:05,946 - success_logs - INFO - Engine Object created...
+2024-03-29 19:11:05,946 - success_logs - INFO - =====4=====
+2024-03-29 19:11:05,946 - success_logs - INFO - Session Object created...
+2024-03-29 19:11:05,948 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:11:05,949 - sqlalchemy.engine.Engine - INFO - UPDATE public.scheduled_jobs SET status=%(status)s WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:11:05,949 - sqlalchemy.engine.Engine - INFO - [generated in 0.00051s] {'status': 'rescheduled', 'magazine_id_1': 5, 'status_1': 'scheduled'}
+2024-03-29 19:11:06,124 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-29 19:11:06,213 - success_logs - INFO - Job id fetched successfully.
+2024-03-29 19:11:06,214 - success_logs - INFO - =====5=====
+2024-03-29 19:11:06,214 - success_logs - INFO - Session Object Removed
+2024-03-29 19:11:06,214 - success_logs - INFO - =====3=====
+2024-03-29 19:11:06,215 - success_logs - INFO - Engine Object created...
+2024-03-29 19:11:06,215 - success_logs - INFO - =====4=====
+2024-03-29 19:11:06,215 - success_logs - INFO - Session Object created...
+2024-03-29 19:11:06,216 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:11:06,216 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-29 19:11:06,217 - sqlalchemy.engine.Engine - INFO - [cached since 176.3s ago] {'magazine_id': 5, 'job_id': 'd3fd8bc9f8d248b79f41f6c865fd9989', 'status': 'scheduled', 'magazine_title': 'test5', 'updated_time': datetime.datetime(2024, 3, 29, 19, 11, 6, 215430), 'release_date': datetime.datetime(2024, 3, 29, 19, 12)}
+2024-03-29 19:11:06,391 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-29 19:11:06,481 - success_logs - INFO - Job added successfully.
+2024-03-29 19:11:06,482 - success_logs - INFO - =====5=====
+2024-03-29 19:11:06,482 - success_logs - INFO - Session Object Removed
+2024-03-29 19:11:06,482 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-29 19:12:00,010 - success_logs - INFO - =====3=====
+2024-03-29 19:12:00,010 - success_logs - INFO - Engine Object created...
+2024-03-29 19:12:00,011 - success_logs - INFO - =====4=====
+2024-03-29 19:12:00,011 - success_logs - INFO - Session Object created...
+2024-03-29 19:12:00,011 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:12:00,012 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-29 19:12:00,013 - sqlalchemy.engine.Engine - INFO - [cached since 230.4s ago] {'flag_1': 'upcoming'}
+2024-03-29 19:12:00,189 - sqlalchemy.engine.Engine - INFO - UPDATE public.magazine SET flag=%(flag)s WHERE public.magazine.id = %(id_1)s
+2024-03-29 19:12:00,190 - sqlalchemy.engine.Engine - INFO - [generated in 0.00078s] {'flag': 'released', 'id_1': '4'}
+2024-03-29 19:12:00,281 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.magazine (id, title, date_created, date_released, flag) VALUES (%(id)s, %(title)s, %(date_created)s, %(date_released)s, %(flag)s)
+2024-03-29 19:12:00,282 - sqlalchemy.engine.Engine - INFO - [generated in 0.00072s] {'id': 5, 'title': 'test5', 'date_created': datetime.datetime(2024, 3, 29, 19, 11, 5, 678721), 'date_released': datetime.datetime(2024, 3, 29, 19, 12), 'flag': 'upcoming'}
+2024-03-29 19:12:00,370 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-29 19:12:00,460 - success_logs - INFO - =====7=====
+2024-03-29 19:12:00,461 - success_logs - INFO - No upcoming draft of magazine remaining.
+2024-03-29 19:12:00,461 - success_logs - INFO - =====5=====
+2024-03-29 19:12:00,461 - success_logs - INFO - Session Object Removed
+2024-03-29 19:12:00,461 - success_logs - INFO - =====6=====
+2024-03-29 19:12:00,461 - success_logs - INFO - Content updated in database.
+2024-03-29 19:12:00,461 - success_logs - INFO - ===0====
+2024-03-29 19:12:00,461 - success_logs - INFO - Successful function run for get_magazine_content function.
+2024-03-29 19:13:12,784 - success_logs - INFO - =====3=====
+2024-03-29 19:13:12,785 - success_logs - INFO - Engine Object created...
+2024-03-29 19:13:12,785 - success_logs - INFO - =====4=====
+2024-03-29 19:13:12,786 - success_logs - INFO - Session Object created...
+2024-03-29 19:13:13,741 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-29 19:13:13,741 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:13,917 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-29 19:13:13,919 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:14,093 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-29 19:13:14,094 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:14,268 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:13:14,274 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine 
+WHERE public.magazine.flag = %(flag_1)s
+2024-03-29 19:13:14,353 - sqlalchemy.engine.Engine - INFO - [generated in 0.07870s] {'flag_1': 'upcoming'}
+2024-03-29 19:13:14,532 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs
+2024-03-29 19:13:14,533 - sqlalchemy.engine.Engine - INFO - [generated in 0.00252s] {}
+2024-03-29 19:13:14,621 - success_logs - INFO - =====4=====
+2024-03-29 19:13:14,622 - success_logs - INFO - Session Object created...
+2024-03-29 19:13:14,624 - sqlalchemy.engine.Engine - INFO - INSERT INTO public.scheduled_jobs (magazine_id, job_id, status, magazine_title, updated_time, release_date) VALUES (%(magazine_id)s, %(job_id)s, %(status)s, %(magazine_title)s, %(updated_time)s, %(release_date)s)
+2024-03-29 19:13:14,634 - sqlalchemy.engine.Engine - INFO - [generated in 0.00962s] {'magazine_id': 6, 'job_id': 'a941758d8eb6430788071f6519922699', 'status': 'scheduled', 'magazine_title': 'test6', 'updated_time': datetime.datetime(2024, 3, 29, 19, 13, 12, 785119), 'release_date': datetime.datetime(2024, 3, 29, 22, 0)}
+2024-03-29 19:13:14,723 - sqlalchemy.engine.Engine - INFO - COMMIT
+2024-03-29 19:13:14,814 - success_logs - INFO - Job added successfully.
+2024-03-29 19:13:14,814 - success_logs - INFO - =====5=====
+2024-03-29 19:13:14,815 - success_logs - INFO - Session Object Removed
+2024-03-29 19:13:14,815 - success_logs - INFO - Successfully scheduled the release of magazine.
+2024-03-29 19:13:17,467 - success_logs - INFO - =====3=====
+2024-03-29 19:13:17,467 - success_logs - INFO - Engine Object created...
+2024-03-29 19:13:17,468 - success_logs - INFO - =====4=====
+2024-03-29 19:13:17,468 - success_logs - INFO - Session Object created...
+2024-03-29 19:13:17,470 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:13:17,472 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:13:17,475 - sqlalchemy.engine.Engine - INFO - [generated in 0.00451s] {'status_1': 'scheduled'}
+2024-03-29 19:13:17,651 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-03-29 19:13:17,651 - sqlalchemy.engine.Engine - INFO - [generated in 0.00072s] {}
+2024-03-29 19:13:17,741 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:13:17,743 - sqlalchemy.engine.Engine - INFO - [generated in 0.00152s] {'magazine_id_1': '6', 'status_1': 'scheduled'}
+2024-03-29 19:13:17,831 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-29 19:13:17,918 - success_logs - INFO - =====5=====
+2024-03-29 19:13:17,919 - success_logs - INFO - Session Object Removed
+2024-03-29 19:13:17,919 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-03-29 19:13:50,580 - success_logs - INFO - =====3=====
+2024-03-29 19:13:50,581 - success_logs - INFO - Engine Object created...
+2024-03-29 19:13:50,581 - success_logs - INFO - =====4=====
+2024-03-29 19:13:50,581 - success_logs - INFO - Session Object created...
+2024-03-29 19:13:51,484 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-29 19:13:51,485 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:51,656 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-29 19:13:51,656 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:51,827 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-29 19:13:51,828 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:13:52,000 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:13:52,003 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:13:52,003 - sqlalchemy.engine.Engine - INFO - [generated in 0.00068s] {'status_1': 'scheduled'}
+2024-03-29 19:13:52,176 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-03-29 19:13:52,176 - sqlalchemy.engine.Engine - INFO - [generated in 0.00079s] {}
+2024-03-29 19:13:52,263 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:13:52,264 - sqlalchemy.engine.Engine - INFO - [generated in 0.00097s] {'magazine_id_1': '6', 'status_1': 'scheduled'}
+2024-03-29 19:13:52,349 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-29 19:13:52,435 - success_logs - INFO - =====5=====
+2024-03-29 19:13:52,436 - success_logs - INFO - Session Object Removed
+2024-03-29 19:13:52,436 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-03-29 19:14:21,522 - success_logs - INFO - =====3=====
+2024-03-29 19:14:21,522 - success_logs - INFO - Engine Object created...
+2024-03-29 19:14:21,522 - success_logs - INFO - =====4=====
+2024-03-29 19:14:21,523 - success_logs - INFO - Session Object created...
+2024-03-29 19:14:22,470 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-03-29 19:14:22,470 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:14:22,647 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-03-29 19:14:22,648 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:14:22,825 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-03-29 19:14:22,826 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-03-29 19:14:23,003 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-03-29 19:14:23,007 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:14:23,008 - sqlalchemy.engine.Engine - INFO - [generated in 0.00095s] {'status_1': 'scheduled'}
+2024-03-29 19:14:23,186 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-03-29 19:14:23,186 - sqlalchemy.engine.Engine - INFO - [generated in 0.00061s] {}
+2024-03-29 19:14:23,275 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id, public.scheduled_jobs.magazine_title AS public_scheduled_jobs_magazine_title, public.scheduled_jobs.updated_time AS public_scheduled_jobs_updated_time, public.scheduled_jobs.release_date AS public_scheduled_jobs_release_date 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.magazine_id = %(magazine_id_1)s AND public.scheduled_jobs.status = %(status_1)s
+2024-03-29 19:14:23,276 - sqlalchemy.engine.Engine - INFO - [generated in 0.00069s] {'magazine_id_1': '6', 'status_1': 'scheduled'}
+2024-03-29 19:14:23,365 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-03-29 19:14:23,455 - success_logs - INFO - =====5=====
+2024-03-29 19:14:23,455 - success_logs - INFO - Session Object Removed
+2024-03-29 19:14:23,456 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-04-01 15:34:45,784 - success_logs - INFO - =====3=====
+2024-04-01 15:34:45,784 - success_logs - INFO - Engine Object created...
+2024-04-01 15:34:45,785 - success_logs - INFO - =====4=====
+2024-04-01 15:34:45,785 - success_logs - INFO - Session Object created...
+2024-04-01 15:34:46,769 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2024-04-01 15:34:46,770 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-04-01 15:34:46,955 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2024-04-01 15:34:46,957 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-04-01 15:34:47,134 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2024-04-01 15:34:47,134 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2024-04-01 15:34:47,309 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-04-01 15:34:47,314 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-04-01 15:34:47,315 - sqlalchemy.engine.Engine - INFO - [generated in 0.00088s] {'status_1': 'scheduled'}
+2024-04-01 15:34:47,493 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-04-01 15:34:47,494 - sqlalchemy.engine.Engine - INFO - [generated in 0.00096s] {}
+2024-04-01 15:34:47,582 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-04-01 15:34:47,671 - success_logs - INFO - =====5=====
+2024-04-01 15:34:47,671 - success_logs - INFO - Session Object Removed
+2024-04-01 15:34:47,672 - success_logs - INFO - Magazine Id available for reschedule of magazine.
+2024-04-01 15:35:04,512 - success_logs - INFO - =====3=====
+2024-04-01 15:35:04,514 - success_logs - INFO - Engine Object created...
+2024-04-01 15:35:04,515 - success_logs - INFO - =====4=====
+2024-04-01 15:35:04,516 - success_logs - INFO - Session Object created...
+2024-04-01 15:35:04,519 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2024-04-01 15:35:04,521 - sqlalchemy.engine.Engine - INFO - SELECT public.scheduled_jobs.magazine_id AS public_scheduled_jobs_magazine_id 
+FROM public.scheduled_jobs 
+WHERE public.scheduled_jobs.status = %(status_1)s
+2024-04-01 15:35:04,522 - sqlalchemy.engine.Engine - INFO - [cached since 17.21s ago] {'status_1': 'scheduled'}
+2024-04-01 15:35:04,702 - sqlalchemy.engine.Engine - INFO - SELECT public.magazine.id AS public_magazine_id 
+FROM public.magazine
+2024-04-01 15:35:04,704 - sqlalchemy.engine.Engine - INFO - [cached since 17.21s ago] {}
+2024-04-01 15:35:04,793 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2024-04-01 15:35:04,890 - success_logs - INFO - =====5=====
+2024-04-01 15:35:04,891 - success_logs - INFO - Session Object Removed
+2024-04-01 15:35:04,892 - success_logs - INFO - Magazine Id available for reschedule of magazine.
