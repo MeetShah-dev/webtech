@@ -5,25 +5,43 @@
 """
 
 from db.db_declarative_config import magazine_base
-from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, VARCHAR, DateTime, Text, Boolean
 
+class Comment(magazine_base):
+    __tablename__ = 'comment'
+    __table_args__ = {"schema": "public"}
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    text = Column(Text)
+    timestamp = Column(DateTime)
+    blog_id = Column(Integer)
+    user_id = Column(Integer)
 
-class Magazine(magazine_base):
-    __tablename__ = 'magazine'
+class Like(magazine_base):
+    __tablename__ = 'like'
+    __table_args__ = {"schema": "public"}
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime)
+    blog_id = Column(Integer)
+    user_id = Column(Integer)
+    value = Column(VARCHAR(255))
+
+class Blog(magazine_base):
+    __tablename__ = 'blog'
     __table_args__ = {"schema": "public"}
     id = Column(Integer, primary_key=True, autoincrement=False)
     title = Column(VARCHAR(255))
+    content = Column(Text)
+    is_approved = Column(Boolean)
+    is_draft = Column(Boolean)
+    is_rejected = Column(Boolean)
+    rejection_number = Column(Integer)
     date_created = Column(DateTime)
-    date_released = Column(DateTime)
-    flag = Column(VARCHAR(255))
-
-
-class Job(magazine_base):
-    __tablename__ = 'scheduled_jobs'
-    __table_args__ = {"schema": "public"}
-    magazine_id = Column(Integer, ForeignKey('public.magazine.id'))
-    job_id = Column(VARCHAR(255), primary_key=True, autoincrement=False)
-    status = Column(VARCHAR(255))
-    magazine_title = Column(VARCHAR(255))
-    updated_time = Column(DateTime)
-    release_date = Column(DateTime)
+    date_updated = Column(DateTime)
+    reader_ids = Column(VARCHAR(255))
+    keywords = Column(VARCHAR(255))
+    likes = Column(Integer)
+    comments = Column(Integer)
+    readers = Column(Integer)
+    magazine_id = Column(Integer)
+    user_id = Column(Integer)
+    is_ready = Column(Boolean)

@@ -5,12 +5,13 @@
     This module provides various functionalities for request controller file.
 
 """
+import requests
 import psycopg2
 from datetime import datetime
+from sqlalchemy import func, Text
 from db.db_declarative_config import Engine
 from logs.logging_handler import success_logger, error_logger
-from model.db_model import Magazine, Job
-from sqlalchemy import func, Text
+from model.db_model import Comment, Like, Blog
 
 
 class RequestOperations:
@@ -19,166 +20,331 @@ class RequestOperations:
     """
 
     @staticmethod
-    def get_release_content(magazine_title, release_date, current_date, reschedule, magazine_id):
+    def get_likes(likes, blog_id, user_id):
         """
-        This function is used to get all content for release of magazine.
+        This function is used to get all likes of the blogs.
         """
-        msg = []
-        magazine_session = None
-        egn = Engine()
-        try:
-            magazine_session = egn.get_engine_session()
-            magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
-            magazine_content_id = [row[0] for row in magazine_data]
-            if len(magazine_content_id) > 0:
-                magazine_content_id = str(magazine_content_id[0])
-
-                magazine_session.query(Magazine).filter(Magazine.id == magazine_content_id).with_for_update().update(
-                    {Magazine.flag: 'released'}, synchronize_session=False)
-
-                if reschedule and magazine_id is not None:
-                    mag_id_from_job = magazine_id
-                else:
-                    current_new_date = current_date.strftime('%Y-%m-%d %H:%M:%S')
-                    job_mag_id = magazine_session.query(Job.magazine_id).filter(Job.magazine_title == magazine_title, func.cast(Job.updated_time, Text).ilike('%' + current_new_date + '%')).all()
-                    job_mag = [data[0] for data in job_mag_id]
-                    mag_id_from_job = job_mag[0]
-
-                magazine_obj = Magazine(
-                    id=mag_id_from_job,
-                    title=magazine_title,
-                    date_created=current_date,
-                    date_released=release_date,
-                    flag='upcoming')
-                magazine_session.add(magazine_obj)
-                magazine_session.commit()
-                msg.append("Successfully updated the magazine")
-
-                success_logger.info("=====7=====")
-                success_logger.info("No upcoming draft of magazine remaining.")
-        except (Exception, psycopg2.Error) as error:
-            error_logger.exception(error)
-            raise
-        finally:
-            egn.close_session(magazine_session)
-        return msg
-
-    @staticmethod
-    def store_jobs(job_id, title, release_date, magazine_id):
-        """
-        This function is used to store all the job ids.
-        """
-        job_session = None
+        like_session = None
         egn = Engine()
         try:
             current_date = datetime.now()
-            if not magazine_id:
-                job_session = egn.get_engine_session()
-                magazine_data = job_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
-                magazine_content_id = [row[0] for row in magazine_data]
+            like_session = egn.get_engine_session()
 
-                job_mag_id = job_session.query(Job.magazine_id).all()
-                job_mag_id = [data[0] for data in job_mag_id]
+            data_updated = like_session.query(Like.value).filter(Like.user_id == user_id, Like.blog_id == blog_id)
+            like_data = [data[0] for data in data_updated]
 
-                if len(magazine_content_id) > len(job_mag_id):
-                    magazine_content_id = str(magazine_content_id[0])
-                    magazine_id = str(magazine_content_id)
-                elif len(magazine_content_id) < len(job_mag_id):
-                    magazine_id = max(job_mag_id) + 1
-                else:
-                    magazine_id = max(job_mag_id) + 1
+            if len(like_data) == 0:
+                like_obj = Like(
+                    timestamp=current_date,
+                    blog_id=blog_id,
+                    user_id=user_id,
+                    value=likes)
+
+                like_session.add(like_obj)
+                like_session.commit()
+
+                like_count_data = like_session.query(Blog.likes).filter(Blog.id == blog_id).all()
+                like_count_data = [data[0] for data in like_count_data]
+
+                like_count = like_count_data[0]
+                like_count = like_count + 1
+
+                like_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                    Blog.likes: like_count
+                }, synchronize_session=False)
+                like_session.commit()
+
+                #Notification for adding likes
+                consumer_id = user_id
+                author_id = like_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
+                author_id = author_id[0][0]
+                api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
+                payload = {'type': 'like', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
+                if requests.post(api_url, json=payload).status_code == 200:
+                    success_logger.info("Notification api called successfully")
+
+                success_logger.info("User has clicked like for the blog.")
+
+            elif like_data[0] == 'false':
+                like_session.query(Like).filter(Like.user_id == user_id, Like.blog_id == blog_id).with_for_update().update({
+                    Like.value: likes, Like.timestamp: current_date
+                }, synchronize_session=False)
+                like_session.commit()
+
+                like_count_data = like_session.query(Blog.likes).filter(Blog.id == blog_id).all()
+                like_count_data = [data[0] for data in like_count_data]
+
+                like_count = like_count_data[0]
+                like_count = like_count + 1
+
+                like_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                    Blog.likes: like_count
+                }, synchronize_session=False)
+                like_session.commit()
+                success_logger.info("User has changed to like the blog.")
+
             else:
-                magazine_id = magazine_id
-
-            job_session = egn.get_engine_session()
-            job_obj = Job(
-                magazine_id=magazine_id,
-                job_id=job_id,
-                magazine_title=title,
-                updated_time=current_date,
-                status='scheduled',
-                release_date=release_date)
-            job_session.add(job_obj)
-            job_session.commit()
-
-            success_logger.info("Job added successfully.")
+                success_logger.info("User has already liked the blog.")
 
         except (Exception, psycopg2.Error) as error:
             error_logger.exception(error)
             raise
         finally:
-            egn.close_session(job_session)
+            egn.close_session(like_session)
 
     @staticmethod
-    def remove_job(magazine_id):
+    def get_dislikes(dislikes, blog_id, user_id):
         """
-        This function is used to get magazine id for removing jobs.
+        This function is used to get all dislikes of the blogs.
         """
-        rem_job_session = None
+        dislike_session = None
         egn = Engine()
         try:
-            rem_job_session = egn.get_engine_session()
-            rem_job_id_data = rem_job_session.query(Job.job_id, Job.magazine_title).filter(
-                Job.magazine_id == magazine_id, Job.status == 'scheduled').all()
-            job_id = rem_job_id_data[0][0]
-            mag_title = rem_job_id_data[0][1]
-            success_logger.info("Job id fetched successfully.")
-        except (Exception, psycopg2.Error) as error:
-            error_logger.exception(error)
-            raise
-        finally:
-            egn.close_session(rem_job_session)
-        return job_id, mag_title
+            current_date = datetime.now()
+            dislike_session = egn.get_engine_session()
 
-    @staticmethod
-    def update_status(magazine_id):
-        """
-        This function is used to update status if magazine has been rescheduled.
-        """
-        status_session = None
-        egn = Engine()
-        try:
-            # current_date = datetime.now()
-            status_session = egn.get_engine_session()
-            status_session.query(Job). \
-                filter(Job.magazine_id == magazine_id, Job.status == 'scheduled'). \
-                with_for_update().update(
-                {Job.status: 'rescheduled'},
-                synchronize_session=False)
-            status_session.commit()
-            success_logger.info("Job id fetched successfully.")
-        except (Exception, psycopg2.Error) as error:
-            error_logger.exception(error)
-            raise
-        finally:
-            egn.close_session(status_session)
+            # check if user has already liked the blog, then no increase in counter or like table.
+            # check if like persist -- value update
+            data_updated = dislike_session.query(Like.value).filter(Like.user_id == user_id, Like.blog_id == blog_id)
+            dislike_data = [data[0] for data in data_updated]
 
-    @staticmethod
-    def fetch_all_magazine():
-        get_magazine_session = None
-        egn = Engine()
-        content_data = []
-        try:
-            get_magazine_session = egn.get_engine_session()
-            get_magazine_data_from_scheduled_jobs = get_magazine_session.query(Job.magazine_id). filter(Job.status == 'scheduled').all()
-            jobs_magazine_id = [row[0] for row in get_magazine_data_from_scheduled_jobs]
-            get_magazine_data_from_magazine = get_magazine_session.query(Magazine.id).all()
-            magazine_id = [row[0] for row in get_magazine_data_from_magazine]
+            if len(dislike_data) == 0:
+                dislike_obj = Like(
+                    timestamp=current_date,
+                    blog_id=blog_id,
+                    user_id=user_id,
+                    value=dislikes)
 
-            magazine_ids_left_to_release = list(set(jobs_magazine_id) - set(magazine_id))
-            if len(magazine_ids_left_to_release) > 0:
-                for ids in magazine_ids_left_to_release:
-                    ids = str(ids)
+                dislike_session.add(dislike_obj)
+                dislike_session.commit()
 
-                    data_for_reschedule = get_magazine_session.query(Job.magazine_id, Job.magazine_title, Job.updated_time, Job.release_date).filter(Job.magazine_id == ids, Job.status == 'scheduled').all()
-                    rows = [row for row in data_for_reschedule]
-                    content = {"magazine_id": rows[0][0], "magazine_title":rows[0][1], "created_date_time": rows[0][2], "release_date_time": rows[0][3]}
-                    content_data.append(content)
+                dislike_count_data = dislike_session.query(Blog.likes).filter(Blog.id == blog_id).all()
+                dislike_count = [data[0] for data in dislike_count_data]
+
+                dislike_count = dislike_count[0]
+                dislike_count = dislike_count - 1
+                if dislike_count >= 0:
+                    dislike_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                        Blog.likes: dislike_count,
+                    }, synchronize_session=False)
+                    dislike_session.commit()
+                success_logger.info("Value added for disliking the blog.")
+
+            elif dislike_data[0] == 'true':
+                dislike_session.query(Like).filter(Like.user_id == user_id,
+                                                Like.blog_id == blog_id).with_for_update().update({
+                    Like.value: dislikes, Like.timestamp: current_date
+                }, synchronize_session=False)
+                dislike_session.commit()
+
+                dislike_count_data = dislike_session.query(Blog.likes).filter(Blog.id == blog_id).all()
+                dislike_count = [data[0] for data in dislike_count_data]
+
+                dislike_count = dislike_count[0]
+                dislike_count = dislike_count - 1
+                if dislike_count >= 0:
+                    dislike_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                        Blog.likes: dislike_count
+                    }, synchronize_session=False)
+                    dislike_session.commit()
+
+                success_logger.info("User has changed to dislike the blog.")
+
             else:
-                content_data = "No magazine found for reschedule."
-        except (Exception, psycopg2.errors) as error:
+                success_logger.info("User has already disliked the blog.")
+
+        except (Exception, psycopg2.Error) as error:
             error_logger.exception(error)
             raise
         finally:
-            egn.close_session(get_magazine_session)
-        return content_data
+            egn.close_session(dislike_session)
+
+    @staticmethod
+    def add_comments(text, blog_id, user_id):
+        """
+        This function is used to add comments for the blogs.
+        """
+        add_comment_session = None
+        egn = Engine()
+        try:
+            current_date = datetime.now()
+            add_comment_session = egn.get_engine_session()
+
+            comment_obj = Comment(
+                timestamp=current_date,
+                blog_id=blog_id,
+                user_id=user_id,
+                text=text)
+
+            add_comment_session.add(comment_obj)
+            add_comment_session.commit()
+
+            add_comment_data = add_comment_session.query(Blog.comments).filter(Blog.id == blog_id).all()
+            add_comment_count = [data[0] for data in add_comment_data]
+
+            add_comment_count = add_comment_count[0]
+            add_comment_count = add_comment_count + 1
+            add_comment_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                Blog.comments: add_comment_count
+            }, synchronize_session=False)
+            add_comment_session.commit()
+
+            #Notification for adding comments
+            consumer_id = user_id
+            author_id = add_comment_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
+            author_id = author_id[0][0]
+            api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
+            payload = {'type': 'comment', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
+            if requests.post(api_url, json=payload).status_code == 200:
+                success_logger.info("Notification api called successfully")
+
+            success_logger.info("add comments function successfully implemented.")
+
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(add_comment_session)
+
+    @staticmethod
+    def delete_comments(blog_id, user_id, comment_id):
+        """
+        This function is used to delete comments for the blogs.
+        """
+        delete_comment_session = None
+        egn = Engine()
+        try:
+            delete_comment_session = egn.get_engine_session()
+            delete_comment_session.query(Comment).filter(Comment.blog_id == blog_id, Comment.user_id == user_id, Comment.id == comment_id).delete()
+
+            delete_comment_session.commit()
+
+            delete_comment_data = delete_comment_session.query(Blog.comments).filter(Blog.id == blog_id).all()
+            delete_comment_count = [data[0] for data in delete_comment_data]
+
+            delete_comment_count = delete_comment_count[0]
+            delete_comment_count = delete_comment_count - 1
+
+            if delete_comment_count >= 0:
+                delete_comment_session.query(Blog).filter(Blog.id == blog_id).with_for_update().update({
+                    Blog.comments: delete_comment_count
+                }, synchronize_session=False)
+                delete_comment_session.commit()
+            success_logger.info("delete comments function successfully implemented.")
+
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(delete_comment_session)
+
+    @staticmethod
+    def edit_comments(text, blog_id, user_id, old_date_time):
+        """
+        This function is used to re-edit the comments for the blogs.
+        """
+        edit_comment_session = None
+        egn = Engine()
+        try:
+            current_date = datetime.now()
+            edit_comment_session = egn.get_engine_session()
+
+            edit_comment_session.query(Comment).filter(Comment.blog_id == blog_id, Comment.user_id == user_id, func.cast(Comment.timestamp, Text).ilike('%' + old_date_time + '%')).with_for_update().update({Comment.text: text, Comment.timestamp: current_date}, synchronize_session=False)
+
+            edit_comment_session.commit()
+
+            success_logger.info("edit_comments function successfully implemented.")
+
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(edit_comment_session)
+
+    @staticmethod
+    def get_comment():
+        """
+        This function is used to get all the comments for the blogs.
+        """
+        comment_session = None
+        egn = Engine()
+        comment_data = []
+        try:
+            current_date = datetime.now()
+            comment_session = egn.get_engine_session()
+            all_comment_data = comment_session.query(Comment.id, Comment.text, Comment.blog_id, Comment.user_id,
+                                                     Comment.timestamp).all()
+            rows = [row for row in all_comment_data]
+            if len(rows) > 0:
+                for row in rows:
+                    content = {"id": row[0], "text": row[1], "blog_id": row[2],
+                               "user_id": row[3], "date_time": row[4]}
+                    comment_data.append(content)
+            else:
+                content = {"id": "Not Found", "text": "No Comment Available", "blog_id":"Not Found",
+                           "user_id":"Not Found", "date_time":current_date}
+                comment_data.append(content)
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(comment_session)
+        return comment_data
+
+    @staticmethod
+    def get_all_likes_for_users():
+        """
+        This function is used to get all likes made for the blogs.
+        """
+        like_session = None
+        egn = Engine()
+        comment_data = []
+        try:
+            current_date = datetime.now()
+            like_session = egn.get_engine_session()
+            all_like_data = like_session.query(Like.id, Like.blog_id, Like.user_id, Like.timestamp).filter(Like.value == 'true').all()
+            rows = [row for row in all_like_data]
+            if len(rows) > 0:
+                for row in rows:
+                    content = {"id": row[0], "Like": 'Like', "blog_id": row[1],
+                               "user_id": row[2], "date_time": row[3]}
+                    comment_data.append(content)
+            else:
+                content = {"id": "Not Found", "text": "No Comment Available", "blog_id": "Not Found",
+                           "user_id": "Not Found", "date_time": current_date}
+                comment_data.append(content)
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(like_session)
+        return comment_data
+
+    @staticmethod
+    def get_all_dislikes_for_users():
+        """
+        This function is used to get all likes made for the blogs.
+        """
+        dislike_session = None
+        egn = Engine()
+        comment_data = []
+        try:
+            current_date = datetime.now()
+            dislike_session = egn.get_engine_session()
+            all_dislike_data = dislike_session.query(Like.id, Like.blog_id, Like.user_id, Like.timestamp).filter(Like.value == 'false').all()
+            rows = [row for row in all_dislike_data]
+            if len(rows) > 0:
+                for row in rows:
+                    content = {"id": row[0], "Like": 'Dislike', "blog_id": row[1],
+                               "user_id": row[2], "date_time": row[3]}
+                    comment_data.append(content)
+            else:
+                content = {"id": "Not Found", "text": "No Comment Available", "blog_id": "Not Found",
+                           "user_id": "Not Found", "date_time": current_date}
+                comment_data.append(content)
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(dislike_session)
+        return comment_data

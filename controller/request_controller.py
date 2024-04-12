@@ -5,48 +5,101 @@
     This module provides various endpoints for request model file.
 
 """
-from datetime import datetime
 from flask import jsonify, request
-from apscheduler.schedulers.background import BackgroundScheduler
 from logs.logging_handler import error_logger, success_logger
 from controller import app
 from model.request_model import RequestOperations
 
 
-def get_magazine_content(title, release_date, current_date, reschedule, magazine_id):
+@app.route("/update_like_dislike", methods=['POST'])
+def get_likes():
     """
-        Get all the magazine contents for release
+        This API is used to get the likes/dislikes by the user for the blogs.
     """
+    response_dict = {}
     try:
-        response_dict = {}
+        post_data = request.get_json(force=True)
+        likes_dislikes = post_data['like_dislike'].lower()
+        blog_id = post_data['blog_id']
+        user_id = post_data['user_id']
+
         data = RequestOperations()
-        title_of_magazine = title
-        data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
-        success_logger.info("=====6=====")
-        success_logger.info("Content updated in database.")
+
+        if likes_dislikes == 'true':
+            data.get_likes(likes_dislikes, blog_id, user_id)
+        else:
+            data.get_dislikes(likes_dislikes, blog_id, user_id)
         response_dict['status'] = '200'
-        response_dict['message'] = 'Successfully Fetched Data.'
-        success_logger.info("===0====")
-        success_logger.info("Successful function run for get_magazine_content function.")
-        return response_dict
+        response_dict['message'] = 'Data updated successfully.'
+        success_logger.info("Likes updated in database table")
     except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
         error_logger.exception(error)
-        raise
+    return jsonify(response_dict)
 
-
-@app.route("/get_all_magazine", methods=['GET'])
-def get_all_magazine():
+@app.route("/add_comment", methods=['POST'])
+def adding_comments():
     """
-        Scheduling the job for the release of magazine.
+        This API is used to add/delete the blogs.
+    """
+    response_dict = {}
+    try:
+        post_data = request.get_json(force=True)
+        text = post_data['text'].lower()
+        blog_id = post_data['blog_id']
+        user_id = post_data['user_id']
+
+        data = RequestOperations()
+        data.add_comments(text, blog_id, user_id)
+
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data updated successfully.'
+        success_logger.info("Likes updated in database table")
+    except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
+        error_logger.exception(error)
+    return jsonify(response_dict)
+
+@app.route("/edit_comment", methods=['POST'])
+def redit_comments():
+    """
+        This API is used to edit the blogs mistakenly added.
+    """
+    response_dict = {}
+    try:
+        post_data = request.get_json(force=True)
+        text = post_data['updated_text'].lower()
+        blog_id = post_data['blog_id']
+        user_id = post_data['user_id']
+        old_date_time = post_data['previous_date_time']
+
+        data = RequestOperations()
+        data.edit_comments(text, blog_id, user_id, old_date_time)
+
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data updated successfully.'
+        success_logger.info("Comment updated in database table")
+    except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
+        error_logger.exception(error)
+    return jsonify(response_dict)
+
+@app.route("/get_all_comments", methods=['GET'])
+def get_comments():
+    """
+        This API is used to get all the comments.
     """
     response_dict = {}
     try:
         data = RequestOperations()
-        magazine_data = data.fetch_all_magazine()
+        comments = data.get_comment()
         response_dict['status'] = '200'
         response_dict['message'] = 'Data fetched successfully.'
-        response_dict['data'] = magazine_data
-        success_logger.info("Magazine Id available for reschedule of magazine.")
+        response_dict['data'] = comments
+        success_logger.info("All comments fetched successfully.")
     except Exception as error:
         response_dict['status'] = '500'
         response_dict['message'] = 'Please check logs for the error occurred.'
@@ -54,99 +107,62 @@ def get_all_magazine():
         error_logger.exception(error)
     return jsonify(response_dict)
 
-
-schedule = BackgroundScheduler()
-schedule.start()
-
-
-@app.route("/schedule_magazine", methods=['POST'])
-def get_scheduled_magazine():
+@app.route("/delete_comment", methods=['DELETE'])
+def delete_comments():
     """
-        Scheduling the job for the release of magazine.
+        This API is used to edit the blogs mistakenly added.
     """
     response_dict = {}
     try:
         post_data = request.get_json(force=True)
-        year = post_data['year']
-        month = post_data['month']
-        date = post_data['date']
-        hour = post_data['hour']
-        minute = post_data['minute']
-        second = post_data['second']
-        title = post_data['title']
-        reschedule = False
-        magazine_id = None
+        blog_id = post_data['blog_id']
+        user_id = post_data['user_id']
+        comment_id = post_data['comment_id']
 
-        current_date = datetime.now()
-        release_date = datetime(year, month, date, hour, minute, second)
+        data = RequestOperations()
+        data.delete_comments(blog_id, user_id, comment_id)
 
-        if current_date > release_date or current_date == release_date:
-            response_dict['status'] = '205'
-            response_dict['message'] = 'Release date and time is less than or equal to the current date and time. Please schedule the magazine again'
-            success_logger.info("Release of time error for the release of magazine.")
-
-        else:
-            job = schedule.add_job(get_magazine_content, trigger="cron", month=month, day=date, hour=hour, minute=minute,
-                                   second=second,
-                                   args=[title, release_date, current_date, reschedule,
-                                         magazine_id])
-            job_id = job.id
-
-            data = RequestOperations()
-            data.store_jobs(job_id, title, release_date, magazine_id=False)
-
-            response_dict['status'] = '200'
-            response_dict['message'] = 'Scheduled successfully.'
-            success_logger.info("Successfully scheduled the release of magazine.")
-
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data updated successfully.'
+        success_logger.info("Delete comment updated in database table")
     except Exception as error:
         response_dict['status'] = '500'
         response_dict['message'] = 'Please check logs for the error occurred.'
         error_logger.exception(error)
     return jsonify(response_dict)
 
-
-@app.route("/reschedule_magazine", methods=['POST'])
-def reschedule_magazine():
+@app.route("/get_all_user_likes", methods=['GET'])
+def get_all_user_likes():
     """
-        Scheduling the job for the release of magazine.
+        This API is used to get a;; the user likes for the blogs.
     """
     response_dict = {}
     try:
-        reschedule = True
-        post_data = request.get_json(force=True)
-        year = post_data['year']
-        month = post_data['month']
-        date = post_data['date']
-        hour = post_data['hour']
-        minute = post_data['minute']
-        second = post_data['second']
-        magazine_id = post_data['magazine_id']
+        data = RequestOperations()
+        all_like_data = data.get_all_likes_for_users()
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data fetched successfully.'
+        response_dict['data'] = all_like_data
+        success_logger.info("Delete comment updated in database table")
+    except Exception as error:
+        response_dict['status'] = '500'
+        response_dict['message'] = 'Please check logs for the error occurred.'
+        error_logger.exception(error)
+    return jsonify(response_dict)
 
-        current_date = datetime.now()
-        release_date = datetime(year, month, date, hour, minute, second)
-
-        if current_date > release_date or current_date == release_date:
-            response_dict['status'] = '205'
-            response_dict['message'] = 'Release date and time is less than or equal to the current date and time. Please reschedule the magazine again'
-            success_logger.info("Release of time error for the release of magazine.")
-
-        else:
-            data = RequestOperations()
-            job_id, title = data.remove_job(magazine_id)
-            data.update_status(magazine_id)
-            schedule.remove_job(job_id)
-            job = schedule.add_job(get_magazine_content, trigger="cron", month=month, day=date, hour=hour, minute=minute,
-                                   second=second,
-                                   args=[title, release_date, current_date, reschedule, magazine_id])
-            job_id = job.id
-            data = RequestOperations()
-            data.store_jobs(job_id, title, release_date, magazine_id)
-
-            response_dict['status'] = '200'
-            response_dict['message'] = 'Rescheduled successfully.'
-            success_logger.info("Successfully scheduled the release of magazine.")
-
+@app.route("/get_all_user_dislikes", methods=['GET'])
+def get_all_user_dislikes():
+    """
+        This API is used to get a;; the user likes for the blogs.
+    """
+    response_dict = {}
+    try:
+        data = RequestOperations()
+        all_like_data = data.get_all_dislikes_for_users()
+        response_dict['status'] = '200'
+        response_dict['message'] = 'Data fetched successfully.'
+        response_dict['data'] = all_like_data
+        success_logger.info("Delete comment updated in database table")
     except Exception as error:
         response_dict['status'] = '500'
         response_dict['message'] = 'Please check logs for the error occurred.'
