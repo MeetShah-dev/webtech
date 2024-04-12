@@ -3,14 +3,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from logs.logging_handler import success_logger, error_logger
 
-DB_NAME = "surrey_magazine"
-DB_USERNAME = "postgres"
-DB_PASSWORD = "sRd4NIyQVmMQQZ71jMvb"
-DB_HOST = "database-3.czyucuu48jmn.us-east-1.rds.amazonaws.com"
-DB_PORT = "5432"
+DB_NAME = "<DB_NAME>"
+DB_USERNAME = "<DB_USERNAME>"
+DB_PASSWORD = "<DB_PASSWORD>"
+DB_HOST = "<DB_HOST>"
+DB_PORT = "<DB_PORT>"
 SQLALCHEMY_ECHO = True
-DB_CONNECTION_POOL_SIZE = 10
-DB_CONNECTION_MAX_OVERFLOW = 20
+DB_CONNECTION_POOL_SIZE = <DB_CONNECTION_POOL_SIZE>
+DB_CONNECTION_MAX_OVERFLOW = <DB_CONNECTION_MAX_OVERFLOW>
 DATABASE_URI = 'postgresql+psycopg2://'+DB_USERNAME+':'+DB_PASSWORD+'@'+DB_HOST+':'+DB_PORT+'/'+DB_NAME
 
 db_engine = create_engine(DATABASE_URI, echo=SQLALCHEMY_ECHO, pool_size=DB_CONNECTION_POOL_SIZE, max_overflow=DB_CONNECTION_MAX_OVERFLOW)
