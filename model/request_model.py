@@ -6,6 +6,7 @@
 
 """
 import psycopg2
+import requests
 from datetime import datetime
 from db.db_declarative_config import Engine
 from logs.logging_handler import success_logger, error_logger
@@ -30,15 +31,20 @@ class RequestOperations:
             magazine_session = egn.get_engine_session()
             magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
             magazine_content_id = [row[0] for row in magazine_data]
+            print("1")
             if len(magazine_content_id) > 0:
                 magazine_content_id = str(magazine_content_id[0])
+                print("2")
 
-                magazine_session.query(Magazine).filter(Magazine.id == magazine_content_id).with_for_update().update(
-                    {Magazine.flag: 'released'}, synchronize_session=False)
+                magazine_session.query(Magazine).filter(Magazine.id == magazine_content_id).with_for_update().update({Magazine.flag: 'released'}, synchronize_session=False)
+                magazine_session.commit()
+                print("3")
 
                 if reschedule and magazine_id is not None:
                     mag_id_from_job = magazine_id
+                    print("4")
                 else:
+                    print("5")
                     current_new_date = current_date.strftime('%Y-%m-%d %H:%M:%S')
                     job_mag_id = magazine_session.query(Job.magazine_id).filter(Job.magazine_title == magazine_title, func.cast(Job.updated_time, Text).ilike('%' + current_new_date + '%')).all()
                     job_mag = [data[0] for data in job_mag_id]
@@ -52,6 +58,12 @@ class RequestOperations:
                     flag='upcoming')
                 magazine_session.add(magazine_obj)
                 magazine_session.commit()
+
+                api_url = "http://35.171.3.193:8001/api/send-event-notification/"
+                payload = {'message': 'an event is upcoming dont miss out!'}
+                if requests.post(api_url, json=payload).status_code == 200:
+                    success_logger.info("Notification api called successfully")
+
                 msg.append("Successfully updated the magazine")
 
                 success_logger.info("=====7=====")
@@ -72,6 +84,7 @@ class RequestOperations:
         egn = Engine()
         try:
             current_date = datetime.now()
+            print(current_date)
             if not magazine_id:
                 job_session = egn.get_engine_session()
                 magazine_data = job_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
