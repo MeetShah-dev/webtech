@@ -5742,3 +5742,615 @@ sqlalchemy.exc.IntegrityError: (psycopg2.errors.ForeignKeyViolation) insert or u
 DETAIL:  Key (magazine_id)=(2) is not present in table "magazine".
 
 (Background on this error at: https://sqlalche.me/e/20/gkpj)
+2024-04-11 20:06:01,147 - error_logs - ERROR - list index out of range
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    mag_id_from_job = job_mag[0]
+                      ~~~~~~~^^^
+IndexError: list index out of range
+2024-04-11 20:06:01,234 - error_logs - ERROR - list index out of range
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    mag_id_from_job = job_mag[0]
+                      ~~~~~~~^^^
+IndexError: list index out of range
+2024-04-11 21:11:48,222 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 49, in get_release_content
+    else:
+          
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-04-11 21:11:48,361 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 49, in get_release_content
+    else:
+          
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-04-11 21:44:01,119 - error_logs - ERROR - missing FROM-clause entry for table "Magazine"
+LINE 1: ...e Magazine set "Magazine".flag = 'released' where "Magazine"...
+                                                             ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "Magazine"
+LINE 1: ...e Magazine set "Magazine".flag = 'released' where "Magazine"...
+                                                             ^
+
+2024-04-11 21:44:01,212 - error_logs - ERROR - missing FROM-clause entry for table "Magazine"
+LINE 1: ...e Magazine set "Magazine".flag = 'released' where "Magazine"...
+                                                             ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "Magazine"
+LINE 1: ...e Magazine set "Magazine".flag = 'released' where "Magazine"...
+                                                             ^
+
+2024-04-11 21:46:01,788 - error_logs - ERROR - column "none" does not exist
+LINE 1: Update Magazine set flag = 'released' where id = None;
+                                                         ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedColumn: column "none" does not exist
+LINE 1: Update Magazine set flag = 'released' where id = None;
+                                                         ^
+
+2024-04-11 21:46:01,917 - error_logs - ERROR - column "none" does not exist
+LINE 1: Update Magazine set flag = 'released' where id = None;
+                                                         ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedColumn: column "none" does not exist
+LINE 1: Update Magazine set flag = 'released' where id = None;
+                                                         ^
+
+2024-04-11 21:48:43,044 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 52, in get_release_content
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-04-11 21:48:43,138 - error_logs - ERROR - 
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 52, in get_release_content
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_line(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\bdb.py", line 115, in dispatch_line
+    if self.quitting: raise BdbQuit
+                      ^^^^^^^^^^^^^
+bdb.BdbQuit
+2024-04-11 21:53:01,549 - error_logs - ERROR - syntax error at or near "=="
+LINE 1: Update Magazine set flag == 'released' where id = 29;
+                                 ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.SyntaxError: syntax error at or near "=="
+LINE 1: Update Magazine set flag == 'released' where id = 29;
+                                 ^
+
+2024-04-11 21:53:01,653 - error_logs - ERROR - syntax error at or near "=="
+LINE 1: Update Magazine set flag == 'released' where id = 29;
+                                 ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.SyntaxError: syntax error at or near "=="
+LINE 1: Update Magazine set flag == 'released' where id = 29;
+                                 ^
+
+2024-04-11 21:55:01,676 - error_logs - ERROR - column "released" does not exist
+LINE 1: Update Magazine set flag = released where id = 29;
+                                   ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedColumn: column "released" does not exist
+LINE 1: Update Magazine set flag = released where id = 29;
+                                   ^
+
+2024-04-11 21:55:01,778 - error_logs - ERROR - column "released" does not exist
+LINE 1: Update Magazine set flag = released where id = 29;
+                                   ^
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute(update_query)
+psycopg2.errors.UndefinedColumn: column "released" does not exist
+LINE 1: Update Magazine set flag = released where id = 29;
+                                   ^
+
+2024-04-12 08:41:00,005 - error_logs - ERROR - 'NoneType' object has no attribute 'query'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 36, in get_release_content
+    magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
+                    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'query'
+2024-04-12 08:41:00,006 - error_logs - ERROR - 'NoneType' object has no attribute 'close'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 36, in get_release_content
+    magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
+                    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'query'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\db\db_declarative_config.py", line 43, in close_session
+    current_session.close()
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'close'
+2024-04-12 08:41:00,008 - error_logs - ERROR - 'NoneType' object has no attribute 'close'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 36, in get_release_content
+    magazine_data = magazine_session.query(Magazine.id).filter(Magazine.flag == 'upcoming').all()
+                    ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'query'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 86, in get_release_content
+    egn.close_session(magazine_session)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\db\db_declarative_config.py", line 43, in close_session
+    current_session.close()
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'close'
+2024-04-12 08:42:00,207 - error_logs - ERROR - Textual SQL expression 'UPDATE magazine SET flag ...' should be explicitly declared as text('UPDATE magazine SET flag ...')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 43, in get_release_content
+    magazine_session.execute("UPDATE magazine SET flag = 'released' WHERE id = :magazine_content_id", {'magazine_content_id': magazine_content_id})
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'UPDATE magazine SET flag ...' should be explicitly declared as text('UPDATE magazine SET flag ...')
+2024-04-12 08:42:00,325 - error_logs - ERROR - Textual SQL expression 'UPDATE magazine SET flag ...' should be explicitly declared as text('UPDATE magazine SET flag ...')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 43, in get_release_content
+    magazine_session.execute("UPDATE magazine SET flag = 'released' WHERE id = :magazine_content_id", {'magazine_content_id': magazine_content_id})
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'UPDATE magazine SET flag ...' should be explicitly declared as text('UPDATE magazine SET flag ...')
+2024-04-12 08:43:00,307 - error_logs - ERROR - Textual SQL expression 'VACUUM FULL; ANALYZE;' should be explicitly declared as text('VACUUM FULL; ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    magazine_session.execute("VACUUM FULL; ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACUUM FULL; ANALYZE;' should be explicitly declared as text('VACUUM FULL; ANALYZE;')
+2024-04-12 08:43:00,401 - error_logs - ERROR - Textual SQL expression 'VACUUM FULL; ANALYZE;' should be explicitly declared as text('VACUUM FULL; ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    magazine_session.execute("VACUUM FULL; ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACUUM FULL; ANALYZE;' should be explicitly declared as text('VACUUM FULL; ANALYZE;')
+2024-04-12 08:44:00,403 - error_logs - ERROR - (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    magazine_session.execute(text("VACUUM FULL; ANALYZE;"))
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2200, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2024-04-12 08:44:00,528 - error_logs - ERROR - (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    magazine_session.execute(text("VACUUM FULL; ANALYZE;"))
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2200, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2024-04-12 08:45:00,639 - error_logs - ERROR - (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 48, in get_release_content
+    magazine_session.execute(text("VACUUM FULL; ANALYZE;"))
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2200, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2024-04-12 08:45:00,734 - error_logs - ERROR - (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 48, in get_release_content
+    magazine_session.execute(text("VACUUM FULL; ANALYZE;"))
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2200, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+           ^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1849, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1989, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2356, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1970, in _exec_single_context
+    self.dialect.do_execute(
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.errors.ActiveSqlTransaction) VACUUM cannot run inside a transaction block
+
+[SQL: VACUUM FULL; ANALYZE;]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2024-04-12 08:47:01,042 - error_logs - ERROR - VACUUM cannot run inside a transaction block
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute('VACUUM FULL')
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+2024-04-12 08:47:01,138 - error_logs - ERROR - VACUUM cannot run inside a transaction block
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute('VACUUM FULL')
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+2024-04-12 08:48:01,064 - error_logs - ERROR - VACUUM cannot run inside a transaction block
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute('VACUUM FULL')
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+2024-04-12 08:48:01,150 - error_logs - ERROR - VACUUM cannot run inside a transaction block
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 46, in get_release_content
+    cursor.execute('VACUUM FULL')
+psycopg2.errors.ActiveSqlTransaction: VACUUM cannot run inside a transaction block
+
+2024-04-12 08:49:00,887 - error_logs - ERROR - 'psycopg2.extensions.connection' object has no attribute 'execution_options'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    conn.execution_options(autocommit=True)
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\pool\base.py", line 1488, in __getattr__
+    return getattr(self.dbapi_connection, key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'psycopg2.extensions.connection' object has no attribute 'execution_options'
+2024-04-12 08:49:00,989 - error_logs - ERROR - 'psycopg2.extensions.connection' object has no attribute 'execution_options'
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 45, in get_release_content
+    conn.execution_options(autocommit=True)
+    ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\pool\base.py", line 1488, in __getattr__
+    return getattr(self.dbapi_connection, key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'psycopg2.extensions.connection' object has no attribute 'execution_options'
+2024-04-12 08:59:00,292 - error_logs - ERROR - Textual SQL expression 'VACCUUM ANALYZE;' should be explicitly declared as text('VACCUUM ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 40, in get_release_content
+    magazine_session.execute("VACCUUM ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACCUUM ANALYZE;' should be explicitly declared as text('VACCUUM ANALYZE;')
+2024-04-12 08:59:00,386 - error_logs - ERROR - Textual SQL expression 'VACCUUM ANALYZE;' should be explicitly declared as text('VACCUUM ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 40, in get_release_content
+    magazine_session.execute("VACCUUM ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACCUUM ANALYZE;' should be explicitly declared as text('VACCUUM ANALYZE;')
+2024-04-12 08:59:30,323 - error_logs - ERROR - Textual SQL expression 'VACUUM ANALYZE;' should be explicitly declared as text('VACUUM ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 40, in get_release_content
+    magazine_session.execute("VACUUM ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACUUM ANALYZE;' should be explicitly declared as text('VACUUM ANALYZE;')
+2024-04-12 08:59:30,419 - error_logs - ERROR - Textual SQL expression 'VACUUM ANALYZE;' should be explicitly declared as text('VACUUM ANALYZE;')
+Traceback (most recent call last):
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\controller\request_controller.py", line 24, in get_magazine_content
+    data.get_release_content(title_of_magazine, release_date, current_date, reschedule, magazine_id)
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\model\request_model.py", line 40, in get_release_content
+    magazine_session.execute("VACUUM ANALYZE;")
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2306, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2089, in _execute_internal
+    statement = coercions.expect(roles.StatementRole, statement)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 621, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 614, in _text_coercion
+    return _no_text_coercion(element, argname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\Desktop\Projects\webtech\Coursework\Schedulers\venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 584, in _no_text_coercion
+    raise exc_cls(
+sqlalchemy.exc.ArgumentError: Textual SQL expression 'VACUUM ANALYZE;' should be explicitly declared as text('VACUUM ANALYZE;')

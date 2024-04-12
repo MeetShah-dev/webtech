@@ -5,5 +5,5 @@ services:
     build:
       context: .
     ports:
-    - "3000:3000"
+    - "3028:3028"
     container_name: scheduler-microservice
