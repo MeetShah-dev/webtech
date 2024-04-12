@@ -110,7 +110,7 @@ def get_comments():
 @app.route("/delete_comment", methods=['DELETE'])
 def delete_comments():
     """
-        This API is used to edit the blogs mistakenly added.
+        This API is used to delete the comments mistakenly added.
     """
     response_dict = {}
     try:
@@ -134,7 +134,7 @@ def delete_comments():
 @app.route("/get_all_user_likes", methods=['GET'])
 def get_all_user_likes():
     """
-        This API is used to get a;; the user likes for the blogs.
+        This API is used to get all the user likes for the blogs.
     """
     response_dict = {}
     try:
