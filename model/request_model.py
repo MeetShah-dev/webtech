@@ -59,7 +59,7 @@ class RequestOperations:
                 magazine_session.add(magazine_obj)
                 magazine_session.commit()
 
-                api_url = "http://35.171.3.193:8001/api/send-event-notification/"
+                api_url = "<SERVICE URL>"
                 payload = {'message': 'an event is upcoming dont miss out!'}
                 if requests.post(api_url, json=payload).status_code == 200:
                     success_logger.info("Notification api called successfully")
