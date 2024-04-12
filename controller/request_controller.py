@@ -153,7 +153,7 @@ def get_all_user_likes():
 @app.route("/get_all_user_dislikes", methods=['GET'])
 def get_all_user_dislikes():
     """
-        This API is used to get a;; the user likes for the blogs.
+        This API is used to get all the user dislikes for the blogs.
     """
     response_dict = {}
     try:
