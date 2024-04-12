@@ -323,7 +323,7 @@ class RequestOperations:
     @staticmethod
     def get_all_dislikes_for_users():
         """
-        This function is used to get all likes made for the blogs.
+        This function is used to get all dislikes made for the blogs.
         """
         dislike_session = None
         egn = Engine()
