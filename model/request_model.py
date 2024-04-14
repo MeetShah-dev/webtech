@@ -57,7 +57,7 @@ class RequestOperations:
                 consumer_id = user_id
                 author_id = like_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
                 author_id = author_id[0][0]
-                api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
+                api_url = "<API_URL>"
                 payload = {'type': 'like', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
                 if requests.post(api_url, json=payload).status_code == 200:
                     success_logger.info("Notification api called successfully")
@@ -192,7 +192,7 @@ class RequestOperations:
             consumer_id = user_id
             author_id = add_comment_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
             author_id = author_id[0][0]
-            api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
+            api_url = "<API_URL>"
             payload = {'type': 'comment', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
             if requests.post(api_url, json=payload).status_code == 200:
                 success_logger.info("Notification api called successfully")
