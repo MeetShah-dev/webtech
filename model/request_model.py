@@ -8,7 +8,6 @@
 import requests
 import psycopg2
 from datetime import datetime
-from sqlalchemy import func, Text
 from db.db_declarative_config import Engine
 from logs.logging_handler import success_logger, error_logger
 from model.db_model import Comment, Like, Blog
@@ -58,7 +57,7 @@ class RequestOperations:
                 consumer_id = user_id
                 author_id = like_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
                 author_id = author_id[0][0]
-                api_url = "<API_URL>"
+                api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
                 payload = {'type': 'like', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
                 if requests.post(api_url, json=payload).status_code == 200:
                     success_logger.info("Notification api called successfully")
@@ -193,7 +192,7 @@ class RequestOperations:
             consumer_id = user_id
             author_id = add_comment_session.query(Blog.user_id).filter(Blog.id == blog_id).all()
             author_id = author_id[0][0]
-            api_url = "<API_URL>"
+            api_url = "http://35.171.3.193:8001/api/send-blog-notification/"
             payload = {'type': 'comment', 'blog': blog_id, 'sender': consumer_id, 'receiver': author_id}
             if requests.post(api_url, json=payload).status_code == 200:
                 success_logger.info("Notification api called successfully")
@@ -239,7 +238,7 @@ class RequestOperations:
             egn.close_session(delete_comment_session)
 
     @staticmethod
-    def edit_comments(text, blog_id, user_id, old_date_time):
+    def edit_comments(text, blog_id, user_id, comment_id):
         """
         This function is used to re-edit the comments for the blogs.
         """
@@ -249,7 +248,7 @@ class RequestOperations:
             current_date = datetime.now()
             edit_comment_session = egn.get_engine_session()
 
-            edit_comment_session.query(Comment).filter(Comment.blog_id == blog_id, Comment.user_id == user_id, func.cast(Comment.timestamp, Text).ilike('%' + old_date_time + '%')).with_for_update().update({Comment.text: text, Comment.timestamp: current_date}, synchronize_session=False)
+            edit_comment_session.query(Comment).filter(Comment.blog_id == blog_id, Comment.user_id == user_id, Comment.id == comment_id).with_for_update().update({Comment.text: text, Comment.timestamp: current_date}, synchronize_session=False)
 
             edit_comment_session.commit()
 
@@ -348,3 +347,25 @@ class RequestOperations:
         finally:
             egn.close_session(dislike_session)
         return comment_data
+
+    @staticmethod
+    def get_user(blog_id, comment_id):
+        """
+        This function is used to re-edit the comments for the blogs.
+        """
+        get_user_session = None
+        egn = Engine()
+        try:
+            get_user_session = egn.get_engine_session()
+            user_data = get_user_session.query(Comment.user_id).filter(Comment.blog_id == blog_id, Comment.id == comment_id).all()
+            rows = [row for row in user_data]
+            user_id = rows[0][0]
+
+            success_logger.info("user id fetched successfully.")
+
+        except (Exception, psycopg2.Error) as error:
+            error_logger.exception(error)
+            raise
+        finally:
+            egn.close_session(get_user_session)
+        return user_id
