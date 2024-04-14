@@ -63,7 +63,7 @@ def adding_comments():
     return jsonify(response_dict)
 
 @app.route("/edit_comment", methods=['POST'])
-def redit_comments():
+def edit_comments():
     """
         This API is used to edit the blogs mistakenly added.
     """
@@ -73,14 +73,19 @@ def redit_comments():
         text = post_data['updated_text'].lower()
         blog_id = post_data['blog_id']
         user_id = post_data['user_id']
-        old_date_time = post_data['previous_date_time']
+        comment_id = post_data['comment_id']
 
         data = RequestOperations()
-        data.edit_comments(text, blog_id, user_id, old_date_time)
-
-        response_dict['status'] = '200'
-        response_dict['message'] = 'Data updated successfully.'
-        success_logger.info("Comment updated in database table")
+        user_blog_id = data.get_user(blog_id, comment_id)
+        if user_id == user_blog_id:
+            data.edit_comments(text, blog_id, user_id, comment_id)
+            response_dict['status'] = '200'
+            response_dict['message'] = 'Data updated successfully.'
+            success_logger.info("Comment updated in database table")
+        else:
+            response_dict['status'] = '200'
+            response_dict['message'] = 'Data cannot be updated by any other user.'
+            success_logger.info("Comment will not be updated in database table")
     except Exception as error:
         response_dict['status'] = '500'
         response_dict['message'] = 'Please check logs for the error occurred.'
@@ -120,11 +125,16 @@ def delete_comments():
         comment_id = post_data['comment_id']
 
         data = RequestOperations()
-        data.delete_comments(blog_id, user_id, comment_id)
-
-        response_dict['status'] = '200'
-        response_dict['message'] = 'Data updated successfully.'
-        success_logger.info("Delete comment updated in database table")
+        user_blog_id = data.get_user(blog_id, comment_id)
+        if user_id == user_blog_id:
+            data.delete_comments(blog_id, user_id, comment_id)
+            response_dict['status'] = '200'
+            response_dict['message'] = 'Data updated successfully.'
+            success_logger.info("Delete comment updated in database table")
+        else:
+            response_dict['status'] = '200'
+            response_dict['message'] = 'Data cannot be deleted by any other user.'
+            success_logger.info("Comment will not be updated in database table")
     except Exception as error:
         response_dict['status'] = '500'
         response_dict['message'] = 'Please check logs for the error occurred.'
