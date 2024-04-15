@@ -37,6 +37,19 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = "__all__"
 
+class CategoryBlogUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class BlogCategorySerializer(serializers.ModelSerializer):
+    categories=CategoryBlogUpSerializer(many=True, read_only=True)
+    class Meta:
+        model = Blog
+        fields = ['id', 'categories']
+
+
 class ManyCategorySerializer(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
