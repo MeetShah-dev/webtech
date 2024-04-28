@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import axios from "axios"
-const BLOGGING_API = 'http://54.82.93.84:8000/api/'
-const NOTIFICATION_API = 'http://35.171.3.193:8001/api/'
+const BLOGGING_API = process.env.BLOGGING_API
+const NOTIFICATION_API = process.env.NOTIFICATION_API
 @Injectable()
 export class BlogService {
     constructor(

@@ -16,20 +16,23 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
-    return requiredRoles.some((role) => {
-      switch (role) {
-        case Role.ADMIN:
-          // Admin has rights of Moderator and User
-          return user.role_id === Role.ADMIN || user.role_id === Role.MODERATOR || user.role_id === Role.USER;
-        case Role.MODERATOR:
-          // Moderator has rights of User
-          return user.role_id === Role.MODERATOR || user.role_id === Role.USER;
-        case Role.USER:
-          // User has only rights of User
-          return user.role_id === Role.USER;
-        default:
-          return false; // Unknown role, deny access
-      }
-    });
+
+    // Define the role values with hierarchical access rights
+    const userRoleValue = this.getRoleValue(user.role_id);
+    return requiredRoles.some(role => userRoleValue >= this.getRoleValue(role));
+  }
+
+  private getRoleValue(role: Role): number {
+    // Higher number implies higher privileges
+    switch (role) {
+      case Role.ADMIN:
+        return 3;
+      case Role.MODERATOR:
+        return 2;
+      case Role.USER:
+        return 1;
+      default:
+        return 0; // Undefined roles get the lowest priority
+    }
   }
 }

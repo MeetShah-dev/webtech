@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { AppController } from './app.controller';
@@ -25,7 +24,6 @@ import { BlogModule } from './blog/blog.module';
       }
     }),
     AuthModule,
-    UserModule,
     BlogModule,
   ],
   controllers: [AppController],
