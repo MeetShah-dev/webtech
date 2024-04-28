@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as session from 'express-session';
-import * as passport from 'passport';
+import session from 'express-session';
+import passport from 'passport';
 const crypto = require('crypto');
-
+let app;
 const secretKey = crypto.randomBytes(64).toString('hex');
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  app = await NestFactory.create(AppModule);
   app.enableCors({
     allowedHeaders: ['content-type'],
     origin: "http://localhost:3000",

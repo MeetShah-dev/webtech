@@ -8,27 +8,33 @@ import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { RolesGuard } from './guards/role.guard';
 import { APP_GUARD } from '@nestjs/core';
-
+import { BlogModule } from './blog/blog.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
+      host: process.env.DB_HOST,
       port: 5432,
-      host: 'localhost',
-      username: 'postgres',
-      password: 'Argus@1234',
-      database: 'magazine_db',
-      entities: [User],
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       synchronize: false,
+      entities: [User],
+      ssl: {
+        rejectUnauthorized: false
+      }
     }),
     AuthModule,
     UserModule,
+    BlogModule,
   ],
   controllers: [AppController],
-  providers: [AppService,  {
+  providers: [AppService, 
+    {
     provide: APP_GUARD,
     useClass: RolesGuard,
-  },]
+  },
+]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

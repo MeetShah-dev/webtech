@@ -1,22 +1,42 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import axios from 'axios';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const excludedRoutes = ['/auth/google/login', '/auth/google/redirect/*', '/auth/status']; // Add routes that should be excluded from authentication
-    if (excludedRoutes.includes(req.originalUrl)) {
-      // Skip authentication for excluded routes
+  constructor(@Inject('AUTH_SERVICE') private readonly authService: AuthService) {}
+  async use(req: Request, res: Response, next: NextFunction) {
+    const excludedRoutes = ['/auth/google/login', '/auth/google/redirect/*', '/auth/status'];
+    if (excludedRoutes.some(route => req.originalUrl.startsWith(route))) {
       return next();
     }
-    // Check if user is authenticated
+
     if (req.isAuthenticated()) {
-      // If authenticated, set user information in request object
-      req.user = req.user; // You can access user info from req.user after authentication
       next();
     } else {
-      // If not authenticated, handle it accordingly
-      res.status(401).send('Unauthorized'); // Or redirect to login page, etc.
+      const authToken = req.headers.authorization;
+      if (!authToken || !authToken.startsWith('Bearer ')) {
+        return res.status(401).send('Unauthorized: No token provided');
+      }
+
+      const token = authToken.slice(7); // Remove 'Bearer ' from the start
+      try {
+        // Validate the access token with Google's tokeninfo endpoint
+        const response = await axios.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`);
+        if (response.data && response.data.user_id) {
+          // Assuming the response includes a user_id which indicates a valid token
+          req.user = await this.authService.findByEmail(response.data.email);
+          req['isAuthenticated'] = () => true; // Mimic isAuthenticated method
+          console.log("USER---",req.user, response.data)
+          next();
+        } else {
+          throw new Error('Invalid token: Google API did not return user_id');
+        }
+      } catch (error) {
+        console.error('Token validation error:', error);
+        return res.status(401).send('Unauthorized: Invalid token');
+      }
     }
   }
 }

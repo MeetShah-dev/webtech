@@ -21,12 +21,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+    console.log('access token', accessToken)
     const { name, emails, photos } = profile
     const user = await this.authService.validateUser(
       profile.emails[0].value,
       profile.name,
-      profile.photos
+      profile.photos,
     );
+    user['accessToken'] = accessToken
     done(null, user);
   }
 }
