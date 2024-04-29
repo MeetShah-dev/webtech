@@ -1,7 +1,9 @@
-import { Controller, Delete, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Req, Res, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
+
 
 @Controller('blog')
 export class BlogController {
@@ -18,9 +20,10 @@ export class BlogController {
     }
 
     @Roles(Role.USER)
+    @UseInterceptors(AnyFilesInterceptor())
     @Post('create-blog')
-    createBlog(@Req() req, @Res() res: Response) {
-      return this.blogService.createBlog(req, res)
+    createBlog(@UploadedFiles() files: Array<Express.Multer.File>, @Req() req, @Res() res: Response) {
+        return this.blogService.createBlog(req, res, files)
     }
 
     @Roles(Role.USER)
@@ -42,9 +45,10 @@ export class BlogController {
     }
 
     @Roles(Role.USER)
+    @UseInterceptors(AnyFilesInterceptor())
     @Put('update-blog')
-    updateBlog(@Req() req, @Res() res: Response) {
-        return this.blogService.updateBlog(req, res)
+    updateBlog(@UploadedFiles() files: Array<Express.Multer.File>, @Req() req, @Res() res: Response) {
+        return this.blogService.updateBlog(req, res, files)
     }
 
     @Roles(Role.USER)
