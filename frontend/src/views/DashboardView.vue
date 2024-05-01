@@ -25,23 +25,6 @@ export default {
                 console.error('Error fetching data:', error);
             });
     },
-    // data: () => ({
-    //     valid: true,
-    //     name: '',
-    //     nameRules: [
-    //         (v) => !!v || 'Name is required',
-    //         (v) =>
-    //             (v && v.length <= 10) || 'Name must be less than 10 characters',
-    //     ],
-    //     email: '',
-    //     emailRules: [
-    //         (v) => !!v || 'E-mail is required',
-    //         (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-    //     ],
-    //     select: null,
-    //     items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    //     checkbox: false,
-    // }),
     methods: {
         validate() {
             this.$refs.form.validate();
@@ -60,15 +43,7 @@ export default {
     <main class="editing">
         <side-bar></side-bar>
         <div class="main-container"></div>
-        <div class="side-container">
-            <h2>Categories</h2>
-            <div>
-                <div v-if="responseData">
-                    {{ responseData }}
-                </div>
-                <div v-else>Loading...</div>
-            </div>
-        </div>
+        <div class="side-container"></div>
     </main>
 </template>
 
