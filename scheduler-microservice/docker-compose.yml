@@ -1,0 +1,9 @@
+version: "3.12"
+services:
+  app:
+    image: surrey-horizon-schedulers
+    build:
+      context: .
+    ports:
+    - "3028:3028"
+    container_name: scheduler-microservice
