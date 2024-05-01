@@ -2,6 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import axios from "axios"
+import FormData from 'form-data';
+
 const BLOGGING_API = process.env.BLOGGING_API
 const NOTIFICATION_API = process.env.NOTIFICATION_API
 @Injectable()
@@ -9,21 +11,37 @@ export class BlogService {
     constructor(
         private httpService: HttpService
     ) { }
-    async createBlog(req, res) {
-        let payload = req.body;
-        payload = { ...payload, "user": req.user.id.toString() }
-        console.log("USER--", typeof (payload))
+    async createBlog(req, res, files) {
+        const formData = new FormData();
+
+        // Append file data if files exist
+        files.forEach((file, index) => {
+            const fieldName = `file${index + 1}`;
+            formData.append(file.fieldname = fieldName, file.buffer, file.originalname);
+        });
+        console.log("filess---", req)
+        // Append other payload data
+        let payload = { ...req.body, "user": req.user.id.toString() };
+        Object.keys(payload).forEach(key => {
+            formData.append(key, payload[key]);
+        });
+
+        console.log("FORM DATA--", formData)
         try {
-            const response = await firstValueFrom(this.httpService.post(BLOGGING_API + 'create-blog/', payload, {
+            const response = await this.httpService.post(`${process.env.BLOGGING_API}create-blog/`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }));
+                    ...formData.getHeaders(),
+                },
+            }).toPromise();
+
             return res.json(response.data);
         } catch (e) {
-            console.log("error", e)
+            console.log("error", JSON.stringify(e));
+            res.status(500).send('Failed to create blog');
         }
+
     }
+
     async getLatestMagazine(req, res) {
         const response = await firstValueFrom(this.httpService.get(BLOGGING_API + 'magazine-feed/'));
         return res.json(response.data);
@@ -74,18 +92,27 @@ export class BlogService {
             console.log(e)
         }
     }
-    async updateBlog(req, res) {
-        let payload = req.body;
-        payload = { ...payload, "user": req.user.id.toString() }
+    async updateBlog(req, res, files) {
+        const formData = new FormData();
+        files.forEach((file, index) => {
+            const fieldName = `file${index + 1}`;
+            formData.append(file.fieldname = fieldName, file.buffer, file.originalname);
+        });
+        let payload = { ...req.body, "user": req.user.id.toString() };
+        Object.keys(payload).forEach(key => {
+            formData.append(key, payload[key]);
+        });
         try {
-            const response = await firstValueFrom(this.httpService.put(BLOGGING_API + 'update-blog/', payload, {
+            const response = await this.httpService.put(`${process.env.BLOGGING_API}update-blog/`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }));
+                    ...formData.getHeaders(),
+                },
+            }).toPromise();
+
             return res.json(response.data);
         } catch (e) {
-            console.log("error", e)
+            console.log("error", JSON.stringify(e));
+            res.status(500).send('Failed to create blog');
         }
     }
     async deleteBlog(req, res) {
@@ -135,7 +162,7 @@ export class BlogService {
     async getUserNotifications(req, res) {
         try {
             const response: any = await axios.get(NOTIFICATION_API + 'user-notifications/', {
-                data: { "user": req.user.id.toString()}
+                data: { "user": req.user.id.toString() }
             })
             return res.json(response.data);
         } catch (e) {

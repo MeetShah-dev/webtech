@@ -8,6 +8,8 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { RolesGuard } from './guards/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { BlogModule } from './blog/blog.module';
+import { MulterModule } from '@nestjs/platform-express';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -21,10 +23,14 @@ import { BlogModule } from './blog/blog.module';
       entities: [User],
       ssl: {
         rejectUnauthorized: false
-      }
+      },
+      
     }),
     AuthModule,
     BlogModule,
+    MulterModule.register({
+      dest: './uploads', // Specify the destination directory
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, 
