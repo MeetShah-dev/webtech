@@ -1,11 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
 
-Vue.config.productionTip = false
-Vue.config.ignoredElements = [
-  'smart-grid'
-]
+import App from './App.vue';
+import router from './router';
+import vuetify from '@/plugins/vuetify';
+
+import './assets/main.css';
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+    router,
+    vuetify,
+    render: (h) => h(App),
+}).$mount('#app');
