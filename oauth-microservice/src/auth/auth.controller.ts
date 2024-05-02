@@ -38,7 +38,10 @@ export class AuthController {
     };
     res.json(hat);
   }
-
+  @Get('all-users')
+  allUsers(@Req() req, @Res() res: Response) {
+    return this.authService.allUsers()
+  }
   @Get('status')
   @Roles(Role.MODERATOR)
   user(@Req() req: Request) {

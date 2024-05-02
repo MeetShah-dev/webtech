@@ -33,6 +33,10 @@ export class AuthService {
     const user = await this.userRepo.findOne({ where: { email } });
     return user;
   }
+  async allUsers() {
+    const users = await this.userRepo.find();
+    return users;
+  }
 
   handlerLogin() {
     return 'handlerLogin';
