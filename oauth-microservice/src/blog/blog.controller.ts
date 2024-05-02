@@ -80,5 +80,6 @@ export class BlogController {
     getUserNotifications(@Req() req, @Res() res: Response) {
         return this.blogService.getUserNotifications(req, res)
     }
+   
 }
 

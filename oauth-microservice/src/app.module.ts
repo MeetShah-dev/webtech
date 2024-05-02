@@ -9,6 +9,8 @@ import { RolesGuard } from './guards/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { BlogModule } from './blog/blog.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { AdminModule } from './admin/admin.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './uploads', // Specify the destination directory
     }),
+    AdminModule,
+    SchedulerModule,
   ],
   controllers: [AppController],
   providers: [AppService, 
