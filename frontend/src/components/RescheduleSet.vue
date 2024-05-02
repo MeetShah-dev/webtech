@@ -49,6 +49,9 @@
                             ></v-select>
                         </v-col>
                     </v-row>
+                    <v-row
+                        ><v-btn class="primary">Update schedule</v-btn></v-row
+                    >
                 </v-form>
             </div>
         </v-container>
@@ -93,9 +96,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.scheduling-form {
-    max-width: 600px; /* Adjust as needed */
-    margin: auto;
-}
-</style>
+<style scoped></style>

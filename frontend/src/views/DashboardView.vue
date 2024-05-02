@@ -1,40 +1,8 @@
 <script>
 // import FeedbackApp from '../components/FeedbackApp.vue';
-import axios from 'axios';
 export default {
     components: {
         SideBar: () => import('@/components/SideBar.vue'),
-    },
-    name: 'axios-category',
-    mounted() {
-        // Example headers
-        const headers = {
-            Accept: 'application/json',
-            // Add any other headers you need here
-        };
-
-        // Example GET request with headers
-        axios
-            .get('http://localhost:8083/getAllCategories', { headers })
-            .then((response) => {
-                this.responseData = response.data;
-                console.log(this.responseData); // Print the response data to the console
-                console.log('CCCCC'); // Print the response data to the console
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    },
-    methods: {
-        validate() {
-            this.$refs.form.validate();
-        },
-        reset() {
-            this.$refs.form.reset();
-        },
-        resetValidation() {
-            this.$refs.form.resetValidation();
-        },
     },
 };
 </script>
@@ -43,7 +11,6 @@ export default {
     <main class="editing">
         <side-bar></side-bar>
         <div class="main-container"></div>
-        <div class="side-container"></div>
     </main>
 </template>
 
