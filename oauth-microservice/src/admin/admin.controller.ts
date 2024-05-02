@@ -59,6 +59,16 @@ export class AdminController {
     changeRole(@Req() req, @Res() res: Response) {
         return this.adminService.changeRole(req, res)
     }
+    @Roles(Role.MODERATOR)
+    @Get('get-ready-posts')
+    getReadyPosts(@Req() req, @Res() res: Response) {
+        return this.adminService.getReadyPosts(req, res)
+    }
+    @Roles(Role.USER)
+    @Get('get-all-magazines')
+    getAllMagazines(@Req() req, @Res() res: Response) {
+        return this.adminService.getAllMagazines(req, res)
+    }
 }
 
 

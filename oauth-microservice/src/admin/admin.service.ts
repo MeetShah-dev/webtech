@@ -126,4 +126,24 @@ export class AdminService {
           console.log("error", e)
         }
     }
+    async getReadyPosts(req, res) {
+      try {
+          const response: any = await axios.get(process.env.ADMIN_API + 'getReadyPosts', {
+              data: req.body
+          })
+          return res.json(response.data);
+      } catch (e) {
+          console.log(e)
+      } 
+  }
+  async getAllMagazines(req, res) {
+    try {
+        const response: any = await axios.get(process.env.ADMIN_API + 'getAllMagazines', {
+            data: req.body
+        })
+        return res.json(response.data);
+    } catch (e) {
+        console.log(e)
+    } 
+}
 }
