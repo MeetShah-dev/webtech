@@ -28,23 +28,27 @@
 </template>
 
 <script>
-import AddCategory from './AddCategory.vue';
+import ArticleApprove from './ArticleApprove.vue';
+import ArticleReject from './ArticleReject.vue';
 import ArticleCreation from './ArticleCreation.vue';
 import MagazineCreation from './MagazineCreation.vue';
 import ArticleList from './ArticleList.vue';
 import ArticleWait from './ArticleWait.vue';
 import ScheduleSet from './ScheduleSet.vue';
 import RescheduleSet from './RescheduleSet.vue';
+import FeedbackApp from './FeedbackApp.vue';
 
 export default {
     components: {
+        ArticleApprove,
+        ArticleReject,
         ArticleCreation,
         MagazineCreation,
         ArticleList,
         ArticleWait,
         ScheduleSet,
         RescheduleSet,
-        AddCategory,
+        FeedbackApp,
     },
     data() {
         return {
@@ -53,8 +57,11 @@ export default {
                 { text: 'Create Article', component: 'ArticleCreation' },
                 { text: 'Create Magazine', component: 'MagazineCreation' },
                 { text: 'View Article(s)', component: 'ArticleList' },
-                { text: 'Add Categories', component: 'AddCategory' },
-                { text: 'Article Waiting', component: 'ArticleWait' },
+                { text: 'Add Categories', component: '' },
+                { text: 'Create a Feedback', component: 'FeedbackApp' },
+                { text: 'New Article to Check', component: 'ArticleWait' },
+                { text: 'Approved Article', component: 'ArticleApprove' },
+                { text: 'Rejected Articles', component: 'ArticleReject' },
                 { text: 'Schedule Magazine', component: 'ScheduleSet' },
                 { text: 'Reschedule Magazine', component: 'RescheduleSet' },
             ],
