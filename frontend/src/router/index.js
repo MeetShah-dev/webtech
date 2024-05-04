@@ -23,11 +23,6 @@ const router = new VueRouter({
             component: () => import('../views/DashboardView.vue'),
         },
         {
-            path: '/editing',
-            name: 'editing',
-            component: () => import('../views/EditingView.vue'),
-        },
-        {
             path: '/login',
             name: 'login',
             component: LoginPage,
@@ -38,18 +33,13 @@ const router = new VueRouter({
             component: AuthorPage,
         },
         {
-            path: '/magazine',
+            path: '/read-magazine',
             name: 'magazine view',
             component: MagazineView,
         },
         {
             path: '*',
             component: EmptyPage,
-        },
-        {
-            path: '/dashboard/create-article',
-            name: 'CreateBlog',
-            component: () => import('../components/ArticleCreation.vue'),
         },
     ],
 });

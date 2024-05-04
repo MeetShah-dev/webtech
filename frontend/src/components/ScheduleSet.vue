@@ -73,6 +73,9 @@
                             ></v-select>
                         </v-col>
                     </v-row>
+                    <v-row
+                        ><v-btn class="primary">schedule magazine</v-btn></v-row
+                    >
                 </v-form>
             </div>
         </v-container>
@@ -128,9 +131,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.scheduling-form {
-    max-width: 600px;
-    margin: auto;
-}
-</style>
+<style scoped></style>

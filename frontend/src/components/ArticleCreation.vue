@@ -16,19 +16,6 @@ export default {
     data() {
         return {
             blog: {
-                // valid: true,
-                // name: '',
-                // nameRules: [
-                //     (v) => !!v || 'Name is required',
-                //     (v) =>
-                //         (v && v.length <= 10) ||
-                //         'Name must be less than 10 characters',
-                // ],
-                // email: '',
-                // emailRules: [
-                //     (v) => !!v || 'E-mail is required',
-                //     (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-                // ],
                 title: '',
                 title_rules: [],
 
@@ -43,16 +30,7 @@ export default {
 
                 categories: '',
 
-                // postCategories: [
-                //     {
-                //         id:1,
-                //         label:'AI',
-                //         img: 'https://pluralsight.imgix.net/paths/path-icons/nodejs-601628d09d.png?w=200',
-                //     }
-                // ],
-
                 delta: undefined,
-                //postcategories json
 
                 select: null,
                 items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],

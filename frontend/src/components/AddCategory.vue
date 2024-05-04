@@ -11,7 +11,7 @@
         </v-list-item>
       </v-col>
     </v-row>
-
+ 
     <v-row v-if="categoriesItems && categoriesItems.length > 0">
       <v-row
         class="mb-2"
@@ -21,11 +21,11 @@
         <v-btn v-if="hasNextPage" @click="currentPage++">Next</v-btn>
       </v-row>
     </v-row>
-
+ 
     <v-row v-else>
       <v-col>Loading...</v-col>
     </v-row>
-
+ 
     <!-- Form for adding a new category -->
     <v-row>
       <v-col>
@@ -47,7 +47,7 @@
         </v-form>
       </v-col>
     </v-row>
-
+ 
           <v-row>
           </v-row>
           <v-row>
@@ -62,7 +62,7 @@
           
     <!-- Toast for displaying success message -->
     <v-row>
-
+ 
     <CToast :autohide="true" :visible="toast">
       
       <CToastHeader closeButton>
@@ -76,7 +76,7 @@
           role="img"
         >
   
-
+ 
          
         </svg>
         <v-row>
@@ -90,10 +90,10 @@
   </v-row>
   </v-container>
 </template>
-
+ 
 <script>
 import axios from 'axios';
-
+ 
 export default {
   name: 'CategoryList',
   data() {
@@ -154,7 +154,8 @@ export default {
   },
 };
 </script>
-
+ 
 <style scoped>
 /* Add scoped styles here if needed */
 </style>
+ 

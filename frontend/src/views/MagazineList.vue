@@ -1,8 +1,6 @@
 <script>
-import ReadMagazine from '../components/ReadMagazine.vue';
 export default {
     components: {
-        ReadMagazine,
         NavBar: () => import('@/components/NavBar.vue'),
     },
 };
@@ -11,7 +9,6 @@ export default {
 <template>
     <div class="main">
         <nav-bar></nav-bar>
-        <read-magazine></read-magazine>
     </div>
 </template>
 

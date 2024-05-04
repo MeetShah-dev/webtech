@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: 'ArticleApproved',
+    name: 'AuthorList',
     data: () => {
         return {};
     },
@@ -8,10 +8,30 @@ export default {
 </script>
 
 <template>
-    <main class="main">
-        <h1>List of All Articles</h1>
-        <div class="side-container"></div>
-        <div class="main-container"></div>
+    <main class="author-display">
+        <h1>List of Authors</h1>
+        <div class="main">
+            <div class="side-container">
+                <ul class="author-list">
+                    <li
+                        v-for="(link, index) in links"
+                        :key="index"
+                        @click="loadArticle(index)"
+                    >
+                        {{ link.text }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-container">
+                <div class="article-view">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
     </main>
 </template>
 
