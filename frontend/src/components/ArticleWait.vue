@@ -177,7 +177,7 @@ export default {
                     <quillEditor id="ql-editor" placeholder="Content" v-model.lazy="blog.content" ref="myQuillEditor"   
                      :options="blog.editorOption" />
                 </div>
-                    
+                    <h1>Feedback</h1>
                     <v-form ref="form">
                         <v-form ref="form" >
                         <v-textarea
