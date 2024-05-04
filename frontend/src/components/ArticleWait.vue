@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
-
+import { quillEditor } from 'vue-quill-editor';
+import 'quill/dist/quill.snow.css';
 export default {
     name: 'axios-articlewaiting',
     data() {
@@ -14,10 +15,27 @@ export default {
             response: '',
             feedback_comment: " ", // Data binding for feedback comment
              // Data binding for the new category input
-            feedbackSubmitted: false
+            latestBlog:'',
+            selectedBlog:'',
+            feedbackSubmitted: false,
+            blog: { 
+                content: '',
+                editorOption: {
+                    debug: 'info',
+                    readOnly: true,
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [] 
+                    }
+                },
+        
+                }
             };
          
         
+    },
+    components: {
+        quillEditor,
     },
     async mounted() {
         await this.fetchArticles(); // Call the method to fetch categories
@@ -90,7 +108,30 @@ export default {
             const response = await axios.get('http://54.82.93.84:8000/api/read-blog-moderation/',
             {params: {'blog':this.selectedArticle.id}
             });
-           alert("MERHABALAR" + response.data.content)
+           //alert("MERHABALAR" + response.data.content)
+
+           
+                    this.selectedBlog=response.data
+
+               //this.latestBlog = selectedArticle
+                //alert("ddskflkgfldkgflskgled" + this.selectedBlog.files)
+
+                const files = this.selectedBlog.files;
+               
+                let htmlContent = `<h1>${this.selectedBlog.title}</h1><br>` + this.selectedBlog.content; 
+                //alert("FILE: " + files)
+                if (files.length > 0) {
+                    for (var i = 0; i < files.length; i++) {
+                        const uidRegExp = new RegExp(files[i].uid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+                        const imgTag = `<img src="${files[i].url}" alt="Image">`;
+                        htmlContent = htmlContent.replace(uidRegExp, imgTag + ' ');
+                        //console.log("HTTTTTTTTT" + htmlContent)
+                    }
+                }
+                  this.blog.content = htmlContent;
+
+                //alert("xxxxx" + this.blog.content)
+
             
                // this.selectedArticleTitle = response.data.title;
         },
@@ -129,11 +170,13 @@ export default {
                         <p :style="{ 'font-weight': 'bold', 'font-style': 'italic', 'color': 'red' }">
                         You have selected {{ selectedArticle.id }}th Article "{{ selectedArticle.title }}" to give FEEDBACK.
                         </p>
-                        <p :style="{ 'font-weight': 'bold', 'color': 'black' }">
-                        FEEDBACK
-                        </p>
+                       
+                      
                     </div>
-        
+                    <div class="cover-image">
+                    <quillEditor id="ql-editor" placeholder="Content" v-model.lazy="blog.content" ref="myQuillEditor"   
+                     :options="blog.editorOption" />
+                </div>
                     
                     <v-form ref="form">
                         <v-form ref="form" >
@@ -211,5 +254,13 @@ main {
     height: 70%;
     background-color: #c1e2f4;
 }
+.cover-image {
+    margin: 5px;
+    padding: 10px;
+
+    height: 80%;
+}
 </style>
+
+
 
