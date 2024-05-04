@@ -80,6 +80,12 @@ export class BlogController {
     getUserNotifications(@Req() req, @Res() res: Response) {
         return this.blogService.getUserNotifications(req, res)
     }
+
+    @Roles(Role.USER)
+    @Get('read-blog-moderation')
+    readBlogModeration(@Req() req, @Res() res: Response) {
+        return this.blogService.readBlogModeration(req, res)
+    }
    
 }
 
