@@ -15,8 +15,8 @@
                     <v-tab>Home</v-tab>
                 </v-tabs>
             </v-navigation-drawer>
-
-            <v-container>
+ 
+            <v-container class="custom-container">
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(link, index) in links" :key="index">
                         <component :is="link.component"></component>
@@ -35,6 +35,7 @@ import ArticleList from './ArticleList.vue';
 import ArticleWait from './ArticleWait.vue';
 import ScheduleSet from './ScheduleSet.vue';
 import RescheduleSet from './RescheduleSet.vue';
+import AdminConsole from './AdminConsole.vue';
 
 export default {
     components: {
@@ -45,22 +46,26 @@ export default {
         ScheduleSet,
         RescheduleSet,
         AddCategory,
+        AdminConsole
     },
     data() {
         return {
             tab: null,
             links: [
                 { text: 'Create Article', component: 'ArticleCreation' },
-                { text: 'Create Magazine', component: 'MagazineCreation' },
-                { text: 'View Article(s)', component: 'ArticleList' },
+                { text: 'Schedule Magazine', component: 'MagazineCreation' },
                 { text: 'Add Categories', component: 'AddCategory' },
                 { text: 'Article Waiting', component: 'ArticleWait' },
-                { text: 'Schedule Magazine', component: 'ScheduleSet' },
-                { text: 'Reschedule Magazine', component: 'RescheduleSet' },
+                { text: 'ADMIN', component: 'AdminConsole' },
             ],
         };
     },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-container {
+    width: 900px;
+    height: 900px;
+}
+</style>
