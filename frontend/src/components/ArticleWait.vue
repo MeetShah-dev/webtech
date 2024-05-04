@@ -122,6 +122,11 @@ export default {
      
             </div>
 
+            <div class="article-rendering">
+                <!--This is an open space to render articles-->
+            </div>
+                    
+
             <div class="add-feedback">
 
                 <v-container>
