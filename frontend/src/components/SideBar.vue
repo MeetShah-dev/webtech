@@ -16,6 +16,7 @@
                 </v-tabs>
             </v-navigation-drawer>
 
+ 
             <v-container class="custom-container">
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(link, index) in links" :key="index">
@@ -46,19 +47,16 @@ export default {
         ScheduleSet,
         RescheduleSet,
         AddCategory,
-        AdminConsole,
+        AdminConsole
     },
     data() {
         return {
             tab: null,
             links: [
                 { text: 'Create Article', component: 'ArticleCreation' },
-                { text: 'Create Magazine', component: 'MagazineCreation' },
-                { text: 'View Article(s)', component: 'ArticleList' },
+                { text: 'Schedule Magazine', component: 'MagazineCreation' },
                 { text: 'Add Categories', component: 'AddCategory' },
                 { text: 'Article Waiting', component: 'ArticleWait' },
-                { text: 'Schedule Magazine', component: 'ScheduleSet' },
-                { text: 'Reschedule Magazine', component: 'RescheduleSet' },
                 { text: 'Admin', component: 'AdminConsole' },
             ],
         };
