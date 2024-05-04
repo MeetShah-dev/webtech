@@ -1,11 +1,30 @@
 <script>
-export default {};
+import AuthorList from '../components/AuthorList.vue';
+export default {
+    data() {
+        return {
+            links: [
+                { text: 'Author 1', route: '' },
+                { text: 'Author 1', route: '' },
+                { text: 'Author 1', route: '' },
+                { text: 'Author 1', route: '' },
+                { text: 'Author 1', route: '' },
+                { text: 'Author 1', route: '' },
+            ],
+            selectedTab: null,
+        };
+    },
+    components: {
+        NavBar: () => import('@/components/NavBar.vue'),
+        AuthorList,
+    },
+};
 </script>
 
 <template>
-    <div class="author-page">
-        <div class="main-container"></div>
-        <div class="side-container"></div>
+    <div class="main">
+        <nav-bar></nav-bar>
+        <author-list></author-list>
     </div>
 </template>
 

@@ -34,7 +34,7 @@ export default {
                             flat
                             dark
                             color="#114C6E"
-                            to="/magazine"
+                            to="/read-magazine"
                             tag="button"
                             >Read Magazine</v-btn
                         ></v-row

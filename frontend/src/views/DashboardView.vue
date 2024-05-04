@@ -1,34 +1,34 @@
 <script>
-// import FeedbackApp from '../components/FeedbackApp.vue';
 export default {
     components: {
+        NavBar: () => import('@/components/NavBar.vue'),
         SideBar: () => import('@/components/SideBar.vue'),
     },
 };
 </script>
 
 <template>
-    <main class="editing">
-        <side-bar></side-bar>
-        <div class="main-container"></div>
-    </main>
+    <div class="main">
+        <nav-bar></nav-bar>
+        <h1>Dashboard</h1>
+        <main class="editing">
+            <side-bar></side-bar>
+            <!-- <div class="main-container"></div> -->
+        </main>
+    </div>
 </template>
 
 <style scoped>
-* {
-    margin: 5px;
-    padding: 10px;
+.main {
+    margin-left: 350px;
+    width: 1500px;
 }
 
 .editing {
-    margin-left: 350px;
     margin-right: 0px;
-    /* margin: auto; */
     padding: 10px;
     display: flex;
     height: 800px;
-    width: 90%;
-    /* align-items: center; */
     justify-content: space-between;
 }
 

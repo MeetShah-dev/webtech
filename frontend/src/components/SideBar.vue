@@ -7,12 +7,19 @@
                 color="#c1e2f4"
                 v-bind:width="325"
             >
-                <v-tabs vertical v-model="tab" background-color="#c1e2f4">
-                    <v-tab v-for="(link, index) in links" :key="index">
+                <v-tabs
+                    vertical
+                    v-model="tab"
+                    background-color="#c1e2f4"
+                    class="mt-9 mb-9"
+                >
+                    <v-tab
+                        v-for="(link, index) in links"
+                        :key="index"
+                        class="mt-6 mb-6"
+                    >
                         {{ link.text }}
                     </v-tab>
-                    <v-spacer></v-spacer>
-                    <v-tab>Home</v-tab>
                 </v-tabs>
             </v-navigation-drawer>
 
@@ -67,6 +74,6 @@ export default {
 <style scoped>
 .custom-container {
     width: 900px;
-    height: 900px;
+    height: max-content;
 }
 </style>
