@@ -31,12 +31,11 @@ export class AuthController {
   async googleLoginRedirect(@Req() req, @Res() res: Response) {
     // After successful authentication, this route will be called with the user data in req.user
     const user = req.user;
-    // Here, user.accessToken will contain the access token
-    // Return the user data along with the access token in the response
-    const hat = {
-      user,
-    };
-    res.json(hat);
+    const token = user.accessToken;  // Assuming the token is needed on the client-side
+    const userData = encodeURIComponent(JSON.stringify(user));
+
+    // Redirect to the Vue.js frontend with the user data as a query parameter
+    res.redirect(`http://localhost:5174/dashboard?user=${userData}&token=${token}`);
   }
   @Get('all-users')
   allUsers(@Req() req, @Res() res: Response) {

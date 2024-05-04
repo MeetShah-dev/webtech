@@ -49,7 +49,7 @@ export class BlogService {
     async getArchiveMagazine(req, res) {
         try {
             const response: any = await axios.get(BLOGGING_API + 'archived-magazine/', {
-                data: req.body
+                params: req.body
             })
             return res.json(response.data);
         } catch (e) {
@@ -59,7 +59,7 @@ export class BlogService {
     async getUserReadBlog(req, res) {
         try {
             const response: any = await axios.get(BLOGGING_API + 'read-user-blogs/', {
-                data: req.body
+                params: req.body
             })
             return res.json(response.data);
         } catch (e) {
@@ -69,7 +69,7 @@ export class BlogService {
     async getUserDrafts(req, res) {
         try {
             const response: any = await axios.get(BLOGGING_API + 'read-drafts/', {
-                data: {
+                params: {
                     user: req.user.id.toString()
                 }
             })
@@ -82,7 +82,7 @@ export class BlogService {
         try {
             const response: any = await axios.get(BLOGGING_API + 'read-blog/', {
 
-                data: {
+                params: {
                     ...req.body,
                     user: req.user.id.toString()
                 },
@@ -138,7 +138,7 @@ export class BlogService {
     async getReadUserRejectedBlogs(req, res) {
         try {
             const response: any = await axios.get(BLOGGING_API + 'read-user-rejected-blogs/', {
-                data: { "user": req.user.id.toString() }
+                params: { "user": req.user.id.toString() }
             })
             return res.json(response.data);
         } catch (e) {
@@ -162,7 +162,17 @@ export class BlogService {
     async getUserNotifications(req, res) {
         try {
             const response: any = await axios.get(NOTIFICATION_API + 'user-notifications/', {
-                data: { "user": req.user.id.toString() }
+                params: { "user": req.user.id.toString() }
+            })
+            return res.json(response.data);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    async readBlogModeration(req, res) {
+        try {
+            const response: any = await axios.get(`${process.env.BLOGGING_API}read-blog-moderation/`, {
+                params: { ...req.body }
             })
             return res.json(response.data);
         } catch (e) {
