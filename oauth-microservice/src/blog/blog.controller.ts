@@ -11,6 +11,7 @@ export class BlogController {
     @Roles(Role.USER)
     @Get('magazine-feed')
     magazineFeed(@Req() req, @Res() res: Response) {
+        console.log("getting all magazine feed")
         return this.blogService.getLatestMagazine(req, res)
     }
     @Roles(Role.USER)

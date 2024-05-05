@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     paths:
-      - 'oauth-microservice/**'  # Trigger only on changes in the oauth-microservice folder
+      - 'oauth-microservice/**'  
 
 jobs:
   build-and-deploy:
@@ -12,20 +12,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Change directory to oauth-microservice
         run: cd oauth-microservice
-        
+      
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          pwd
+          cd oauth-microservice
+          pwd
+          npm install
 
       - name: Creating the build
         run: |
+          cd oauth-microservice
           npm run build
 
       - name: Deploy to AWS Lambda
@@ -33,5 +38,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
+          cd oauth-microservice
           npm install -g serverless
           serverless deploy

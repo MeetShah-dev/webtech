@@ -13,6 +13,7 @@ export class SchedulerController {
     }
     @Get('get-all-user-dislikes')
     getAllUserDislikes(@Req() req, @Res() res: Response) {
+        console.log("legs")
         return this.schedulerService.getAllUserDislikes(req, res)
     }
     @Get('get-all-comments')
