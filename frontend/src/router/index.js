@@ -5,7 +5,7 @@ import LoginPage from '@/views/LoginPage.vue';
 import AuthorPage from '@/views/AuthorPage.vue';
 import MagazineView from '@/views/MagazineView.vue';
 import EmptyPage from '@/views/EmptyPage.vue';
-import axios from 'axios'
+import axios from 'axios';
 Vue.use(VueRouter);
 // Authentication Guard
 const requireAuthHome = (to, from, next) => {
@@ -19,16 +19,15 @@ const requireAuthHome = (to, from, next) => {
             const parsedUser = JSON.parse(decodeURIComponent(user));
             sessionStorage.setItem('user', JSON.stringify(parsedUser));
             sessionStorage.setItem('token', token);
-            next();  // Continue to the route
+            next(); // Continue to the route
         } catch (error) {
             console.error('Failed to parse user data:', error);
-            next('/login');  // Redirect to login if parsing fails
+            next('/login'); // Redirect to login if parsing fails
         }
     } else {
-        requireAuth(to, from, next)
+        requireAuth(to, from, next);
     }
 };
-
 
 const requireAuth = async (to, from, next) => {
     const token = sessionStorage.getItem('token');
@@ -51,7 +50,6 @@ const requireAuth = async (to, from, next) => {
     }
 };
 
-
 const ifAuthenticated = (to, from, next) => {
     const user = sessionStorage.getItem('user');
     if (user) {
@@ -65,18 +63,18 @@ const ifAuthenticated = (to, from, next) => {
     }
 };
 
-
 function verifyToken(accessToken) {
     const url = `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`;
-    return axios.get(url)
-        .then(response => {
+    return axios
+        .get(url)
+        .then((response) => {
             if (response.data && response.data.aud) {
                 return { isValid: true, data: response.data };
             }
             return { isValid: false };
         })
-        .catch(error => {
-            console.error("Token verification failed:", error);
+        .catch((error) => {
+            console.error('Token verification failed:', error);
             return { isValid: false };
         });
 }
@@ -88,49 +86,44 @@ const router = new VueRouter({
             path: '/',
             name: 'home',
             component: HomeView,
-            beforeEnter: requireAuthHome
+            beforeEnter: requireAuthHome,
         },
         {
             path: '/dashboard',
             name: 'dashboard',
             component: () => import('../views/DashboardView.vue'),
-            beforeEnter: requireAuth
+            beforeEnter: requireAuth,
         },
         {
             path: '/login',
             name: 'login',
             component: LoginPage,
-            beforeEnter: ifAuthenticated
-
+            beforeEnter: ifAuthenticated,
         },
         {
             path: '/author-page',
             name: 'author',
             component: AuthorPage,
-            beforeEnter: requireAuth
+            beforeEnter: requireAuth,
         },
         {
             path: '/read-magazine',
             name: 'magazine view',
             component: MagazineView,
-            beforeEnter: requireAuth
-
+            beforeEnter: requireAuth,
         },
         {
             path: '*',
             component: EmptyPage,
-            beforeEnter: requireAuth
-
+            beforeEnter: requireAuth,
         },
         {
             path: '/dashboard/create-article',
             name: 'CreateBlog',
             component: () => import('../components/ArticleCreation.vue'),
-            beforeEnter: requireAuth
-
+            beforeEnter: requireAuth,
         },
     ],
 });
-
 
 export default router;
