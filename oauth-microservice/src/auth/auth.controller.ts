@@ -35,7 +35,7 @@ export class AuthController {
     const userData = encodeURIComponent(JSON.stringify(user));
 
     // Redirect to the Vue.js frontend with the user data as a query parameter
-    res.redirect(`http://localhost:5174/dashboard?user=${userData}&token=${token}`);
+    res.redirect(`http://localhost:5174?user=${userData}&token=${token}`);
   }
   @Get('all-users')
   allUsers(@Req() req, @Res() res: Response) {
