@@ -11,14 +11,18 @@
         <v-btn class="login-button">
             <img src="../assets/google-color-icon.svg" alt="" />
             <v-spacer></v-spacer>
-            Continue with Google
+            <button @click="loginWithGoogle">Login with Google</button>
         </v-btn>
     </div>
 </template>
 
 <script>
 export default {
-    // Component logic here
+    methods: {
+    loginWithGoogle() {
+      window.location.href = 'https://svfg5klna6.execute-api.us-east-1.amazonaws.com/dev/auth/google/login';
+    }
+  }
 };
 </script>
 

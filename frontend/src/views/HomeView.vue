@@ -1,14 +1,19 @@
 <script>
+import NavBar from '@/components/NavBar.vue';
+import FooterBar from '@/components/FooterBar.vue';
+
 export default {
     name: 'Home-view',
-    data: () => {
-        return {};
-    },
     components: {
-        NavBar: () => import('@/components/NavBar.vue'),
-        FooterBar: () => import('@/components/FooterBar.vue'),
+        NavBar,
+        FooterBar,
     },
-};
+    data() {
+        return {
+            userData: null,  // Ensure userData is part of the component's reactive data
+        };
+    },
+}
 </script>
 
 <template>

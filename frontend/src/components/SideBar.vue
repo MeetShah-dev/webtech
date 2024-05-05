@@ -56,18 +56,41 @@ export default {
         AddCategory,
         AdminConsole
     },
+    name: 'SideBarComponent',
+    props: {
+        role: Number,
+        default: () => {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        return user ? user.role_id : null;
+    }
+},
     data() {
         return {
             tab: null,
-            links: [
-                { text: 'Create Article', component: 'ArticleCreation' },
-                { text: 'Schedule Magazine', component: 'MagazineCreation' },
-                { text: 'Add Categories', component: 'AddCategory' },
-                { text: 'Article Waiting', component: 'ArticleWait' },
-                { text: 'Admin', component: 'AdminConsole' },
-            ],
+            links: this.getLinksBasedOnRole(),
         };
     },
+    methods: {
+        getLinksBasedOnRole() {
+            const links = [
+                { text: 'Create Article', component: 'ArticleCreation', roles: [1, 2, 3] },
+                { text: 'Create Magazine', component: 'MagazineCreation', roles: [2, 3] },
+                { text: 'View Article(s)', component: 'ArticleList', roles: [1, 2 ,3] },
+                { text: 'Add Categories', component: 'AddCategory', roles: [2, 3] },
+                { text: 'Article Waiting', component: 'ArticleWait', roles: [2, 3] },
+                { text: 'Schedule Magazine', component: 'ScheduleSet', roles: [2 ,3] },
+                { text: 'Reschedule Magazine', component: 'RescheduleSet', roles: [3] },
+            ];
+            console.log("this role", this.role)
+            // Filter links based on role_id
+            return links.filter(link => link.roles.includes(this.role));
+        }
+    },
+    watch: {
+        role(newVal) { // corrected from role_id to role
+        this.links = this.getLinksBasedOnRole();
+         }
+    }
 };
 </script>
 
