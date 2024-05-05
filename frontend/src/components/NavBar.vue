@@ -21,6 +21,12 @@ export default {
     components: {
         // UserRegistration,
     },
+    methods: {
+        logout() {
+            sessionStorage.clear();
+            this.$router.push('/login');
+        }
+    }
 };
 </script>
 
@@ -86,7 +92,7 @@ export default {
                 </v-list>
             </v-menu>
 
-            <v-btn>
+            <v-btn @click="logout">
                 <span>Sign Out</span>
                 <v-icon right>mdi-exit-to-app</v-icon>
             </v-btn>
