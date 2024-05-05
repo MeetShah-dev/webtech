@@ -38,15 +38,16 @@ export default {
             <v-tabs>
                 <v-tab exact to="/" active>Home</v-tab>
                 <v-tab exact to="/dashboard">Dashboard</v-tab>
-                <v-tab exact to="/author-page">Authors</v-tab>
+                <!-- <v-tab exact to="/author-page">Authors</v-tab> -->
             </v-tabs>
             <v-spacer></v-spacer>
-            <v-menu open-on-hover bottom offset-y>
+            <v-menu open-on-click bottom offset-y>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
                         <v-btn icon>
                             <v-icon>mdi-bell</v-icon>
                             <v-badge
+                                dot
                                 :content="messages"
                                 :value="messages"
                                 color="green"
@@ -69,19 +70,6 @@ export default {
                 <v-list v-bind:width="370">
                     <v-list-item v-for="(notif, index) in notifs" :key="index">
                         <v-list-item-title>{{ notif.title }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-menu bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-menu</v-icon>
-                    </v-btn>
-                </template>
-
-                <v-list>
-                    <v-list-item v-for="(menu, index) in menus" :key="index">
-                        <v-list-item-title>{{ menu.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
