@@ -27,6 +27,7 @@ jobs:
           cd oauth-microservice
           pwd
           npm install
+          ls
 
       - name: Creating the build
         run: |
