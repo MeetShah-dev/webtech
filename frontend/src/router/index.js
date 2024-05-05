@@ -97,12 +97,6 @@ const router = new VueRouter({
             beforeEnter: requireAuth
         },
         {
-            path: '/editing',
-            name: 'editing',
-            component: () => import('../views/EditingView.vue'),
-            beforeEnter: requireAuth
-        },
-        {
             path: '/login',
             name: 'login',
             component: LoginPage,
