@@ -22,7 +22,11 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          pwd
+          cd oauth-microservice
+          pwd
+          npm install
 
       - name: Creating the build
         run: |
