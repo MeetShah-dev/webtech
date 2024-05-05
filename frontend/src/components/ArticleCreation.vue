@@ -1,173 +1,153 @@
+<template>
+    <main class="editing">
+        <v-container>
+            <h2>Add a New Article</h2>
+            <v-form ref="form" @submit.prevent="submitForm">
+                <v-select v-model="blog.categoryItems" :items="categoryItems" item-text="name" item-value="id" hint="Pick one category at least" label="Categories*"
+                        multiple persistent-hint></v-select>
+                <v-text-field label="Title*" v-model="blog.title"></v-text-field>
+                <quillEditor placeholder="Content" v-model.lazy="blog.content" ref="myQuillEditor"
+                    :options="blog.editorOption" />
+                <v-text-field label="Keywords" v-model="blog.keywords" hint="Separate keywords by a comma"></v-text-field>
+                <v-checkbox v-model="blog.draft" label="Save as draft"></v-checkbox>
+                <v-btn type="submit">Submit</v-btn>
+            </v-form>
+            <Success ref="Success"></Success>
+        </v-container>
+    </main>
+</template>
 <script>
-import axios from 'axios'; // Import Axios library
+import axios from 'axios'; 
 import { v4 as uuidv4 } from 'uuid';
 import 'quill/dist/quill.snow.css';
 import { quillEditor } from 'vue-quill-editor';
-// import { Button, Input, Select } from 'iview';
+import Success from '@/components/Success.vue';
 
 export default {
     name: 'CreateBlog',
     components: {
-        // Button,
-        // Input,
-        // Select,
         quillEditor,
+        Success
     },
     data() {
         return {
             blog: {
                 title: '',
-                title_rules: [],
-
-                content: '',
-                content_rules: [],
+                content: '', 
+                categories: [],
+                keywords: '',
+                draft: false,
                 editorOption: {
                     debug: 'info',
-                    placeholder: 'Type your post here...',
-                    readOnly: true,
+                    placeholder: 'Share your thoughts with us...',
                     theme: 'snow',
                 },
-
-                categories: '',
-
-                delta: undefined,
-
-                select: null,
-                items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-                checkbox: false,
             },
+            categories: [],
+            categoryItems: '',
+            formData: new FormData(), 
         };
     },
+    async mounted() {
+        await this.fetchCategories();
+        await this.getLikes();
+    },
+
     methods: {
-        validate() {
-            this.$refs.form.validate();
-        },
-        reset() {
-            this.$refs.form.reset();
-        },
-        resetValidation() {
-            this.$refs.form.resetValidation();
-        },
-        //FORM FIELDS DATA SETUP
-        async handleSubmit() {
-            // Get the selected files from the file input
-            const files = this.$refs.fileInput.files;
+        async submitForm() {
+            const title = this.blog.title;
+            const content = await this.blogParser(this.blog.content);
+            const isDraft = this.blog.draft;
+            const category_ids = JSON.stringify(this.blog.categoryItems);
+            const keywords = JSON.stringify(this.blog.keywords.split(','))
 
-            // Prepare FormData object to hold the files
-            const formData = new FormData();
-            for (let i = 0; i < files.length; i++) {
-                formData.append(`file${i + 1}`, files[i]);
-            }
-            const uid = uuidv4(); // generate uids for all the files
+            this.formData.append('user', "8"); // must change to the real value
+            this.formData.append('title', title);
+            this.formData.append('content', content);
+            this.formData.append('is_draft', isDraft);
+            this.formData.append('category_ids', category_ids);
+            this.formData.append('keywords', keywords);
 
-            // Add other fields to FormData object
-            formData.append('title', this.title);
-            formData.append('content', this.content + uid);
-
-            // Example of additional data
-            formData.append('user', '1');
-            formData.append('category_ids', JSON.stringify(['1', '2']));
-            formData.append('is_draft', true);
-            formData.append(
-                'keywords',
-                JSON.stringify(['keyword1', 'keyword2'])
-            );
-            formData.append(
-                'file_placeholders',
-                JSON.stringify([
-                    { file1: uid }, // only using ONE FILE! a logic has to be implemented for when man files are used
-                ])
-            );
-
-            // Make the POST request
+            // log formData FOR DEBUGGING...
+            // for (const [key, value] of this.formData.entries()) {
+            //     console.log(`Key: ${key}, Value: ${value}, Type ${typeof(value)}`);   
+            // }
+            // calling blog creation API ##### MUST BE CALLED THROUGH THE AUTH MICROSERVICE #####
             try {
-                const url = 'http://54.82.93.84:8000/api/create-blog/';
-                console.log(Object.fromEntries(formData));
-                const response = await axios.post(url, formData);
+                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/create-blog/';
+                const response = await axios.post(url, this.formData);
                 console.log(response.data);
             } catch (error) {
                 console.error('Error:', error);
             }
+            // reinitialising form data after submission
+            await this.showMessage();
+            await this.resetInputFields();
+            ///////// CREATE A POP UP WITH SUCCESS AND CLEAN THE INPUT FIELDS /////////
         },
-    },
-    watch: {
-        content() {
-            this.delta = this.$refs.myQuillEditor.quill.getContents(); //helps reduce load to database
+        
+        async fetchCategories() {
+              try {
+                    const url = import.meta.env.VITE_ADMIN_SERVER + '/getAllCategories';
+                    const response = await axios.get(url);
+                    this.categoryItems = response.data; // Populate categories array
+                    return response.data;
+              } catch (error) {
+                    console.error('Error fetching categories:', error);
+              }
         },
-    },
-};
-</script>
 
-<template>
-    <!-- <div class="hello">
-    <h1>{{ msg }}</h1>
-    <form @submit.prevent="handleSubmit">
-      <input type="file" ref="fileInput" multiple accept="image/*, video/*" />
-      <input type="text" v-model="title" placeholder="Title" required />
-      <textarea v-model="content" placeholder="Content" required></textarea>
-      <button type="submit">Upload Files</button>
-    </form>
-  </div> -->
-    <main class="editing">
-        <v-container>
-            <h2>Add a New Article</h2>
-            <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
-                    label="User ID"
-                    v-model="blog.user_id"
-                ></v-text-field>
-                <v-text-field
-                    label="Article ID"
-                    v-model="blog.id"
-                ></v-text-field>
-                <v-text-field
-                    label="Magazine ID"
-                    v-model="blog.mag_id"
-                ></v-text-field>
-                <v-select
-                    :categories="categories"
-                    label="Categories"
-                    v-model="blog.categories"
-                >
-                    <!-- <Option
-                        v-for="(cat, index) in postCategories"
-                        :key="index"
-                        :value="cat.id"
-                        >{{}}</Option
-                    > -->
-                </v-select>
-                <v-text-field
-                    label="Article Title"
-                    v-model="blog.title"
-                ></v-text-field>
-                <quillEditor
-                    placeholder="Content"
-                    v-model.lazy="blog.content"
-                    ref="myQuillEditor"
-                    :options="editorOption"
-                />
-                <v-file-input
-                    show-size
-                    v-model="blog.file1"
-                    label="File input"
-                ></v-file-input>
-                <v-file-input
-                    show-size
-                    v-model="blog.file2"
-                    label="File input (Optional)"
-                ></v-file-input>
-                <v-text-field
-                    label="Keywords"
-                    v-model="blog.keywords"
-                ></v-text-field>
-                <v-checkbox label="Keep as draft">Keep as draft</v-checkbox>
-                <v-btn>submit</v-btn>
-            </v-form>
-        </v-container>
-    </main>
-</template>
+        async blogParser(htmlContent) {
+            /*****************************************************************************************
+            This function parses the HTML in the editor to convert base64 images to files and assign 
+            each file a UUID as a placeholder in the text so that the blog order can be maintained.
+            ******************************************************************************************/
+            const div = document.createElement('div');
+            div.innerHTML = htmlContent;
+            const images = div.querySelectorAll('img');
+            var file_placeholders = [];
+            var i = 1;
+            for (const img of images) {
+                const uuid = uuidv4();
+                file_placeholders.push({[`file${i}`]: uuid});
+                const span = document.createElement('span');
+                span.textContent = uuid;
+                img.parentNode.replaceChild(span, img);
+                const src = img.src;
+                const response = await fetch(src);
+                const blob = await response.blob();
+                const file = new File([blob], `image-${i}.png`, { type: 'image/png' });
+                this.formData.append(`file${i}`, file);
+                i++;
+            }
+            this.formData.append('file_placeholders', JSON.stringify(file_placeholders));
+            return div.innerHTML;
+        },
+
+        async resetInputFields() {
+            this.blog.title = '';
+            this.blog.content = '';
+            this.blog.categoryItems = [];
+            this.blog.keywords = '';
+            this.blog.draft = false;
+            this.formData = new FormData();
+        },
+
+        async showMessage() {
+            this.$refs.Success.dialogVisible = true;
+        },
+
+    }
+}
+</script> 
 <style>
 .ql-editor {
     height: 72vh;
 }
 </style>
+
+<!-- 
+    YAAAY, THE PAYLOAD WORKS!!!
+    NOW WE HAVE TO GET THE USER ID APPROPRIATELY AS IT'S HARDCODED
+    "user": "1", ############################################ TODO #####################################################
+-->

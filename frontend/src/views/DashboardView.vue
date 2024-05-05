@@ -13,6 +13,13 @@ export default {
             responseData: null,
         };
     },
+    mounted(){ 
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }); 
+
+    },
     beforeRouteEnter(to, from, next) {
         // First, attempt to get user data from URL parameters
         const urlParams = new URLSearchParams(window.location.search);

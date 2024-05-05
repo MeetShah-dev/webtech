@@ -3,6 +3,8 @@
 import axios from 'axios';
 import 'quill/dist/quill.snow.css';
 import { quillEditor } from 'vue-quill-editor';
+import Dialog from '@/components/Dialog.vue';
+
 
 export default {
     name: 'Home-view',
@@ -29,39 +31,35 @@ export default {
         NavBar: () => import('@/components/NavBar.vue'),
         FooterBar: () => import('@/components/FooterBar.vue'),
         quillEditor,
+        Dialog,
     },
     async mounted() {
-        await this.fetchLatestMagazine();
+        await this.fetchLatestMagazine(); 
         await this.fetchAllMagazines();
-        await this.getArchivedMagazine(1);
     },
     methods: {
+        async showDialog() {
+            this.$refs.Dialog.dialogVisible = true;
+        },
+
+
         async fetchLatestMagazine() {
             /*************************************************
             Getting latest magazine's associated blogs
             **************************************************/
             try {
-                const url =
-                    import.meta.env.VITE_BLOGGING_SERVER +
-                    '/api/magazine-feed/';
+                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/magazine-feed/';
                 const response = await axios.get(url);
                 this.LatestMagazineBlogs = response.data;
 
                 const latestBlog = response.data.results[0];
                 const files = latestBlog.files;
-                let htmlContent =
-                    `<h1>${latestBlog.title}</h1><br>` + latestBlog.content;
+                let htmlContent = `<h1>${latestBlog.title}</h1><br>` + latestBlog.content; 
                 if (files.length > 0) {
                     for (var i = 0; i < files.length; i++) {
-                        const uidRegExp = new RegExp(
-                            files[i].uid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-                            'g'
-                        );
+                        const uidRegExp = new RegExp(files[i].uid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
                         const imgTag = `<img src="${files[i].url}" alt="Image">`;
-                        htmlContent = htmlContent.replace(
-                            uidRegExp,
-                            imgTag + ' '
-                        );
+                        htmlContent = htmlContent.replace(uidRegExp, imgTag + ' ');
                     }
                 }
                 this.blog.content = htmlContent;
@@ -76,8 +74,7 @@ export default {
             Getting latest magazine's associated blogs
             **************************************************/
             try {
-                const url =
-                    import.meta.env.VITE_ADMIN_SERVER + '/getAllMagazines'; // change for auth api
+                const url = import.meta.env.VITE_ADMIN_SERVER + '/getAllMagazines'; // change for auth api
                 const response = await axios.get(url);
                 this.magazines = response.data;
                 this.magazines.reverse(); // ordering by the latest
@@ -88,30 +85,25 @@ export default {
 
         async getArchivedMagazine(magazineId) {
             try {
-                const url =
-                    import.meta.env.VITE_BLOGGING_SERVER +
-                    '/api/archived-magazine/'; // change for auth api
+                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/archived-magazine/'; // change for auth api
                 const response = await axios.get(url, {
-                    params: { magazine: magazineId },
+                    params: {'magazine': magazineId}
                 });
-                console.log(response.data);
+                return response.data;
             } catch (error) {
                 console.error('Error:', error);
             }
         },
 
-        async handleMagazineClick(magazineId) {
-            // need to work on that...
+        async handleMagazineClick(magazineId) { // need to work on that...
             console.log('Clicked on magazine with ID:', magazineId);
-            await getArchivedMagazine(magazineId);
+            const magazinedata = await this.getArchivedMagazine(magazineId);
+            this.$router.push({ name: 'magazine view', query: { data: JSON.stringify(magazinedata) } });
         },
 
         async readLatestMagazine() {
-            this.$router.push({
-                name: 'magazine view',
-                query: { data: JSON.stringify(this.LatestMagazineBlogs) },
-            });
-        },
+            this.$router.push({ name: 'magazine view', query: { data: JSON.stringify(this.LatestMagazineBlogs) } });
+        }
     },
 };
 </script>
@@ -124,14 +116,14 @@ export default {
             <div class="side-container">
                 <h2>Magazine Archives</h2>
                 <br />
-                <ul id="sidebar-ul">
-                    <li v-for="magazine in magazines" :key="magazine.id">
+                <ul id="sidebar-ul" v-for="magazine in magazines" :key="magazine.id">
+                    <li v-if="magazine.flag !== 'upcoming'" @click="handleMagazineClick(magazine.id)">
                         <b class="archived-magazine">{{ magazine.title }}</b>
-                        <b
-                            ><span v-if="magazine.flag === 'upcoming'"
-                                ><small id="upcoming"> - upcoming</small></span
-                            ></b
-                        >
+                        <b><span v-if="magazine.flag === 'upcoming'"><small id="upcoming">  - upcoming</small></span></b>
+                    </li>
+                    <li v-else @click="showDialog">
+                        <b class="archived-magazine">{{ magazine.title }}</b>
+                        <b><span v-if="magazine.flag === 'upcoming'"><small id="upcoming">  - upcoming</small></span></b>
                     </li>
                 </ul>
             </div>
@@ -141,32 +133,16 @@ export default {
                 </h2>
 
                 <div class="cover-image">
-                    <quillEditor
-                        id="ql-editor"
-                        placeholder="Content"
-                        v-model.lazy="blog.content"
-                        ref="myQuillEditor"
-                        :options="blog.editorOption"
-                    />
+                    <quillEditor id="ql-editor" placeholder="Content" v-model.lazy="blog.content" ref="myQuillEditor"
+                    :options="blog.editorOption" />
                 </div>
                 <div class="center">
                     <div class="main-container-btn">
                         <v-row>
-                            <v-btn
-                                flat
-                                dark
-                                color="#114C6E"
-                                style="margin-right: 20px"
-                                >Post to our upcoming Magazine</v-btn
-                            >
-                            <v-btn
-                                @click="readLatestMagazine"
-                                flat
-                                dark
-                                color="#114C6E"
-                                tag="button"
-                                >Read Latest released Magazine</v-btn
-                            >
+                            <router-link :to="{ name: 'dashboard' }">
+                                <v-btn flat dark color="#114C6E" style="margin-right: 20px;">Post to our upcoming Magazine</v-btn>
+                            </router-link>
+                            <v-btn @click="readLatestMagazine" flat dark color="#114C6E" tag="button">Read Latest released Magazine</v-btn>
                         </v-row>
                     </div>
                 </div>
@@ -182,6 +158,7 @@ export default {
                     entertained, our app has you covered.
                 </p>
             </div>
+            <Dialog ref="Dialog"></Dialog>
         </div>
         <footer-bar></footer-bar>
     </main>
@@ -258,7 +235,7 @@ export default {
     padding: 5px;
 }
 #ql-editor {
-    height: 60vh;
+    height: 76vh;
 }
 .archived-magazine {
     color: rgb(102, 101, 101);

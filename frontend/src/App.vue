@@ -1,69 +1,47 @@
-<!-- <script>
-import NavBar from '@/components/NavBar.vue';
-import FooterBar from './components/FooterBar.vue';
-export default {
-    name: 'App',
-    components: { NavBar, FooterBar },
-    watch: {
-        $route: {
-            immediate: true,
-            handler(to) {
-                document.title = to.meta.title || 'Surrey Horizon';
-            },
-        },
-    },
-};
-</script> -->
-
-<script>
-export default {
-    name: 'App',
-    components: {},
-    watch: {
-        $route: {
-            immediate: true,
-            handler(to) {
-                document.title = to.meta.title || 'Surrey Horizon';
-            },
-        },
-    },
-};
-</script>
-
-<!-- <template>
-    <v-app class="grey lightn-4">
-        <img alt="Surrey Horizon logo" class="logo" src="@/assets/s-h.png" />
-        <nav-bar></nav-bar>
-        <v-main>
-            <router-view></router-view>
-        </v-main>
-
-        <v-footer>
-            <footer-bar></footer-bar>
-        </v-footer>
-    </v-app>
-</template> -->
-
 <template>
     <v-app class="grey lightn-4">
         <!-- <img alt="Surrey Horizon logo" class="logo" src="@/assets/s-h.png" /> -->
         <router-view></router-view>
+        <Modal v-if="showModal" :message="message"/>
     </v-app>
 </template>
 
-<!-- <template>
-    <div id="app">
-        <header>
-            <nav>
-                <router-link to="/">Home</router-link>
-                <router-link to="/catalogue">Catalogue</router-link>
-            </nav>
-        </header>
+<script>
+import Modal from './components/Modal.vue';
 
-        <router-view />
-    </div>
-</template> -->
+export default {
+    name: 'App',
+    components: { 
+        Modal,
+    },
+    data() {
+        return {
+            message: 'hello world',
+            showModal: false
+        }
+    },
+    mounted() {
+        this.$root.$on('show-modal', this.auth)
+    },
+    watch: {
+        $route: {
+            immediate: true,
+            handler(to) {
+                document.title = to.meta.title || 'Surrey Horizon';
+            },
+        },
+    },
+    methods: {
+        auth(access_token, userId) {
+            console.log('nik zebiiiiiiiiiiiiiiiiiiiiiiiiiii')
+            this.showModal = true;
+            console.log(access_token, userId)
+            // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@FUNCTION CALLED@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
+        },
+    }
+};
+</script>
 <style scoped>
 .logo {
     display: block;

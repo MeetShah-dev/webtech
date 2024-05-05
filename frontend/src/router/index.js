@@ -5,8 +5,15 @@ import LoginPage from '@/views/LoginPage.vue';
 import AuthorPage from '@/views/AuthorPage.vue';
 import MagazineView from '@/views/MagazineView.vue';
 import EmptyPage from '@/views/EmptyPage.vue';
+import Blog from '@/views/Blog.vue';
 import axios from 'axios';
+import Socket from '@/Socket';
+import App from '@/App.vue';
+
 Vue.use(VueRouter);
+let notificationWebsocket;
+let eventWebsocket;
+
 // Authentication Guard
 const requireAuthHome = (to, from, next) => {
     // Attempt to parse and set user data if coming with URL parameters
@@ -19,6 +26,13 @@ const requireAuthHome = (to, from, next) => {
             const parsedUser = JSON.parse(decodeURIComponent(user));
             sessionStorage.setItem('user', JSON.stringify(parsedUser));
             sessionStorage.setItem('token', token);
+            // authenticate websockets
+            // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+            // console.log(parsedUser.id)
+            // console.log(token)
+            authenticateWebSockets(token, parsedUser.id);
+
+            //
             next(); // Continue to the route
         } catch (error) {
             console.error('Failed to parse user data:', error);
@@ -27,6 +41,38 @@ const requireAuthHome = (to, from, next) => {
     } else {
         requireAuth(to, from, next);
     }
+};
+const authenticateWebSockets = (access_token, userId) => {
+    console.log("websocket authentication test:")
+
+    notificationWebsocket = new WebSocket(
+        'ws://' + 
+        '35.171.3.193:8001' + 
+        // import.meta.env.VITE_NOTIFICATION_SERVER +
+        '/ws/notification/' + 
+        `${userId}` +  
+        `/?Authorization=${access_token}`
+    ); 
+    console.log(notificationWebsocket);
+
+    eventWebsocket = new WebSocket(
+        'ws://' + 
+        '35.171.3.193:8001' + 
+        // import.meta.env.VITE_NOTIFICATION_SERVER +
+        `/ws/event/?Authorization=${access_token}` 
+    );
+
+    notificationWebsocket.onmessage = (event) => {
+        console.log("Received WebSocket message:", event.data);
+        const data = JSON.parse(event.data);
+        const notificationMessage = data.message;
+        this.$root.$emit('show-modal', notificationMessage);
+    };
+
+    eventWebsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const eventMessage = data.message;
+    };
 };
 
 const requireAuth = async (to, from, next) => {
@@ -113,6 +159,11 @@ const router = new VueRouter({
             beforeEnter: requireAuth,
         },
         {
+            path: '/blog',
+            name: 'blog',
+            component: Blog,
+        },
+        {
             path: '*',
             component: EmptyPage,
             beforeEnter: requireAuth,
@@ -125,5 +176,14 @@ const router = new VueRouter({
         },
     ],
 });
+
+router.beforeEach((to, from, next) => {
+    const token = sessionStorage.getItem('token')
+    const user = sessionStorage.getItem('user');
+    const socketComponentInstance = new Socket()
+    socketComponentInstance.auth(token,user)
+    App
+    next()
+})
 
 export default router;
