@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     paths:
-      - 'oauth-microservice/**'  # Trigger only on changes in the oauth-microservice folder
+      - 'oauth-microservice/**'  
 
 jobs:
   build-and-deploy:
@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Change directory to oauth-microservice
         run: cd oauth-microservice
-        
+      
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
