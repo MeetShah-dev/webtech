@@ -2,7 +2,6 @@
     <main class="editing">
         <v-container>
             <div class="admin-table">
-                <!-- Search input for searching by last name -->
                 <v-text-field
                     v-model="lastNameSearch"
                     label="Search by Last Name"
@@ -18,7 +17,6 @@
                     :sort-by="['id']"
                 >
                     <template v-slot:item.action="{ item }">
-                        <!-- Render the button only for users with roles Moderator or User -->
                         <v-btn
                             v-if="isModeratorOrUser(item.role)"
                             @click="changeUserRole(item.id, item.role)"
@@ -38,7 +36,7 @@ export default {
     data() {
         return {
             search: '',
-            lastNameSearch: '', // New data property for searching by last name
+            lastNameSearch: '', 
             users: [],
             headers: [
                 { text: 'User ID', value: 'id' },
@@ -46,7 +44,7 @@ export default {
                 { text: 'Last Name', value: 'last_name' },
                 { text: 'Email', value: 'email' },
                 { text: 'Role ID', value: 'role' },
-                { text: 'Role Name', value: 'role_name' }, // New column for role names
+                { text: 'Role Name', value: 'role_name' }, 
                 { text: 'Action', value: 'action', sortable: false },
             ],
         };
@@ -55,7 +53,6 @@ export default {
         this.getAllUsers();
     },
     computed: {
-        // Map role IDs to role names
         roleNames() {
             return {
                 1: 'User',
@@ -64,7 +61,7 @@ export default {
             };
         },
         filteredUsers() {
-            if (!this.lastNameSearch) return this.users; // Return all users if no search input provided
+            if (!this.lastNameSearch) return this.users; 
             const searchUpperCase = this.lastNameSearch.toUpperCase();
             return this.users.filter((user) =>
                 user.last_name.toUpperCase().includes(searchUpperCase)
@@ -75,12 +72,11 @@ export default {
         async getAllUsers() {
             try {
                 const response = await axios.get(
-                    'http://18.206.186.97:8000/getAllUsers'
+                    import.meta.env.VITE_AUTH_SERVER + '/admin/all-users',
                 );
-                // Map role IDs to role names for each user
                 this.users = response.data.map((user) => ({
                     ...user,
-                    role_name: this.roleNames[user.role], // Add role_name property
+                    role_name: this.roleNames[user.role], 
                 }));
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -88,20 +84,20 @@ export default {
         },
         async changeUserRole(userId, roleId) {
             try {
-                // Determine the new role ID based on the current role ID
+                // determine the new role ID based on the current role ID
                 const newRoleId = roleId === 1 ? 2 : 1;
-                await axios.put('http://18.206.186.97:8000/changeRole', {
+                await axios.put(import.meta.env.VITE_AUTH_SERVER + '/admin/change-role', {
                     id: userId,
                     role_id: newRoleId,
                 });
-                // Refresh the user list after role change
+                // refresh the user list after role change
                 this.getAllUsers();
             } catch (error) {
                 console.error('Error changing user role:', error);
             }
         },
         isModeratorOrUser(roleId) {
-            // Check if the role ID is either for Moderator or User
+            // check if the role ID is either for Moderator or User
             return roleId === 2 || roleId === 1;
         },
     },

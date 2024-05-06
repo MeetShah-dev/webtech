@@ -29,16 +29,14 @@
             return {
                 showCommentModal: false,
                 comment: '',
-                blogId: null,
-                userId: null,
+                blogId: null
             };
         },
         methods: {
             async postComment() {
                 this.$emit('post-comment', this.comment);
                 this.showCommentModal = false; 
-                await this.commentBlog(this.comment, this.blogId, this.userId);
-                console.log("comment posted", this.userId, this.comment, this.blogId)
+                await this.commentBlog(this.comment, this.blogId);
             },
             async closeModal() {
                 this.showCommentModal = false;
@@ -46,17 +44,13 @@
             async showModal() {
                 this.showCommentModal = true;
             },
-            async commentBlog(text, blogId, userId) {
+            async commentBlog(text, blogId) {
                 try {
-                    console.log("calling api")
-                    const url = import.meta.env.VITE_INTERACTION_SERVER + '/add_comment'; // change for auth api
-                    console.log("text: ", text, "blog id: ", blogId, "user id: ", userId)
+                    const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/add-comment'; 
                     const response = await axios.post(url, {
                         "text": text,
                         "blog_id": blogId,
-                        "user_id": userId // USER ID SHOULD NOT BE HARDCODED DELETE AFTER AUTHSERVICE SETUP!!!!!!!!
                     });
-                    console.log(response.data);
                     return response.data;
                 } catch (error) {
                     console.error('Error:', error);

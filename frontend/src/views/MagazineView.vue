@@ -1,5 +1,6 @@
 <template>
-    <main class="home">
+    <div>
+         <main class="home" v-if="!overlay">
         <nav-bar></nav-bar>
         <div class="main">
             <div class="main-container">
@@ -8,7 +9,7 @@
                         {{ magazineTitle }}
                     </div>
                 </h2>
-                <div v-for="blog in MagazineData.results" :key="blog">
+                <div v-for="blog in MagazineData.results" :key="blog.id">
                     <div class="blog">
                         <div class="blog-container">
                             <quillEditor id="ql-editor" v-model.lazy="blog.content" ref="myQuillEditor" :options="{ modules: { toolbar: [] }, debug: false, }"/>
@@ -49,7 +50,7 @@
                 </div>
                 <div class="pagination">
                     <button @click="prevPage" :disabled="currentPage === 1">Prev</button>
-                    <button v-for="page in totalPages" :key="page" @click="goToPage(page)" :class="{ active: page === currentPage }">{{ page }}</button>
+                    <button>{{ currentPage }}</button>
                     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
                 </div>
             </div>
@@ -57,8 +58,14 @@
         <div class="comment-modal">
             <Comment ref="Comment" @post-comment="incrementCommentCount"/>
         </div>
-        <!-- <footer-bar></footer-bar> -->
     </main>
+    <v-overlay :opacity="1" :value="overlay" v-if="overlay">
+      <v-progress-circular indeterminate size="64">
+        Loading...
+      </v-progress-circular>
+    </v-overlay>
+</div>
+   
 </template>
 <script>
 import axios from 'axios';
@@ -84,6 +91,7 @@ export default {
             currentPage: '',
             itemsPerPage: 10,
             totalPages: '',
+            overlay: true
         };
     },
     async created() {
@@ -96,11 +104,6 @@ export default {
             this.prevPageLink = this.MagazineData.previous;
             this.currentPage = this.MagazineData?.currentPage ?? 1;
             this.totalPages = Math.ceil(this.MagazineData.count / this.itemsPerPage);
-            console.log('next page:', this.nextPageLink)
-            console.log('prev page:', this.prevPageLink)
-            console.log('total pages:', this.totalPages)
-            console.log('current page:', this.currentPage)
-            console.log('magazine data @@@@@@@@@@@@@@',this.MagazineData)
             try {
                 for (let i = 0; i < this.MagazineData.results.length; i++) {
                     this.MagazineData.results[i].content = await this.formatBlog(this.MagazineData.results[i]);
@@ -117,6 +120,7 @@ export default {
             top: 0,
             behavior: 'smooth'
         });
+        this.overlay = false
     },
     components: {
         NavBar: () => import('@/components/NavBar.vue'),
@@ -126,13 +130,11 @@ export default {
     },
     methods: {
         async handleLike(blogId) {
-            const userId = 8; // USER ID SHOULD NOT BE HARDCODED DELETE AFTER AUTHSERVICE SETUP!!!!!!!!
             try {
-                const url = import.meta.env.VITE_INTERACTION_SERVER + '/update_like_dislike';
+                const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/update-like-dislike';
                 const response = await axios.post(url, {
                     'like_dislike': "true",
                     "blog_id": blogId,
-                    "user_id": userId 
                 });
                 let liked = false;
                 for (var i = 0; i < this.likes.length; i++) {
@@ -184,17 +186,16 @@ export default {
             }
         },
         async readBlog(blogId) {
-            const userId = 8; // USER ID!!!!!!!!!!!!!!!!!!!!! 
-            await this.addReader(userId, blogId);
+            await this.addReader(blogId);
             const data = await this.getBlog(blogId);
             this.$router.push({ name: 'blog', query: { data: JSON.stringify(data) } });
         },
 
         async getBlog(blogId) {
             try {
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/read-blog/'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/blog/read-blog'; 
                 const response = await axios.get(url, {
-                    params: {'user': 8, 'blog': blogId} // DELETE USER ID WHEN YOU REPLACE BLOOGING WITH AUTH SERVICE!!!!
+                    params: { 'blog': blogId } 
                 });
                 return response.data;
             } catch (error) {
@@ -202,10 +203,9 @@ export default {
             }
         },
 
-        async addReader(userId, blogId) {
-            const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/add-reader/';
+        async addReader(blogId) {
+            const url = import.meta.env.VITE_AUTH_SERVER + '/blog/add-reader';
             const response = await axios.post(url, {
-                "user": userId,
                 "blog": blogId,
             });
             console.log(response.data);
@@ -213,19 +213,21 @@ export default {
 
         async getMagazineTitle(magazineId) {
             try {
-                const url = import.meta.env.VITE_ADMIN_SERVER + '/getMagazine'; // change for auth api
+                const url = import.meta.env.VITE_ADMIN_SERVER + '/getMagazine'; 
+                console.log('}}}}}', url)
                 const response = await axios.get(url, {
                     params: {'magazine_id': magazineId}
                 });
+                console.log(response.data, 'QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
                 return response.data.title;
             } catch (error) {
-                console.error('Error:', error);
+                console.error('RAYAN    Error:', error);
             }
         },
 
         async getLikes() {
             try {
-                const url = import.meta.env.VITE_INTERACTION_SERVER + '/get_all_user_likes'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/get-all-user-likes'; // change for auth api
                 const response = await axios.get(url);
                 console.log("likes => ", response.data.data);
                 this.likes = response.data.data;
@@ -255,7 +257,7 @@ export default {
         async goToPage(page) {
             try {
                 this.currentPage = page;
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/magazine-feed/?page=' + String(page); // change for auth api
+                const url = import.meta.env.VITE_BLOGGING_SERVER + '/blog/magazine-feed/?page=' + String(page); // change for auth api
                 await this.redirect(url, this.currentPage);
                 return response.data.data;
             } catch (error) {
@@ -276,7 +278,6 @@ export default {
                 console.error('error', e)
             }
         },
-        /////////////////////////////////////////////////////////
     },
 };
 </script>

@@ -1,5 +1,6 @@
 <template>
-    <main class="home">
+    <div>
+        <main class="home" v-if="!overlay">
         <nav-bar></nav-bar>
         <div class="main">
             <div class="main-container">
@@ -45,7 +46,6 @@
                         <div v-for="(comment, index) in blogComments" :key="index" class="comment-item">
                             <div class="comment-header">{{ comment.date_time }}</div>
                             <div class="comment-body">{{ comment.text }}</div>
-                            <!-- You might need to adjust bindings according to your actual data structure -->
                         </div>
                     </div>
                 </div>
@@ -56,6 +56,13 @@
             <Comment ref="Comment" @post-comment="incrementCommentCount"/>
         </div>
     </main>
+    <v-overlay :opacity="1" :value="overlay" v-if="overlay">
+      <v-progress-circular indeterminate size="64">
+        Loading...
+      </v-progress-circular>
+    </v-overlay>
+    </div>
+   
 </template>
 <script>
 import axios from 'axios'; 
@@ -84,6 +91,7 @@ export default {
                     }
                 },
             },
+            overlay: true
         };
     },
     async created() {
@@ -109,6 +117,7 @@ export default {
     async mounted() {
         await this.getComments(); 
         await this.getLikes();
+        this.overlay = false;
     },
     methods: {
         async formatBlog(blog) {
@@ -131,12 +140,10 @@ export default {
 
         async getComments() {
             try {
-                console.log('api called')
-                const url = import.meta.env.VITE_INTERACTION_SERVER + '/get_all_comments'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/get-all-comments';
+                console.log('URLLLLL', url)
                 const response = await axios.get(url);
-                console.log("likes => ", response.data.data);
                 const comments = await this.getBlogComments(this.blogData.id, response.data.data);
-                console.log("comments: ", comments)
                 this.blogComments = comments;
                 return response.data.data;
             } catch (error) {
@@ -152,7 +159,6 @@ export default {
                         i--;
                     }
                 }
-                console.log(comments)
                 return comments;
             } catch (e) {
                 console.error('Error:', e)
@@ -162,13 +168,11 @@ export default {
 
         async handleLike(blogId) {
             this.likeClicked = true;
-            const userId = 8; // USER ID SHOULD NOT BE HARDCODED DELETE AFTER AUTHSERVICE SETUP!!!!!!!!
             try {
-                const url = import.meta.env.VITE_INTERACTION_SERVER + '/update_like_dislike';
+                const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/update_like_dislike';
                 const response = await axios.post(url, {
                     'like_dislike': "true",
                     "blog_id": blogId,
-                    "user_id": userId 
                 });
                 let liked = false;
                 for (var i = 0; i < this.likes.length; i++) {
@@ -184,12 +188,11 @@ export default {
         },
 
         async handleComment(blogId) {
-            const userId = 8; // get user ID!!!!!!!!!
+            const parsedUser = JSON.parse(decodeURIComponent(sessionStorage.getItem('user')));
             this.blogId = blogId;
             this.$refs.Comment.showCommentModal = true;
-            // setting new blog id and user id in the comment component to make an api call on comment upload
             this.$refs.Comment.blogId = blogId;
-            this.$refs.Comment.userId = userId;
+            this.$refs.Comment.userId = parsedUser.id;
         },
 
         async incrementCommentCount() {
@@ -198,9 +201,8 @@ export default {
 
         async getLikes() {
             try {
-                const url = import.meta.env.VITE_INTERACTION_SERVER + '/get_all_user_likes'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/scheduler/get-all-user-likes'; 
                 const response = await axios.get(url);
-                console.log("likes => ", response.data.data);
                 this.likes = response.data.data;
                 return response.data.data;
             } catch (error) {

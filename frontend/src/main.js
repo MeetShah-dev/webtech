@@ -6,7 +6,7 @@ import vuetify from '@/plugins/vuetify';
 import axios from 'axios';
 import store from './store';
 import './assets/main.css';
-// Request interceptor to add the auth token header to requests
+
 axios.interceptors.request.use(
     (config) => {
         const token = sessionStorage.getItem('token');
@@ -20,15 +20,12 @@ axios.interceptors.request.use(
     }
 );
 
-// Response interceptor to handle errors globally
 axios.interceptors.response.use(
     (response) => {
         return response;
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            // If the API returns a 401 error, assume the token is invalid or expired
-            // Clear the session and redirect to login
             sessionStorage.removeItem('token');
             router.push('/login');
             console.error(
@@ -41,5 +38,6 @@ axios.interceptors.response.use(
 new Vue({
     router,
     vuetify,
+    store,
     render: (h) => h(App),
 }).$mount('#app');

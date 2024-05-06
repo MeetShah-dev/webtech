@@ -12,7 +12,6 @@ export default Vue.extend({
             const notificationWebsocket = new WebSocket(
                 'ws://' + 
                 '35.171.3.193:8001' + 
-                // import.meta.env.VITE_NOTIFICATION_SERVER +
                 '/ws/notification/' + 
                 `${userId}` +  
                 `/?Authorization=${access_token}`
@@ -22,7 +21,6 @@ export default Vue.extend({
             const eventWebsocket = new WebSocket(
                 'ws://' + 
                 '35.171.3.193:8001' + 
-                // import.meta.env.VITE_NOTIFICATION_SERVER +
                 `/ws/event/?Authorization=${access_token}` 
             );
         

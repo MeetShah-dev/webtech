@@ -1,4 +1,3 @@
-<!-- eslint-disable no-undef -->
 <script>
 import axios from 'axios';
 import 'quill/dist/quill.snow.css';
@@ -25,6 +24,7 @@ export default {
                     },
                 },
             },
+            overlay: true
         };
     },
     components: {
@@ -36,6 +36,7 @@ export default {
     async mounted() {
         await this.fetchLatestMagazine(); 
         await this.fetchAllMagazines();
+        this.overlay = false;
     },
     methods: {
         async showDialog() {
@@ -48,7 +49,8 @@ export default {
             Getting latest magazine's associated blogs
             **************************************************/
             try {
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/magazine-feed/';
+                this.userData = JSON.parse(decodeURIComponent(sessionStorage.getItem('user')));
+                const url = import.meta.env.VITE_AUTH_SERVER + '/blog/magazine-feed/';
                 const response = await axios.get(url);
                 this.LatestMagazineBlogs = response.data;
 
@@ -63,7 +65,6 @@ export default {
                     }
                 }
                 this.blog.content = htmlContent;
-                /////////////////////////////////////////////////////////////////////
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -74,7 +75,7 @@ export default {
             Getting latest magazine's associated blogs
             **************************************************/
             try {
-                const url = import.meta.env.VITE_ADMIN_SERVER + '/getAllMagazines'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/admin/get-all-magazines'; 
                 const response = await axios.get(url);
                 this.magazines = response.data;
                 this.magazines.reverse(); // ordering by the latest
@@ -85,7 +86,7 @@ export default {
 
         async getArchivedMagazine(magazineId) {
             try {
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/archived-magazine/'; // change for auth api
+                const url = import.meta.env.VITE_AUTH_SERVER + '/blog/archived-magazine/'; 
                 const response = await axios.get(url, {
                     params: {'magazine': magazineId}
                 });
@@ -95,7 +96,7 @@ export default {
             }
         },
 
-        async handleMagazineClick(magazineId) { // need to work on that...
+        async handleMagazineClick(magazineId) { 
             console.log('Clicked on magazine with ID:', magazineId);
             const magazinedata = await this.getArchivedMagazine(magazineId);
             this.$router.push({ name: 'magazine view', query: { data: JSON.stringify(magazinedata) } });
@@ -109,9 +110,10 @@ export default {
 </script>
 
 <template>
-    <main class="home">
+    <div>
+        <main class="home" v-if="!overlay">
         <nav-bar></nav-bar>
-        <h1>Homepage</h1>
+        <h2>Welcome {{userData.first_name}}</h2>
         <div class="main">
             <div class="side-container">
                 <h2>Magazine Archives</h2>
@@ -157,11 +159,27 @@ export default {
                     academic resources, or engaging content to stay informed and
                     entertained, our app has you covered.
                 </p>
+                <h2>How Does it Work?</h2>
+                <p>
+                    Users can create and submit blogs, which are then reviewed by moderators. 
+                    Moderators can either accept or reject the blogs, providing feedback if necessary. 
+                    Accepted blogs are linked to our upcoming magazine, 
+                    where they're showcased alongside other approved content. 
+                    It's a platform where creativity meets community, 
+                    offering a space for sharing and discovering great content.
+                </p>
             </div>
             <Dialog ref="Dialog"></Dialog>
         </div>
         <footer-bar></footer-bar>
     </main>
+    <v-overlay :opacity="1" :value="overlay" v-if="overlay">
+      <v-progress-circular indeterminate size="64">
+        Loading...
+      </v-progress-circular>
+    </v-overlay>
+    </div>
+    
 </template>
 
 <style scoped>
@@ -214,6 +232,7 @@ export default {
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    position: absolute;
 }
 .side-container {
     margin: 7px;

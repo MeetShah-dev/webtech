@@ -30,7 +30,6 @@
             <v-col>Loading...</v-col>
         </v-row>
 
-        <!-- Form for adding a new category -->
         <v-row>
             <v-col>
                 <h3>Add a New Category</h3>
@@ -57,7 +56,6 @@
         <v-row> </v-row>
         <v-row> </v-row>
 
-        <!-- Toast for displaying success message -->
         <v-row>
             <CToast :autohide="true" :visible="toast">
                 <CToastHeader closeButton>
@@ -114,7 +112,7 @@ export default {
         async fetchCategories() {
             try {
                 const response = await axios.get(
-                    'http://18.206.186.97:8000/getAllCategories'
+                  import.meta.env.VITE_AUTH_SERVER + '/admin/all-categories'
                 );
                 this.categoriesItems = response.data;
             } catch (error) {
@@ -124,7 +122,7 @@ export default {
         async addCategory() {
             try {
                 const response = await axios.post(
-                    'http://18.206.186.97:8000/addCategory',
+                    import.meta.env.VITE_AUTH_SERVER + '/admin/add-categories',
                     {
                         name: this.newCategoryName,
                     }
@@ -132,7 +130,6 @@ export default {
                 this.newCategoryName = '';
                 this.categoriesItems.push(response.data);
 
-                // Show toast when category is added successfully
                 this.newCategoryMessage =
                     'New category "' + response.data.name + '" added';
                 this.toastTime = new Date().toLocaleTimeString();
@@ -146,5 +143,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add scoped styles here if needed */
 </style>

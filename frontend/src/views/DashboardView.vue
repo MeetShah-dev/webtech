@@ -1,6 +1,5 @@
 <script>
-import axios from 'axios';
-
+import axios from 'axios'
 export default {
     components: {
         NavBar: () => import('@/components/NavBar.vue'),
@@ -21,7 +20,6 @@ export default {
 
     },
     beforeRouteEnter(to, from, next) {
-        // First, attempt to get user data from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const userFromUrl = urlParams.get('user');
 
@@ -29,16 +27,14 @@ export default {
 
         if (userFromUrl) {
             try {
-                // Try parsing the user data from the URL
                 userData = JSON.parse(decodeURIComponent(userFromUrl));
-                sessionStorage.setItem('user', JSON.stringify(userData)); // Save to sessionStorage
+                sessionStorage.setItem('user', JSON.stringify(userData)); 
             } catch (error) {
                 console.error('Failed to parse user data from URL:', error);
-                next('/login'); // Redirect to login if parsing fails
+                next('/login'); 
                 return;
             }
         } else {
-            // If not found in URL, try fetching from sessionStorage
             const userFromSession = sessionStorage.getItem('user');
             if (userFromSession) {
                 try {
@@ -48,19 +44,18 @@ export default {
                         'Failed to parse user data from sessionStorage:',
                         error
                     );
-                    next('/login'); // Redirect to login if parsing fails
+                    next('/login'); 
                     return;
                 }
             }
         }
-        // Proceed to the route if userData is found; otherwise, redirect to login
         if (userData) {
             next((vm) => {
                 vm.userData = userData;
-                vm.fetchData(); // Assume fetchData exists and properly fetches other necessary data
+                vm.fetchData(); 
             });
         } else {
-            next('/login'); // Redirect to login if no user data is available
+            next('/login');
         }
     },
 

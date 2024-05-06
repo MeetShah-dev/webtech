@@ -13,8 +13,7 @@ export default {
             selectedArticleTitle: '',
             data: '',
             response: '',
-            feedback_comment: ' ', // Data binding for feedback comment
-            // Data binding for the new category input
+            feedback_comment: ' ',
             latestBlog: '',
             selectedBlog: '',
             feedbackSubmitted: false,
@@ -35,15 +34,15 @@ export default {
         quillEditor,
     },
     async mounted() {
-        await this.fetchArticles(); // Call the method to fetch categories
+        await this.fetchArticles(); 
     },
     methods: {
         async fetchArticles() {
             try {
                 const response = await axios.get(
-                    'http://18.206.186.97:8000/getReadyPosts'
+                    import.meta.env.VITE_AUTH_SERVER + '/admin/get-ready-posts'
                 );
-                this.articleItems = response.data; // Populate categories array
+                this.articleItems = response.data; 
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -55,23 +54,18 @@ export default {
                     content: this.feedback_comment,
                 };
                 this.feedbackSubmitted = true;
-                // Post feedback to the /postfeedback API
                 await axios.post(
-                    'http://18.206.186.97:8000/postFeedback',
+                    import.meta.env.VITE_AUTH_SERVER + '/admin/post-feedback',
                     feedbackData
                 );
 
-                // Reset selected article and feedback comment after successful submission
-
-                // You may want to add additional logic here, like displaying a success message
             } catch (error) {
                 console.error('Error submitting feedback:', error);
-                // You can handle errors here, e.g., displaying an error message
             }
         },
         async approveSelectedArticle() {
             try {
-                await axios.put('http://18.206.186.97:8000/approvePost', {
+                await axios.put(import.meta.env.VITE_AUTH_SERVER + '/admin/approve-post', {
                     id: this.selectedArticle.id,
                 });
                 alert(`Post ID ${this.selectedArticle.id} is approved.`);
@@ -82,7 +76,7 @@ export default {
 
         async rejectSelectedArticle() {
             try {
-                await axios.put('http://18.206.186.97:8000/rejectPost', {
+                await axios.put(import.meta.env.VITE_AUTH_SERVER + '/admin/reject-post', {
                     id: this.selectedArticle.id,
                 });
                 alert(`Post ID ${this.selectedArticle.id} is rejected.`);
@@ -92,32 +86,18 @@ export default {
         },
 
         async selectArticle(article) {
-            // Set the selected article
             this.selectedArticle = article;
-            // let data = JSON.stringify({
-            //     blog: 78
-            // });
-            // let data = {"blog": this.selectedArticle.id}
-            //alert("MERHABALAR" + this.selectedArticle.id)
-            //console.log(data)
-
             const response = await axios.get(
-                'http://54.82.93.84:8000/api/read-blog-moderation/',
+                import.meta.env.VITE_AUTH_SERVER + '/blog/read-blog-moderation',
                 { params: { blog: this.selectedArticle.id } }
             );
-            //alert("MERHABALAR" + response.data.content)
 
             this.selectedBlog = response.data;
-
-            //this.latestBlog = selectedArticle
-            //alert("ddskflkgfldkgflskgled" + this.selectedBlog.files)
-
             const files = this.selectedBlog.files;
 
             let htmlContent =
                 `<h1>${this.selectedBlog.title}</h1><br>` +
                 this.selectedBlog.content;
-            //alert("FILE: " + files)
             if (files.length > 0) {
                 for (var i = 0; i < files.length; i++) {
                     const uidRegExp = new RegExp(
@@ -126,14 +106,10 @@ export default {
                     );
                     const imgTag = `<img src="${files[i].url}" alt="Image">`;
                     htmlContent = htmlContent.replace(uidRegExp, imgTag + ' ');
-                    //console.log("HTTTTTTTTT" + htmlContent)
                 }
             }
+            console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ', htmlContent)
             this.blog.content = htmlContent;
-
-            //alert("xxxxx" + this.blog.content)
-
-            // this.selectedArticleTitle = response.data.title;
         },
     },
 };

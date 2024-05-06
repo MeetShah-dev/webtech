@@ -1,4 +1,3 @@
-<!-- eslint-disable no-unused-vars -->
 <template>
     <div class="side-drawer">
         <v-card style="display: flex; flex-direction: row">
@@ -39,14 +38,14 @@
 import AddCategory from './AddCategory.vue';
 import ArticleCreation from './ArticleCreation.vue';
 import ArticleWait from './ArticleWait.vue';
-import ScheduleSet from './ScheduleSet.vue';
 import AdminConsole from './AdminConsole.vue';
+import MagazineCreation from './MagazineCreation.vue';
 
 export default {
     components: {
         ArticleCreation,
         ArticleWait,
-        ScheduleSet,
+        MagazineCreation,
         AddCategory,
         AdminConsole,
     },
@@ -84,18 +83,21 @@ export default {
                 },
                 {
                     text: 'Schedule Magazine',
-                    component: 'ScheduleSet',
+                    component: 'MagazineCreation',
                     roles: [2, 3],
+                },
+                {
+                    text: 'Admin Console',
+                    component: 'AdminConsole',
+                    roles: [3],
                 },
             ];
             console.log('this role', this.role);
-            // Filter links based on role_id
             return links.filter((link) => link.roles.includes(this.role));
         },
     },
     watch: {
         role() {
-            // corrected from role_id to role
             this.links = this.getLinksBasedOnRole();
         },
     },

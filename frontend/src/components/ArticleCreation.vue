@@ -60,19 +60,14 @@ export default {
             const isDraft = this.blog.draft;
             const category_ids = JSON.stringify(this.blog.categoryItems);
             const keywords = JSON.stringify(this.blog.keywords.split(','))
+            const parsedUser = JSON.parse(decodeURIComponent(sessionStorage.getItem('user')));
 
-            this.formData.append('user', "8"); // must change to the real value
+            this.formData.append('user', parsedUser.id); 
             this.formData.append('title', title);
             this.formData.append('content', content);
             this.formData.append('is_draft', isDraft);
             this.formData.append('category_ids', category_ids);
             this.formData.append('keywords', keywords);
-
-            // log formData FOR DEBUGGING...
-            // for (const [key, value] of this.formData.entries()) {
-            //     console.log(`Key: ${key}, Value: ${value}, Type ${typeof(value)}`);   
-            // }
-            // calling blog creation API ##### MUST BE CALLED THROUGH THE AUTH MICROSERVICE #####
             try {
                 const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/create-blog/';
                 const response = await axios.post(url, this.formData);
@@ -80,17 +75,15 @@ export default {
             } catch (error) {
                 console.error('Error:', error);
             }
-            // reinitialising form data after submission
             await this.showMessage();
             await this.resetInputFields();
-            ///////// CREATE A POP UP WITH SUCCESS AND CLEAN THE INPUT FIELDS /////////
         },
         
         async fetchCategories() {
               try {
-                    const url = import.meta.env.VITE_ADMIN_SERVER + '/getAllCategories';
+                    const url = import.meta.env.VITE_AUTH_SERVER + '/admin/all-categories';
                     const response = await axios.get(url);
-                    this.categoryItems = response.data; // Populate categories array
+                    this.categoryItems = response.data; 
                     return response.data;
               } catch (error) {
                     console.error('Error fetching categories:', error);
@@ -145,9 +138,3 @@ export default {
     height: 72vh;
 }
 </style>
-
-<!-- 
-    YAAAY, THE PAYLOAD WORKS!!!
-    NOW WE HAVE TO GET THE USER ID APPROPRIATELY AS IT'S HARDCODED
-    "user": "1", ############################################ TODO #####################################################
--->

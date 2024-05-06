@@ -1,5 +1,4 @@
 <script>
-// import UserRegistration from '../components/UserRegistration.vue';
 import { mapGetters } from 'vuex';
 export default {
     name: 'nav-bar',
@@ -8,30 +7,36 @@ export default {
             links: [
                 { tab: 'home', text: 'Home', route: '/' },
                 { tab: 'dashboard', text: 'Dashboard', route: '/dashboard' },
-                { tab: 'author', text: 'Authors', route: '/author-page' },
-            ],
-            menus: [
-                { title: 'Author page' },
-                { title: 'Blog list' },
-                { title: 'Update profile', components: 'UserRegistration' },
             ],
             notifs: [{ title: 'Notification 1' }, { title: 'Notification 2' }],
-            snackbar: true, //SEE HTML COMMENT,
-            messages: ''
+            userRoll: null
         };
     },
     computed: {
     ...mapGetters([
       'currentCount'
-     ])
+     ]),
+   
+    role() {
+        const roleMapping = {
+            1: 'User',
+            2: 'Moderator',
+            3: 'Admin'
+        };
+        return roleMapping[this.userRole] || 'Unknown Role';
+     }
     },
-    components: {
-        // UserRegistration,
+    created() {
+        this.fetchRole()
     },
     methods: {
         logout() {
             sessionStorage.clear();
             this.$router.push('/login');
+        },
+        fetchRole() {
+            const userData = JSON.parse(decodeURIComponent(sessionStorage.getItem('user')));
+            this.userRole = userData.role_id;
         }
     }
 };
@@ -51,14 +56,14 @@ export default {
             <v-tabs>
                 <v-tab exact to="/" active>Home</v-tab>
                 <v-tab exact to="/dashboard">Dashboard</v-tab>
-                <!-- <v-tab exact to="/author-page">Authors</v-tab> -->
             </v-tabs>
             <v-spacer></v-spacer>
+            <v-icon>mdi-account</v-icon>
+            {{role}}
             <v-menu open-on-click bottom offset-y>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
                         <v-btn icon>
-                            {{currentCount}}
                             <v-icon>mdi-bell</v-icon>
                             <v-badge
                                 dot
@@ -67,16 +72,7 @@ export default {
                                 color="green"
                                 overlap
                             />
-                            <!-- FUNCTION FOR THIS CAN BE ADDED SO THAT USERS RECIEVE A LIVE NOTICATION WHEN AN ARTICLE IS POSTED -->
-                            <!-- <v-snackbar v-model="snackbar" :timeout="4000">
-                                <span>Notification message </span>
-                                <v-btn
-                                    flat
-                                    class="alert"
-                                    @click="snackbar = false"
-                                    >close</v-btn
-                                >
-                            </v-snackbar> -->
+                            {{currentCount}}
                         </v-btn>
                     </v-btn>
                 </template>
