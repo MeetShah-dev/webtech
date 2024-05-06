@@ -218,7 +218,6 @@ export default {
                 const response = await axios.get(url, {
                     params: {'magazine_id': magazineId}
                 });
-                console.log(response.data, 'QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ')
                 return response.data.title;
             } catch (error) {
                 console.error('RAYAN    Error:', error);
@@ -257,7 +256,8 @@ export default {
         async goToPage(page) {
             try {
                 this.currentPage = page;
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/blog/magazine-feed/?page=' + String(page); // change for auth api
+                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/magazine-feed/?page=' + String(page); // change for auth api
+                // const url = 'api/blog/create-blog/';
                 await this.redirect(url, this.currentPage);
                 return response.data.data;
             } catch (error) {

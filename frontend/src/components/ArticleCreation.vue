@@ -69,7 +69,8 @@ export default {
             this.formData.append('category_ids', category_ids);
             this.formData.append('keywords', keywords);
             try {
-                const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/create-blog/';
+                // const url = import.meta.env.VITE_BLOGGING_SERVER + '/api/create-blog/';
+                const url = 'api/blog/create-blog/';
                 const response = await axios.post(url, this.formData);
                 console.log(response.data);
             } catch (error) {
