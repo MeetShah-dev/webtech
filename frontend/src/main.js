@@ -4,7 +4,7 @@ import App from './App.vue';
 import router from './router';
 import vuetify from '@/plugins/vuetify';
 import axios from 'axios';
-
+import store from './store';
 import './assets/main.css';
 // Request interceptor to add the auth token header to requests
 axios.interceptors.request.use(

@@ -1,5 +1,6 @@
 <script>
 // import UserRegistration from '../components/UserRegistration.vue';
+import { mapGetters } from 'vuex';
 export default {
     name: 'nav-bar',
     data() {
@@ -15,8 +16,14 @@ export default {
                 { title: 'Update profile', components: 'UserRegistration' },
             ],
             notifs: [{ title: 'Notification 1' }, { title: 'Notification 2' }],
-            snackbar: true, //SEE HTML COMMENT
+            snackbar: true, //SEE HTML COMMENT,
+            messages: ''
         };
+    },
+    computed: {
+    ...mapGetters([
+      'currentCount'
+     ])
     },
     components: {
         // UserRegistration,
@@ -51,10 +58,11 @@ export default {
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn icon v-bind="attrs" v-on="on">
                         <v-btn icon>
+                            {{currentCount}}
                             <v-icon>mdi-bell</v-icon>
                             <v-badge
                                 dot
-                                :content="messages"
+                                :content="currentCount"
                                 :value="messages"
                                 color="green"
                                 overlap

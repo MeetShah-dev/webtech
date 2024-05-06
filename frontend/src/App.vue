@@ -8,7 +8,7 @@
 
 <script>
 import Modal from './components/Modal.vue';
-
+import { EventBus } from './eventBus';
 export default {
     name: 'App',
     components: { 
@@ -16,12 +16,13 @@ export default {
     },
     data() {
         return {
-            message: 'hello world',
+            message: '',
             showModal: false
         }
     },
     mounted() {
-        this.$root.$on('show-modal', this.auth)
+        console.log("App.vue mounted, setting up event listener.");
+        EventBus.$on('show-modal', this.authMethod);
     },
     watch: {
         $route: {
@@ -32,12 +33,13 @@ export default {
         },
     },
     methods: {
-        auth(access_token, userId) {
-            console.log('nik zebiiiiiiiiiiiiiiiiiiiiiiiiiii')
-            this.showModal = true;
-            console.log(access_token, userId)
-            // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@FUNCTION CALLED@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
+        authMethod(message) {
+            this.showModal = false; 
+            this.$nextTick(() => {
+            this.showModal = true; 
+            this.message = message; 
+            this.$store.dispatch('incrementNotificationCount');
+           });
         },
     }
 };

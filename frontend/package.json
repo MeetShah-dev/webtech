@@ -14,7 +14,8 @@
     "vue": "^2.7.7",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.5.4",
-    "vuetify": "^2.7.2"
+    "vuetify": "^2.7.2",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
@@ -39,8 +40,11 @@
     "tabWidth": 4,
     "singleQuote": true
   },
-  "vue/no-reserved-component-names": ["error", {
-    "disallowVueBuiltInComponents": false,
-    "disallowVue3BuiltInComponents": false
-  }]
+  "vue/no-reserved-component-names": [
+    "error",
+    {
+      "disallowVueBuiltInComponents": false,
+      "disallowVue3BuiltInComponents": false
+    }
+  ]
 }
