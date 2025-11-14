@@ -22,11 +22,11 @@ Each service handles a focused responsibility and communicates through REST APIs
   - Deployed as a serverless service on AWS Lambda via API Gateway.
 
 2. Independent Functional Microservices
-  - Blog Service – Handles post creation and media uploads to AWS S3.
-  - Magazine Scheduler – Uses cron jobs to release magazines at fixed times.
-  - Admin/Moderation – Enables moderators to review, approve, or reject content and manage roles.
-  - Likes & Comments – Provides interactive engagement APIs.
-  - Notification Service – Uses Django Channels and Redis (ElastiCache) for real-time push notifications.
+  - **Blog Service:** Handles post creation and media uploads to AWS S3.
+  - **Magazine Scheduler:** Uses cron jobs to release magazines at fixed times.
+  - **Admin/Moderation:** Enables moderators to review, approve, or reject content and manage roles.
+  - **Likes & Comments:** Provides interactive engagement APIs.
+  - **Notification Service:** Uses Django Channels and Redis (ElastiCache) for real-time push notifications.
 
 3. Shared Resources
   - PostgreSQL as a central database ensuring data integrity and high availability.
@@ -53,10 +53,10 @@ Each service handles a focused responsibility and communicates through REST APIs
 
 # Core Features
 
-- Google OAuth 2.0 Authentication: secure sign-in with role assignment.
-- Custom Blog System: text + media posts, tagging, and categorisation.
-- Moderation Workflow: review, feedback, approval/rejection pipeline.
-- Magazine Scheduling: automated timed releases with pagination and archiving.
-- Real-Time Notifications: live alerts for comments, likes, and approvals.
-- Scalable Cloud Deployment: Dockerised microservices distributed across AWS EC2 + Lambda.
-- User-Friendly Interface: responsive, accessible, and built for simplicity.
+- **Google OAuth 2.0 Authentication:** secure sign-in with role assignment.
+- **Custom Blog System:** text + media posts, tagging, and categorisation.
+- **Moderation Workflow:** review, feedback, approval/rejection pipeline.
+- **Magazine Scheduling:** automated timed releases with pagination and archiving.
+- **Real-Time Notifications:** live alerts for comments, likes, and approvals.
+- **Scalable Cloud Deployment:** Dockerised microservices distributed across AWS EC2 + Lambda.
+- **User-Friendly Interface:** responsive, accessible, and built for simplicity.
