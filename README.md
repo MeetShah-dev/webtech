@@ -29,24 +29,24 @@ The following diagrams illustrate the internal structure and data flow within ea
 
 # Key Design Highlights
 
-1. Authentication/Authorisation Microservice
+**1. Authentication/Authorisation Microservice**
   - Implements Google OAuth 2.0 via NestJS middleware.
   - Manages identity, sessions, and role-based access control (Admin, Moderator, User).
   - Deployed as a serverless service on AWS Lambda via API Gateway.
 
-2. Independent Functional Microservices
+**2. Independent Functional Microservices**
   - **Blog Service:** Handles post creation and media uploads to AWS S3.
   - **Magazine Scheduler:** Uses cron jobs to release magazines at fixed times.
   - **Admin/Moderation:** Enables moderators to review, approve, or reject content and manage roles.
   - **Likes & Comments:** Provides interactive engagement APIs.
   - **Notification Service:** Uses Django Channels and Redis (ElastiCache) for real-time push notifications.
 
-3. Shared Resources
+**3. Shared Resources**
   - PostgreSQL as a central database ensuring data integrity and high availability.
   - Redis for pub/sub messaging and instant user updates.
   - Dockerised services running on AWS EC2 instances with load-ready configuration.
 
-4. Frontend
+**4. Frontend**
   - Built with Vue 3, Vuetify, and Vue Router.
   - Communicates with backend microservices via REST and WebSocket APIs.
   - Implements a clean SPA experience with secure session storage.
