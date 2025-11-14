@@ -73,3 +73,18 @@ The following diagrams illustrate the internal structure and data flow within ea
 - **Real-Time Notifications:** live alerts for comments, likes, and approvals.
 - **Scalable Cloud Deployment:** Dockerised microservices distributed across AWS EC2 + Lambda.
 - **User-Friendly Interface:** responsive, accessible, and built for simplicity.
+
+# Interface Screenshots
+
+Below are a few screenshots showcasing the application's user interface.
+
+<div style="display: flex; justify-content: center;">
+  <img width="1895" height="801" alt="1" src="https://github.com/user-attachments/assets/a1980f12-45e0-4f6f-955b-97d4fb130a2c" style="width: 32%;"/>
+  <img width="1918" height="772" alt="2" src="https://github.com/user-attachments/assets/117064f4-beb0-42eb-b130-e2fd51d51338" style="width: 32%;"/>
+  <img width="1893" height="793" alt="3" src="https://github.com/user-attachments/assets/3099c9a5-00ec-4636-ae5d-2def124de08c" style="width: 32%;"/>
+</div>
+<div style="display: flex; justify-content: center;">
+  <img width="1882" height="802" alt="4" src="https://github.com/user-attachments/assets/4a2322df-e3b5-4864-8c1c-45f17dc9b4e8" style="width: 32%;"/>
+  <img width="1901" height="783" alt="6" src="https://github.com/user-attachments/assets/a368be49-ee74-45c7-a633-2378097ad4bf" style="width: 32%;"/>
+  <img width="1895" height="790" alt="7" src="https://github.com/user-attachments/assets/8669d5a4-6c22-4706-b40a-2290104f04d7" style="width: 32%;"/>
+</div>
