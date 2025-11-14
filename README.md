@@ -6,13 +6,26 @@ A cloud-native, microservices-based digital magazine built for organisations and
 
 Modern institutions struggle to balance information sharing and focus. Surrey-Horizon solves this by creating a private, customisable magazine platform that lets users share posts, read curated content, and engage interactively; all within a moderated, secure environment.
 
-# Architecture
+# App Architecture
 
 Surrey-Horizon follows a distributed microservices architecture designed for scalability, reliability, and modular development.
 Each service handles a focused responsibility and communicates through REST APIs secured by a central authentication layer.
 
 <img width="682" height="640" alt="image" src="https://github.com/user-attachments/assets/7126331b-d18d-4367-a20b-99e4dd17a65a" />
 
+# Architecture On a Microservice Level
+
+The following diagrams illustrate the internal structure and data flow within each major microservice, showing how components interact and integrate across the platform.
+
+<div style="display: flex; justify-content: center;">
+  <img width="806" height="548" alt="image" src="https://github.com/user-attachments/assets/58f675a7-996b-4c1b-b321-3e7a2f6cb1ff" style="width: 32%;"/>
+  <img width="652" height="411" alt="image" src="https://github.com/user-attachments/assets/52479648-7c87-413c-b0a7-eb84e3f35fba" style="width: 32%;"/>
+  <img width="746" height="542" alt="image" src="https://github.com/user-attachments/assets/0f20258d-4267-4370-9e6d-d9b1147ffcf6" style="width: 32%;"/>
+</div>
+<div style="display: flex; justify-content: center;">
+  <img width="731" height="691" alt="image" src="https://github.com/user-attachments/assets/8370fba3-80ce-4f2e-8d09-d49c34af6d77" style="width: 32%;"/>
+  <img width="776" height="596" alt="image" src="https://github.com/user-attachments/assets/c7b73815-7a79-4645-927c-27010bc80d4b" style="width: 32%;"/>
+</div>
 
 # Key Design Highlights
 
