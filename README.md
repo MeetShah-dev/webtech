@@ -1,6 +1,6 @@
 # Surrey-Horizon
 
-A cloud-native, microservices-based digital magazine built for organisations and universities. It provides a centralised hub for non-work updates, news, and events; combining structured publishing, moderation, and real-time engagement without cluttering email channels.
+A cloud-native, microservices-based digital magazine built for organisations and universities. It provides a centralised hub for non-work updates, news, and events; combining secure authentication, structured publishing, moderation, and real-time engagement without cluttering email channels.
 
 # Purpose
 
