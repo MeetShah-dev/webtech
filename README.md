@@ -88,3 +88,8 @@ Below are a few screenshots showcasing the application's user interface.
   <img width="1901" height="783" alt="6" src="https://github.com/user-attachments/assets/a368be49-ee74-45c7-a633-2378097ad4bf" style="width: 32%;"/>
   <img width="1895" height="790" alt="7" src="https://github.com/user-attachments/assets/8669d5a4-6c22-4706-b40a-2290104f04d7" style="width: 32%;"/>
 </div>
+<div style="display: flex; justify-content: center;">
+  <img width="1896" height="796" alt="8" src="https://github.com/user-attachments/assets/a5988290-af0d-4db5-a229-146360f09e88" style="width: 32%;"/>
+  <img width="1896" height="790" alt="9" src="https://github.com/user-attachments/assets/f3440c85-539d-4dc6-b71b-eade20a8a1a4" style="width: 32%;"/>
+  <img width="1897" height="798" alt="10" src="https://github.com/user-attachments/assets/7b016427-1c23-4839-bbf4-5579f4b75d6c" style="width: 32%;"/>
+</div>
